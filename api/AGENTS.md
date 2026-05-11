@@ -48,6 +48,65 @@ src/main/java/br/com/meveum/
 Nao crie pastas vazias com `.gitkeep` como promessa de arquitetura. Crie a
 pasta quando houver codigo real para ela.
 
+## Roadmap de implementacao
+
+Siga esta ordem preferencial para evoluir o backend. A ordem existe para que
+cada etapa desbloqueie testes manuais e funcionalidades reais do sistema.
+
+1. `cardapio/categorias`
+   - Status: iniciado.
+   - Manter CRUD, validators, mapper e testes unitarios como referencia para
+     os proximos contextos.
+
+2. `cardapio/produtos`
+   - Implementar CRUD de produtos.
+   - Produto deve pertencer a uma loja e, quando informado, a uma categoria da
+     mesma loja.
+   - Cobrir services, validators e mapper com testes unitarios.
+   - Campos esperados inicialmente: nome, descricao, preco, imagem, ordem,
+     ativo e categoria.
+
+3. `cardapio/complementos`
+   - Implementar grupos de complemento.
+   - Implementar opcoes de complemento.
+   - Implementar vinculo produto x grupo de complemento.
+   - Validar minimo, maximo, obrigatoriedade e pertencimento a loja.
+
+4. `lojas`
+   - Implementar consulta e atualizacao dos dados principais da loja.
+   - Implementar pausa manual e status operacional.
+   - Depois evoluir para horarios de funcionamento.
+
+5. `entrega`
+   - Implementar areas/regras de entrega da loja.
+   - Validar tipo de area, taxa, pedido minimo e compatibilidade com loja.
+
+6. `pagamentos`
+   - Implementar formas de pagamento aceitas pela loja.
+   - Validar tipo de pagamento, ativo/inativo e regras por loja.
+
+7. `crm/clientes`
+   - Implementar cadastro e consulta de clientes.
+   - Implementar enderecos de cliente.
+   - Preparar reutilizacao no fluxo de pedido.
+
+8. `pedidos`
+   - Implementar criacao de pedido.
+   - Calcular totais a partir de produtos e complementos.
+   - Validar loja aberta, produtos ativos, complementos validos e endereco.
+   - Implementar atualizacao de status.
+
+9. `dashboard`
+   - Implementar metricas basicas apos pedidos existirem.
+   - Priorizar faturamento, quantidade de pedidos e produtos mais vendidos.
+
+10. `integracao_whatsapp`
+    - Implementar apenas depois que pedidos e status estiverem estaveis.
+    - Preparar envio de notificacoes e mensagens operacionais.
+
+Ao iniciar um item do roadmap, mantenha o padrao de arquitetura deste arquivo e
+crie commits separados por contexto.
+
 ## Controllers
 
 Controllers nao podem conter logica de negocio.
