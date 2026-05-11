@@ -21,6 +21,14 @@
     {
       "key": "produtoId",
       "value": "33333333-3333-3333-3333-333333333333"
+    },
+    {
+      "key": "grupoComplementoId",
+      "value": "44444444-4444-4444-4444-444444444444"
+    },
+    {
+      "key": "opcaoComplementoId",
+      "value": "55555555-5555-5555-5555-555555555555"
     }
   ],
   "item": [
@@ -288,6 +296,327 @@
               "path": [
                 "produtos",
                 "{{produtoId}}"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Complementos",
+      "item": [
+        {
+          "name": "Criar Grupo de Complemento",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lojaId\": \"{{lojaId}}\",\n  \"nome\": \"Grupo Complemento Teste Bruno Nova\",\n  \"descricao\": \"Grupo criado manualmente pelo Bruno\",\n  \"quantidadeMinima\": 0,\n  \"quantidadeMaxima\": 2,\n  \"ordem\": 2\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/complementos/grupos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "complementos",
+                "grupos"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Listar Grupos de Complemento",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/complementos/grupos?lojaId={{lojaId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "complementos",
+                "grupos"
+              ],
+              "query": [
+                {
+                  "key": "lojaId",
+                  "value": "{{lojaId}}"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Detalhar Grupo de Complemento Teste",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/complementos/grupos/{{grupoComplementoId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "complementos",
+                "grupos",
+                "{{grupoComplementoId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Atualizar Grupo de Complemento Teste",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Grupo Complemento Teste Bruno Atualizado\",\n  \"descricao\": \"Grupo atualizado manualmente pelo Bruno\",\n  \"quantidadeMinima\": 0,\n  \"quantidadeMaxima\": 3,\n  \"ordem\": 1,\n  \"ativo\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/complementos/grupos/{{grupoComplementoId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "complementos",
+                "grupos",
+                "{{grupoComplementoId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Criar Opcao de Complemento",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lojaId\": \"{{lojaId}}\",\n  \"grupoComplementoId\": \"{{grupoComplementoId}}\",\n  \"nome\": \"Opcao Complemento Teste Bruno Nova\",\n  \"descricao\": \"Opcao criada manualmente pelo Bruno\",\n  \"precoAdicional\": 3.5,\n  \"ordem\": 2\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/complementos/opcoes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "complementos",
+                "opcoes"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Listar Opcoes do Grupo",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/complementos/opcoes?grupoComplementoId={{grupoComplementoId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "complementos",
+                "opcoes"
+              ],
+              "query": [
+                {
+                  "key": "grupoComplementoId",
+                  "value": "{{grupoComplementoId}}"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Detalhar Opcao de Complemento Teste",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/complementos/opcoes/{{opcaoComplementoId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "complementos",
+                "opcoes",
+                "{{opcaoComplementoId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Atualizar Opcao de Complemento Teste",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Opcao Complemento Teste Bruno Atualizada\",\n  \"descricao\": \"Opcao atualizada manualmente pelo Bruno\",\n  \"precoAdicional\": 5,\n  \"ordem\": 1,\n  \"ativo\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/complementos/opcoes/{{opcaoComplementoId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "complementos",
+                "opcoes",
+                "{{opcaoComplementoId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Vincular Grupo ao Produto",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"grupoComplementoId\": \"{{grupoComplementoId}}\",\n  \"ordem\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/complementos/produtos/{{produtoId}}/grupos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "complementos",
+                "produtos",
+                "{{produtoId}}",
+                "grupos"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Listar Grupos do Produto",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/complementos/produtos/{{produtoId}}/grupos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "complementos",
+                "produtos",
+                "{{produtoId}}",
+                "grupos"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Desvincular Grupo do Produto",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/complementos/produtos/{{produtoId}}/grupos/{{grupoComplementoId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "complementos",
+                "produtos",
+                "{{produtoId}}",
+                "grupos",
+                "{{grupoComplementoId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Excluir Opcao de Complemento Teste",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/complementos/opcoes/{{opcaoComplementoId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "complementos",
+                "opcoes",
+                "{{opcaoComplementoId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Excluir Grupo de Complemento Teste",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/complementos/grupos/{{grupoComplementoId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "complementos",
+                "grupos",
+                "{{grupoComplementoId}}"
               ]
             }
           }

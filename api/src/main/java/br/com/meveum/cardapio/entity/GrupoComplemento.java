@@ -13,6 +13,9 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.OffsetDateTime;
 import java.util.UUID;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,7 +24,9 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Entity
 @Table(name = "complement_groups")
 public class GrupoComplemento {
@@ -41,15 +46,19 @@ public class GrupoComplemento {
     private String description;
 
     @Column(name = "min_quantity", nullable = false)
+    @Builder.Default
     private Integer minQuantity = 0;
 
     @Column(name = "max_quantity", nullable = false)
+    @Builder.Default
     private Integer maxQuantity = 1;
 
     @Column(name = "sort_order", nullable = false)
+    @Builder.Default
     private Integer sortOrder = 0;
 
     @Column(nullable = false)
+    @Builder.Default
     private Boolean active = true;
 
     @CreationTimestamp

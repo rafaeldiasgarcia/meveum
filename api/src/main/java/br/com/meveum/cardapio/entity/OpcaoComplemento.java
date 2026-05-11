@@ -13,13 +13,18 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.util.UUID;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Entity
 @Table(name = "complement_options")
 public class OpcaoComplemento {
@@ -43,11 +48,14 @@ public class OpcaoComplemento {
     private String description;
 
     @Column(name = "additional_price", nullable = false, precision = 12, scale = 2)
+    @Builder.Default
     private BigDecimal additionalPrice = BigDecimal.ZERO;
 
     @Column(name = "sort_order", nullable = false)
+    @Builder.Default
     private Integer sortOrder = 0;
 
     @Column(nullable = false)
+    @Builder.Default
     private Boolean active = true;
 }
