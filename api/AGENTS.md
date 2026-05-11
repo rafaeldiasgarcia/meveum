@@ -5,7 +5,23 @@ Antes de implementar qualquer funcionalidade, leia e respeite estas regras.
 
 ## Arquitetura geral
 
-O backend deve seguir uma separacao clara por camadas:
+O backend segue um **monolito modular organizado por domínios**.
+
+Cada domínio é independente e contém suas próprias camadas:
+
+```
+src/main/java/br/com/meveum/
+├── cardapio/              ← Domínio de gestão de cardápio
+├── pedidos/               ← Domínio de gestão de pedidos
+├── pagamentos/            ← Domínio de pagamentos
+├── entrega/               ← Domínio de entregas
+├── crm/                   ← Domínio de clientes
+├── dashboard/             ← Domínio de analytics
+├── integracao_whatsapp/   ← Domínio de WhatsApp
+└── shared/                ← Código compartilhado entre domínios
+```
+
+Dentro de cada domínio, separe as responsabilidades em camadas:
 
 - Controller
 - Service
