@@ -1,0 +1,24 @@
+meta {
+  name: Criar Categoria
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/categorias
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "lojaId": "{{lojaId}}",
+    "nome": "Pizzas",
+    "descricao": "Sabores especiais",
+    "ordem": 1
+  }
+}
