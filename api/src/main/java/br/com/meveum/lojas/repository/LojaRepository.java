@@ -10,4 +10,6 @@ public interface LojaRepository extends JpaRepository<Loja, UUID> {
     Optional<Loja> findBySlug(String slug);
 
     boolean existsBySlug(String slug);
+
+    boolean existsBySlugAndIdNot(String slug, UUID id);
 }

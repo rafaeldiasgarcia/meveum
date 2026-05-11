@@ -2,7 +2,7 @@
   "info": {
     "_postman_id": "d1111111-1111-4111-8111-111111111111",
     "name": "Meveum API - Cardapio",
-    "description": "Collection para importar no Bruno e testar os endpoints de cardapio.",
+    "description": "Collection para importar no Postman e testar os endpoints da API.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
@@ -32,6 +32,205 @@
     }
   ],
   "item": [
+    {
+      "name": "Lojas",
+      "item": [
+        {
+          "name": "Detalhar Loja Teste",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/lojas/{{lojaId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "lojas",
+                "{{lojaId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Detalhar Loja por Slug",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/lojas/slug/loja-teste-bruno",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "lojas",
+                "slug",
+                "loja-teste-bruno"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Atualizar Loja Teste",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Loja Teste Postman Atualizada\",\n  \"slug\": \"loja-teste-bruno\",\n  \"logoUrl\": null,\n  \"whatsappNumber\": \"5511999999999\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/lojas/{{lojaId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "lojas",
+                "{{lojaId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Pausar Loja Teste",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pausadaManualmente\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/lojas/{{lojaId}}/pausa-manual",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "lojas",
+                "{{lojaId}}",
+                "pausa-manual"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Despausar Loja Teste",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pausadaManualmente\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/lojas/{{lojaId}}/pausa-manual",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "lojas",
+                "{{lojaId}}",
+                "pausa-manual"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Inativar Loja Teste",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"INACTIVE\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/lojas/{{lojaId}}/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "lojas",
+                "{{lojaId}}",
+                "status"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Ativar Loja Teste",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"ACTIVE\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/lojas/{{lojaId}}/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "lojas",
+                "{{lojaId}}",
+                "status"
+              ]
+            }
+          }
+        }
+      ]
+    },
     {
       "name": "Categorias",
       "item": [
