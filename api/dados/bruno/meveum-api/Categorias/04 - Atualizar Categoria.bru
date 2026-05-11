@@ -1,0 +1,24 @@
+meta {
+  name: Atualizar Categoria
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{baseUrl}}/categorias/{{categoriaId}}
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "nome": "Pizzas Artesanais",
+    "descricao": "Sabores especiais e bordas recheadas",
+    "ordem": 2,
+    "ativo": true
+  }
+}
