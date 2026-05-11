@@ -132,10 +132,11 @@ validators/
 
 ## Mappers
 
-O projeto deve usar mappers anotados com `@Mapper`.
+O projeto deve usar mappers comuns anotados com `@Component`.
 
-Preferencialmente use MapStruct para os mappers. Caso o MapStruct ainda nao
-esteja configurado no projeto, configure antes de criar mapeamentos grandes.
+Nao use MapStruct por enquanto. Os mappers devem ser classes concretas com
+conversoes explicitas e, sempre que possivel, usando `builder()` para criar
+entities e DTOs de response.
 
 Cada mapper deve ser responsavel por um contexto principal.
 
@@ -159,14 +160,31 @@ Use sempre o prefixo `to` para conversoes.
 Exemplo:
 
 ```java
-@Mapper(componentModel = "spring")
-public interface ProdutoMapper {
+@Component
+public class ProdutoMapper {
 
-    Produto toEntity(CriarProdutoRequest request);
+    public Produto toEntity(CriarProdutoRequest request) {
+        return Produto.builder()
+            .nome(request.nome())
+            .ativo(true)
+            .build();
+    }
 
-    CriarProdutoResponse toCriarProdutoResponse(Produto produto);
+    public CriarProdutoResponse toCriarProdutoResponse(Produto produto) {
+        return CriarProdutoResponse.builder()
+            .id(produto.getId())
+            .nome(produto.getNome())
+            .ativo(produto.getAtivo())
+            .build();
+    }
 
-    ListarProdutoResponse toListarProdutoResponse(Produto produto);
+    public ListarProdutoResponse toListarProdutoResponse(Produto produto) {
+        return ListarProdutoResponse.builder()
+            .id(produto.getId())
+            .nome(produto.getNome())
+            .ativo(produto.getAtivo())
+            .build();
+    }
 }
 ```
 
