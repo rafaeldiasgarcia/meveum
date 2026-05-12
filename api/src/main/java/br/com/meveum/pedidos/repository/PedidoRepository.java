@@ -8,5 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PedidoRepository extends JpaRepository<Pedido, UUID> {
 
+    List<Pedido> findByLojaIdOrderByCreatedAtDesc(UUID lojaId);
+
     List<Pedido> findByLojaIdAndStatusOrderByCreatedAtDesc(UUID lojaId, StatusPedido status);
 }

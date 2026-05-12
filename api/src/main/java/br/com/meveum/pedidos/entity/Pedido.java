@@ -21,6 +21,9 @@ import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.UUID;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -31,7 +34,9 @@ import org.hibernate.type.SqlTypes;
 
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Entity
 @Table(name = "orders")
 public class Pedido {
@@ -60,6 +65,7 @@ public class Pedido {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 30)
+    @Builder.Default
     private StatusPedido status = StatusPedido.NEW;
 
     @Enumerated(EnumType.STRING)
@@ -70,15 +76,18 @@ public class Pedido {
     private BigDecimal subtotal;
 
     @Column(name = "delivery_fee", nullable = false, precision = 12, scale = 2)
+    @Builder.Default
     private BigDecimal deliveryFee = BigDecimal.ZERO;
 
     @Column(name = "discount_total", nullable = false, precision = 12, scale = 2)
+    @Builder.Default
     private BigDecimal discountTotal = BigDecimal.ZERO;
 
     @Column(nullable = false, precision = 12, scale = 2)
     private BigDecimal total;
 
     @Column(name = "needs_change", nullable = false)
+    @Builder.Default
     private Boolean needsChange = false;
 
     @Column(name = "change_for", precision = 12, scale = 2)

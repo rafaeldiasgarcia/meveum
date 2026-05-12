@@ -14,13 +14,18 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.util.UUID;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Entity
 @Table(name = "order_item_complements")
 public class ComplementoItemPedido {
@@ -48,11 +53,14 @@ public class ComplementoItemPedido {
     private String complementOptionName;
 
     @Column(name = "unit_price", nullable = false, precision = 12, scale = 2)
+    @Builder.Default
     private BigDecimal unitPrice = BigDecimal.ZERO;
 
     @Column(nullable = false)
+    @Builder.Default
     private Integer quantity = 1;
 
     @Column(nullable = false, precision = 12, scale = 2)
+    @Builder.Default
     private BigDecimal total = BigDecimal.ZERO;
 }
