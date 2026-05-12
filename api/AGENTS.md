@@ -81,11 +81,12 @@ cada etapa desbloqueie testes manuais e funcionalidades reais do sistema.
    - Depois evoluir para horarios de funcionamento.
 
 5. `entrega`
-   - Status: proximo.
+   - Status: concluido.
    - Implementar areas/regras de entrega da loja.
    - Validar tipo de area, taxa, pedido minimo e compatibilidade com loja.
 
 6. `pagamentos`
+   - Status: proximo.
    - Implementar formas de pagamento aceitas pela loja.
    - Validar tipo de pagamento, ativo/inativo e regras por loja.
 
