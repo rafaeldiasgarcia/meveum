@@ -86,11 +86,12 @@ cada etapa desbloqueie testes manuais e funcionalidades reais do sistema.
    - Validar tipo de area, taxa, pedido minimo e compatibilidade com loja.
 
 6. `pagamentos`
-   - Status: proximo.
+   - Status: concluido.
    - Implementar formas de pagamento aceitas pela loja.
    - Validar tipo de pagamento, ativo/inativo e regras por loja.
 
 7. `crm/clientes`
+   - Status: proximo.
    - Implementar cadastro e consulta de clientes.
    - Implementar enderecos de cliente.
    - Preparar reutilizacao no fluxo de pedido.
