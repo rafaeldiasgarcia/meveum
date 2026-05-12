@@ -45,6 +45,18 @@
     {
       "key": "enderecoClienteId",
       "value": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"
+    },
+    {
+      "key": "pedidoId",
+      "value": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"
+    },
+    {
+      "key": "itemPedidoId",
+      "value": "cccccccc-cccc-cccc-cccc-cccccccccccc"
+    },
+    {
+      "key": "complementoItemPedidoId",
+      "value": "dddddddd-dddd-dddd-dddd-dddddddddddd"
     }
   ],
   "item": [
@@ -1375,6 +1387,168 @@
                 "enderecos",
                 "{{enderecoClienteId}}"
               ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Pedidos",
+      "item": [
+        {
+          "name": "Criar Pedido Retirada",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/pedidos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pedidos"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lojaId\": \"{{lojaId}}\",\n  \"clienteId\": \"{{clienteId}}\",\n  \"nomeCliente\": \"Cliente Teste\",\n  \"telefoneCliente\": \"11999999999\",\n  \"tipoRecebimento\": \"PICKUP\",\n  \"formaPagamento\": \"PIX\",\n  \"precisaTroco\": false,\n  \"observacaoCliente\": \"Pedido criado pelo Postman\",\n  \"itens\": [\n    {\n      \"produtoId\": \"{{produtoId}}\",\n      \"quantidade\": 1,\n      \"observacao\": \"Sem cebola\",\n      \"complementos\": [\n        {\n          \"opcaoComplementoId\": \"{{opcaoComplementoId}}\",\n          \"quantidade\": 1\n        }\n      ]\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Criar Pedido Entrega",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/pedidos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pedidos"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lojaId\": \"{{lojaId}}\",\n  \"clienteId\": \"{{clienteId}}\",\n  \"enderecoClienteId\": \"{{enderecoClienteId}}\",\n  \"nomeCliente\": \"Cliente Teste\",\n  \"telefoneCliente\": \"11999999999\",\n  \"tipoRecebimento\": \"DELIVERY\",\n  \"formaPagamento\": \"PIX\",\n  \"precisaTroco\": false,\n  \"observacaoCliente\": \"Pedido entrega criado pelo Postman\",\n  \"itens\": [\n    {\n      \"produtoId\": \"{{produtoId}}\",\n      \"quantidade\": 1,\n      \"observacao\": null,\n      \"complementos\": []\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Listar Pedidos da Loja",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/pedidos?lojaId={{lojaId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pedidos"
+              ],
+              "query": [
+                {
+                  "key": "lojaId",
+                  "value": "{{lojaId}}"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Listar Pedidos Novos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/pedidos?lojaId={{lojaId}}&status=NEW",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pedidos"
+              ],
+              "query": [
+                {
+                  "key": "lojaId",
+                  "value": "{{lojaId}}"
+                },
+                {
+                  "key": "status",
+                  "value": "NEW"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Detalhar Pedido Teste",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/pedidos/{{pedidoId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pedidos",
+                "{{pedidoId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Atualizar Status Pedido Teste",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/pedidos/{{pedidoId}}/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pedidos",
+                "{{pedidoId}}",
+                "status"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"PREPARING\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             }
           }
         }
