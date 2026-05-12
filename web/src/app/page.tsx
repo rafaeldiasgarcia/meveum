@@ -5,49 +5,52 @@ import Link from "next/link";
 import { useState } from "react";
 import { Check } from "lucide-react";
 
-const CREAM = "#f5ede3";
-const DARK = "#111111";
-const ORANGE = "#f97316";
-const BORDER = "#ddd5c8";
-
 // ── Header ────────────────────────────────────────────────────────────────────
 function Header() {
   return (
     <header
-      className="sticky top-0 z-50 border-b"
-      style={{ backgroundColor: CREAM, borderColor: BORDER }}
+      className="sticky top-0 z-50 border-b border-lborder/60 backdrop-blur-md"
+      style={{ backgroundColor: "rgba(251,247,244,0.85)" }}
     >
-      <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5">
+        <Link href="/" className="flex items-center">
           <Image
             src="/logo.png"
             alt="MeVêUm"
-            width={40}
-            height={40}
-            className="object-contain"
+            width={130}
+            height={52}
+            className="h-10 w-auto object-contain"
+            priority
           />
-          <span className="font-black text-xl" style={{ color: DARK }}>
-            Me<span style={{ color: ORANGE }}>Vê</span>Um
-          </span>
         </Link>
-        <nav className="hidden md:flex items-center gap-8 text-sm" style={{ color: "#555" }}>
-          <a href="#funcionalidades" className="hover:text-black transition-colors">Funcionalidades</a>
-          <a href="#cardapio" className="hover:text-black transition-colors">Cardápio digital</a>
-          <a href="#dashboard" className="hover:text-black transition-colors">Dashboard</a>
-          <a href="#precos" className="hover:text-black transition-colors">Preços</a>
-          <a href="#faq" className="hover:text-black transition-colors">FAQ</a>
+
+        <nav className="hidden items-center gap-7 text-sm text-lmuted md:flex">
+          <a href="#funcionalidades" className="hover:text-charcoal transition-colors">Funcionalidades</a>
+          <a href="#cardapio" className="hover:text-charcoal transition-colors">Cardápio digital</a>
+          <a href="#dashboard" className="hover:text-charcoal transition-colors">Dashboard</a>
+          <a href="#precos" className="hover:text-charcoal transition-colors">Preços</a>
+          <a href="#faq" className="hover:text-charcoal transition-colors">FAQ</a>
         </nav>
-        <div className="flex items-center gap-4">
-          <Link href="/login" className="text-sm" style={{ color: "#444" }}>
+
+        <div className="flex items-center gap-2">
+          <Link
+            href="/login"
+            className="hidden rounded-md px-3 py-2 text-sm font-medium text-charcoal/80 hover:text-charcoal sm:inline-flex"
+          >
             Entrar
           </Link>
           <Link
-            href="/register"
-            className="text-sm px-4 py-2 rounded-lg font-semibold text-white"
-            style={{ backgroundColor: DARK }}
+            href="#cta"
+            className="inline-flex items-center gap-2 rounded-md bg-charcoal px-4 py-2 text-sm font-semibold text-cream shadow-soft transition hover:bg-graphite"
           >
-            Teste grátis →
+            Teste grátis<span className="text-ember">→</span>
           </Link>
+          <button
+            aria-label="Menu"
+            className="grid h-9 w-9 place-items-center rounded-md border border-lborder md:hidden"
+          >
+            <span className="block h-px w-4 bg-charcoal" />
+          </button>
         </div>
       </div>
     </header>
@@ -57,204 +60,112 @@ function Header() {
 // ── Lead Form ─────────────────────────────────────────────────────────────────
 function LeadForm() {
   const [aceito, setAceito] = useState(false);
-  const inputCls = "w-full border rounded-lg px-4 py-2.5 text-sm outline-none transition-colors";
-  const inputStyle = { borderColor: BORDER, backgroundColor: "#faf8f5", color: DARK };
 
   return (
-    <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
-      {[
-        { label: "Nome", type: "text", placeholder: "Seu nome" },
-        { label: "Empresa", type: "text", placeholder: "Nome do seu restaurante" },
-        { label: "E-mail", type: "email", placeholder: "voce@restaurante.com" },
-        { label: "WhatsApp", type: "tel", placeholder: "(11) 90000-0000" },
-      ].map((f) => (
-        <div key={f.label}>
-          <label className="block text-sm font-medium mb-1" style={{ color: DARK }}>
-            {f.label}
-          </label>
-          <input type={f.type} placeholder={f.placeholder} className={inputCls} style={inputStyle} />
-        </div>
-      ))}
-      <div className="grid grid-cols-2 gap-3">
-        <div>
-          <label className="block text-sm font-medium mb-1" style={{ color: DARK }}>
-            Faturamento mensal
-          </label>
-          <select className={inputCls} style={inputStyle}>
-            <option value="">Selecionar</option>
-            <option>Até R$ 10 mil</option>
-            <option>R$ 10k – R$ 50k</option>
-            <option>Acima de R$ 50k</option>
-          </select>
-        </div>
-        <div>
-          <label className="block text-sm font-medium mb-1" style={{ color: DARK }}>
-            Segmento
-          </label>
-          <select className={inputCls} style={inputStyle}>
-            <option value="">Selecionar</option>
-            <option>Hamburgueria</option>
-            <option>Pizzaria</option>
-            <option>Restaurante</option>
-            <option>Lanchonete</option>
-          </select>
-        </div>
-      </div>
-      <div className="flex items-start gap-2">
-        <input
-          id="privacidade"
-          type="checkbox"
-          checked={aceito}
-          onChange={(e) => setAceito(e.target.checked)}
-          className="mt-0.5 flex-shrink-0"
-        />
-        <label htmlFor="privacidade" className="text-xs" style={{ color: "#666" }}>
-          Declaro que li e aceito a{" "}
-          <span className="underline cursor-pointer" style={{ color: ORANGE }}>
-            Política de Privacidade
-          </span>
-          .
+    <form
+      className="rounded-2xl border border-lborder bg-white p-6 shadow-lift md:p-7"
+      onSubmit={(e) => e.preventDefault()}
+    >
+      <div className="space-y-3.5">
+        <label className="block">
+          <span className="mb-1 block text-xs font-semibold text-charcoal/80">Nome</span>
+          <input required maxLength={100} placeholder="Seu nome" className="input-base" />
         </label>
-      </div>
-      <button
-        type="submit"
-        className="w-full text-white font-bold py-3 rounded-lg tracking-wider text-sm transition-opacity hover:opacity-90"
-        style={{ backgroundColor: ORANGE }}
-      >
-        TESTAR AGORA →
-      </button>
-    </form>
-  );
-}
-
-// ── Device Mockups ────────────────────────────────────────────────────────────
-function DeviceMockups() {
-  return (
-    <div className="relative mt-8" style={{ height: 220 }}>
-      {/* Laptop */}
-      <div className="absolute left-0 bottom-0" style={{ width: 260 }}>
-        <div
-          className="rounded-t-xl overflow-hidden border-4 shadow-2xl"
-          style={{ borderColor: "#2a2a2a", backgroundColor: "#1a1a1a" }}
+        <label className="block">
+          <span className="mb-1 block text-xs font-semibold text-charcoal/80">Empresa</span>
+          <input required maxLength={120} placeholder="Nome do seu restaurante" className="input-base" />
+        </label>
+        <label className="block">
+          <span className="mb-1 block text-xs font-semibold text-charcoal/80">E-mail</span>
+          <input required type="email" maxLength={160} placeholder="voce@restaurante.com" className="input-base" />
+        </label>
+        <label className="block">
+          <span className="mb-1 block text-xs font-semibold text-charcoal/80">WhatsApp</span>
+          <input required maxLength={20} placeholder="(11) 90000-0000" className="input-base" />
+        </label>
+        <div className="grid grid-cols-2 gap-3">
+          <label className="block">
+            <span className="mb-1 block text-xs font-semibold text-charcoal/80">Faturamento mensal</span>
+            <select className="input-base">
+              <option>Selecionar</option>
+              <option>Até R$ 10 mil</option>
+              <option>R$ 10 a 30 mil</option>
+              <option>R$ 30 a 80 mil</option>
+              <option>Acima de R$ 80 mil</option>
+            </select>
+          </label>
+          <label className="block">
+            <span className="mb-1 block text-xs font-semibold text-charcoal/80">Segmento</span>
+            <select className="input-base">
+              <option>Selecionar</option>
+              <option>Hamburgueria</option>
+              <option>Pizzaria</option>
+              <option>Restaurante</option>
+              <option>Delivery</option>
+              <option>Açaiteria</option>
+            </select>
+          </label>
+        </div>
+        <label className="mt-2 flex items-start gap-2 text-xs text-lmuted">
+          <input
+            type="checkbox"
+            checked={aceito}
+            onChange={(e) => setAceito(e.target.checked)}
+            className="mt-0.5 h-4 w-4"
+            style={{ accentColor: "#EA580C" }}
+          />
+          <span>
+            Declaro que li e aceito a{" "}
+            <a href="#" className="text-ember underline underline-offset-2">
+              Política de Privacidade
+            </a>
+            .
+          </span>
+        </label>
+        <button
+          type="submit"
+          disabled={!aceito}
+          className="mt-2 w-full rounded-md bg-ember py-3 text-sm font-bold uppercase tracking-wider text-white shadow-ember transition hover:bg-ember-deep disabled:cursor-not-allowed disabled:opacity-50"
         >
-          <div className="p-1.5" style={{ backgroundColor: "#fff8f2" }}>
-            <div className="flex gap-1" style={{ height: 130 }}>
-              <div className="w-10 rounded flex flex-col gap-1 p-1.5" style={{ backgroundColor: "#111" }}>
-                <div className="w-4 h-4 rounded" style={{ backgroundColor: ORANGE }}></div>
-                {[...Array(4)].map((_, i) => (
-                  <div key={i} className="h-2 w-full rounded-sm" style={{ backgroundColor: "#2a2a2a" }}></div>
-                ))}
-              </div>
-              <div className="flex-1 flex flex-col gap-1">
-                <div className="grid grid-cols-2 gap-1">
-                  {[
-                    { label: "FAT", value: "R$8.640" },
-                    { label: "TICKET", value: "R$47,80" },
-                    { label: "PEDIDOS", value: "182" },
-                    { label: "TEMPO", value: "23min" },
-                  ].map((m) => (
-                    <div key={m.label} className="rounded p-1 border" style={{ backgroundColor: "#fff", borderColor: "#f0ebe5" }}>
-                      <div className="text-[5px] font-medium" style={{ color: "#aaa" }}>{m.label}</div>
-                      <div className="text-[8px] font-black" style={{ color: DARK }}>{m.value}</div>
-                    </div>
-                  ))}
-                </div>
-                <div className="flex-1 rounded border p-1 overflow-hidden" style={{ backgroundColor: "#fff", borderColor: "#f0ebe5" }}>
-                  {[
-                    { name: "Smash Bacon Duplo", status: "EM PREPARO", bg: "#fef3e2", color: "#c2410c" },
-                    { name: "Combo Família", status: "SAIU", bg: "#dbeafe", color: "#1d4ed8" },
-                    { name: "Pizza Calabresa", status: "PAGO PIX", bg: "#dcfce7", color: "#15803d" },
-                  ].map((o) => (
-                    <div key={o.name} className="flex items-center justify-between border-b py-0.5 last:border-0" style={{ borderColor: "#f5f5f5" }}>
-                      <span className="text-[5px]" style={{ color: "#333" }}>{o.name}</span>
-                      <span className="text-[4px] px-1 rounded" style={{ backgroundColor: o.bg, color: o.color }}>{o.status}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="h-2 rounded-b" style={{ backgroundColor: "#2a2a2a" }}></div>
+          Testar agora →
+        </button>
       </div>
-
-      {/* Phone */}
-      <div
-        className="absolute right-4 bottom-4 rounded-3xl border-4 shadow-2xl overflow-hidden"
-        style={{ width: 120, borderColor: "#1a1a1a", backgroundColor: "#111" }}
-      >
-        <div className="p-2" style={{ background: "linear-gradient(to bottom, #f97316, #ea580c)" }}>
-          <div className="text-[5px] font-medium mb-0.5" style={{ color: "#fed7aa" }}>CARDÁPIO · ABERTO</div>
-          <div className="text-[9px] font-black text-white leading-tight">Burger do Bairro</div>
-          <div className="flex gap-1 mt-1 overflow-hidden">
-            {["Mais pedidos", "Burgers", "Pizzas"].map((t, i) => (
-              <span
-                key={t}
-                className="text-[5px] px-1 py-0.5 rounded-full flex-shrink-0 whitespace-nowrap"
-                style={{ backgroundColor: i === 0 ? "#fff" : "rgba(255,255,255,0.25)", color: i === 0 ? ORANGE : "#fff" }}
-              >
-                {t}
-              </span>
-            ))}
-          </div>
-        </div>
-        <div className="p-1.5 space-y-1.5" style={{ backgroundColor: "#fff" }}>
-          {[
-            { name: "Smash Bacon Duplo", price: "R$ 38,90", tag: "MAIS PEDIDO" },
-            { name: "Pizza Calabresa Artesanal", price: "R$ 52,00" },
-            { name: "Combo Família", price: "R$ 119,90", tag: "COMBO" },
-          ].map((item) => (
-            <div key={item.name} className="flex items-center gap-1 border-b pb-1 last:border-0" style={{ borderColor: "#f5f5f5" }}>
-              <div className="w-7 h-7 rounded flex-shrink-0" style={{ backgroundColor: ORANGE }}></div>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-0.5 flex-wrap">
-                  <span className="text-[5px] font-semibold" style={{ color: DARK }}>{item.name}</span>
-                  {item.tag && (
-                    <span className="text-[4px] px-0.5 rounded" style={{ backgroundColor: "#fef3e2", color: "#c2410c" }}>{item.tag}</span>
-                  )}
-                </div>
-                <div className="text-[6px] font-bold" style={{ color: ORANGE }}>{item.price}</div>
-              </div>
-            </div>
-          ))}
-          <button className="w-full text-white text-[5px] font-bold py-1.5 rounded-full" style={{ backgroundColor: ORANGE }}>
-            Finalizar pedido · R$ 92,80
-          </button>
-        </div>
-      </div>
-    </div>
+    </form>
   );
 }
 
 // ── Hero ──────────────────────────────────────────────────────────────────────
 function Hero() {
   return (
-    <section style={{ backgroundColor: CREAM }} className="pt-12 pb-20 px-6" id="inicio">
-      <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-start">
-        <div>
-          <div
-            className="inline-flex items-center gap-2 text-sm rounded-full px-4 py-1.5 mb-6 border"
-            style={{ backgroundColor: "#fff", borderColor: BORDER, color: "#555" }}
-          >
-            <span className="w-2 h-2 rounded-full" style={{ backgroundColor: ORANGE }}></span>
+    <section className="relative overflow-hidden border-b border-lborder bg-cream">
+      <div className="bg-grain absolute inset-0 opacity-60" />
+      <div className="relative mx-auto grid max-w-6xl items-start gap-10 px-5 pb-16 pt-12 md:grid-cols-12 md:gap-12 md:pb-20 md:pt-16">
+        <div className="md:col-span-7">
+          <div className="inline-flex items-center gap-2 rounded-full border border-lborder bg-white px-3 py-1 text-xs font-medium text-lmuted">
+            <span className="h-1.5 w-1.5 rounded-full bg-ember" />
             Sistema para Delivery e Restaurante
           </div>
-          <h1 className="text-5xl lg:text-6xl font-black leading-tight mb-5" style={{ color: DARK }}>
-            O Cardápio Digital{" "}
-            <span style={{ color: ORANGE }}>
-              mais
-              <br />
-              completo
-            </span>{" "}
-            do Brasil.
+          <h1 className="mt-5 text-balance font-display text-4xl font-semibold leading-[1.05] tracking-tight text-charcoal md:text-5xl lg:text-[52px]">
+            O Cardápio Digital
+            <span className="text-ember"> mais completo</span> do Brasil.
           </h1>
-          <p className="text-lg leading-relaxed max-w-lg" style={{ color: "#555" }}>
+          <p className="mt-4 max-w-xl text-pretty text-base text-charcoal/70 md:text-lg">
             Experimente a ferramenta que vai automatizar seus pedidos de WhatsApp, aumentar suas
             vendas com marketing e profissionalizar a gestão do seu negócio de uma vez por todas.
           </p>
-          <DeviceMockups />
+          <div className="relative mt-8">
+            <Image
+              src="/mock-hero.png"
+              alt="MeVêUm exibido em notebook, celular e tablet com cardápio digital de hamburgueria"
+              width={1280}
+              height={896}
+              className="w-full"
+              style={{ filter: "drop-shadow(0 30px 40px rgba(40,25,10,0.18))" }}
+              priority
+            />
+          </div>
         </div>
-        <div className="rounded-2xl shadow-xl p-8 border" style={{ backgroundColor: "#fff", borderColor: BORDER }}>
+        <div className="md:col-span-5 md:sticky md:top-24">
           <LeadForm />
         </div>
       </div>
@@ -262,23 +173,51 @@ function Hero() {
   );
 }
 
-// ── Logos Strip ───────────────────────────────────────────────────────────────
-function LogosStrip() {
+// ── Integrations Marquee ──────────────────────────────────────────────────────
+const INTEGRACOES = [
+  { nome: "iFood",        arquivo: "ifood",       w: 80,  h: 24 },
+  { nome: "PIX",          arquivo: "pix",         w: 24,  h: 24 },
+  { nome: "Mercado Pago", arquivo: "mercadopago", w: 24,  h: 24 },
+  { nome: "WhatsApp",     arquivo: "whatsapp",    w: 24,  h: 24 },
+  { nome: "Cielo",        arquivo: "cielo",       w: 64,  h: 24 },
+  { nome: "Loggi",        arquivo: "loggi",       w: 64,  h: 24 },
+  { nome: "Stone",        arquivo: "stone",       w: 72,  h: 24 },
+  { nome: "Rappi",        arquivo: "rappi",       w: 72,  h: 24 },
+  { nome: "Uber Eats",    arquivo: "ubereats",    w: 24,  h: 24 },
+  { nome: "PagSeguro",    arquivo: "pagseguro",   w: 24,  h: 24 },
+  { nome: "Nubank",       arquivo: "nubank",      w: 24,  h: 24 },
+  { nome: "PicPay",       arquivo: "picpay",      w: 24,  h: 24 },
+  { nome: "Visa",         arquivo: "visa",        w: 24,  h: 24 },
+  { nome: "Mastercard",   arquivo: "mastercard",  w: 24,  h: 24 },
+  { nome: "Getnet",       arquivo: "getnet",      w: 80,  h: 24 },
+  { nome: "Ame",          arquivo: "ame",         w: 48,  h: 24 },
+];
+
+function IntegracoesMaquee() {
+  const items = [...INTEGRACOES, ...INTEGRACOES];
   return (
-    <section
-      className="py-8 px-6"
-      style={{ backgroundColor: CREAM, borderTop: `1px solid ${BORDER}`, borderBottom: `1px solid ${BORDER}` }}
-    >
-      <div className="max-w-7xl mx-auto">
-        <p className="text-center text-xs font-semibold tracking-widest mb-4" style={{ color: "#aaa" }}>
-          INTEGRAÇÕES NATIVAS
+    <section className="border-y border-lborder bg-white">
+      <div className="mx-auto max-w-7xl px-5 py-8">
+        <p className="mb-5 text-center text-xs font-semibold uppercase tracking-[0.18em] text-lmuted">
+          Integrações nativas
         </p>
-        <div className="flex items-center justify-center flex-wrap gap-x-12 gap-y-2">
-          {["Rappi", "Uber Eats", "PagSeguro", "Getnet", "Ame Digital", "iFood", "Mercado Pago"].map((logo) => (
-            <span key={logo} className="text-base font-semibold" style={{ color: "#999" }}>
-              {logo}
-            </span>
-          ))}
+        <div
+          className="group relative overflow-hidden"
+          style={{ maskImage: "linear-gradient(to right, transparent, black 8%, black 92%, transparent)" }}
+        >
+          <div className="flex w-max animate-marquee items-center gap-14 whitespace-nowrap">
+            {items.map((integ, i) => (
+              <Image
+                key={i}
+                src={`/integracoes/${integ.arquivo}.svg`}
+                alt={integ.nome}
+                width={integ.w * 1.5}
+                height={integ.h * 1.5}
+                className="h-7 w-auto opacity-55 transition-opacity hover:opacity-90"
+                unoptimized
+              />
+            ))}
+          </div>
         </div>
       </div>
     </section>
@@ -286,41 +225,39 @@ function LogosStrip() {
 }
 
 // ── Problema Section ──────────────────────────────────────────────────────────
-function ProblemaSection() {
-  const problemas = [
-    { num: "01", titulo: "Áudio de 4 minutos", descricao: "para confirmar 2 hambúrgueres." },
-    { num: "02", titulo: "Print perdido", descricao: "no meio de 80 conversas no WhatsApp." },
-    { num: "03", titulo: "Anotação errada", descricao: "vira reclamação e pedido refeito." },
-    { num: "04", titulo: "Cozinha sem fila", descricao: "sai pedido frio, cliente reclama." },
-  ];
+const PROBLEMAS = [
+  { num: "01", titulo: "Áudio de 4 minutos", descricao: "para confirmar 2 hambúrgueres." },
+  { num: "02", titulo: "Print perdido", descricao: "no meio de 80 conversas no WhatsApp." },
+  { num: "03", titulo: "Anotação errada", descricao: "vira reclamação e pedido refeito." },
+  { num: "04", titulo: "Cozinha sem fila", descricao: "sai pedido frio, cliente reclama." },
+];
 
+function ProblemaSection() {
   return (
-    <section style={{ backgroundColor: DARK }} className="py-24 px-6">
-      <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
-        <div>
-          <p className="text-sm font-semibold tracking-widest mb-4" style={{ color: ORANGE }}>
-            O PROBLEMA
-          </p>
-          <h2 className="text-4xl lg:text-5xl font-black leading-tight mb-6 text-white">
-            WhatsApp desorganizado custa caro.
-          </h2>
-          <p className="text-base leading-relaxed" style={{ color: "#888" }}>
-            A maioria dos restaurantes brasileiros perde de 8% a 15% dos pedidos por bagunça
-            operacional. Não é falta de cliente — é falta de sistema.
-          </p>
-        </div>
-        <div>
-          {problemas.map((p) => (
-            <div key={p.num} className="flex items-start gap-6 py-5 border-b" style={{ borderColor: "#2a2a2a" }}>
-              <span className="text-sm font-mono flex-shrink-0 mt-0.5" style={{ color: "#555" }}>
-                {p.num}
-              </span>
-              <div>
-                <p className="font-bold text-white text-base">{p.titulo}</p>
-                <p className="text-sm mt-0.5" style={{ color: "#777" }}>{p.descricao}</p>
-              </div>
-            </div>
-          ))}
+    <section className="border-b border-white/10 bg-charcoal text-cream">
+      <div className="mx-auto max-w-7xl px-5 py-20 md:py-28">
+        <div className="grid gap-10 md:grid-cols-12">
+          <div className="md:col-span-5">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-ember">O problema</p>
+            <h2 className="mt-3 font-display text-4xl font-semibold leading-[1.05] md:text-5xl">
+              WhatsApp desorganizado custa caro.
+            </h2>
+            <p className="mt-4 max-w-md text-cream/70">
+              A maioria dos restaurantes brasileiros perde de 8% a 15% dos pedidos por bagunça
+              operacional. Não é falta de cliente — é falta de sistema.
+            </p>
+          </div>
+          <ul className="divide-y divide-cream/10 md:col-span-7">
+            {PROBLEMAS.map((p) => (
+              <li key={p.num} className="flex items-start gap-5 py-5">
+                <span className="font-mono text-xs text-cream/40">{p.num}</span>
+                <div>
+                  <p className="font-display text-xl font-semibold">{p.titulo}</p>
+                  <p className="text-cream/60">{p.descricao}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </section>
@@ -328,44 +265,46 @@ function ProblemaSection() {
 }
 
 // ── Funcionalidades Section ───────────────────────────────────────────────────
-function FuncionalidadesSection() {
-  const cards = [
-    { num: "01", titulo: "Pedido entrou, cozinha viu.", descricao: "Cada pedido cai direto na tela da cozinha, com tempo, status e prioridade. Sem print, sem dúvida." },
-    { num: "02", titulo: "Cardápio digital que vende.", descricao: "Fotos, combos, adicionais e cupons. Cliente escolhe pelo celular e finaliza no PIX em segundos." },
-    { num: "03", titulo: "QR Code na mesa.", descricao: "Cada mesa tem seu próprio QR. Cliente abre, pede, paga. Garçom só leva e fecha." },
-    { num: "04", titulo: "WhatsApp organizado.", descricao: "Mensagens viram pedidos formais. Atalhos, automações e disparo de campanhas para a sua base." },
-  ];
+const FUNCIONALIDADES = [
+  { num: "01", titulo: "Pedido entrou, cozinha viu.", descricao: "Cada pedido cai direto na tela da cozinha, com tempo, status e prioridade. Sem print, sem dúvida." },
+  { num: "02", titulo: "Cardápio digital que vende.", descricao: "Fotos, combos, adicionais e cupons. Cliente escolhe pelo celular e finaliza no PIX em segundos." },
+  { num: "03", titulo: "QR Code na mesa.", descricao: "Cada mesa tem seu QR. Cliente abre, pede, paga. Garçom só leva e fecha." },
+  { num: "04", titulo: "WhatsApp organizado.", descricao: "Mensagens viram pedidos formais. Atalhos, automações e disparo de campanhas para a sua base." },
+];
 
+function FuncionalidadesSection() {
   return (
-    <section id="funcionalidades" style={{ backgroundColor: CREAM }} className="py-24 px-6">
-      <div className="max-w-7xl mx-auto">
-        <div className="flex items-end justify-between mb-12 flex-wrap gap-4">
-          <div>
-            <p className="text-sm font-semibold tracking-widest mb-3" style={{ color: ORANGE }}>
-              COMO O MEVÊUM RESOLVE
+    <section id="funcionalidades" className="border-b border-lborder bg-white">
+      <div className="mx-auto max-w-7xl px-5 py-20 md:py-28">
+        <div className="flex flex-wrap items-end justify-between gap-6">
+          <div className="max-w-xl">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-ember">
+              Como o MeVêUm resolve
             </p>
-            <h2 className="text-4xl lg:text-5xl font-black leading-tight" style={{ color: DARK }}>
-              Tudo que sua operação precisa.{" "}
-              <span style={{ color: ORANGE }}>Em uma tela só.</span>
+            <h2 className="mt-3 font-display text-4xl font-semibold leading-[1.05] text-charcoal md:text-5xl">
+              Tudo que sua operação precisa
+              <span className="text-ember">. Em uma tela só.</span>
             </h2>
           </div>
-          <a href="/register" className="text-sm font-semibold" style={{ color: ORANGE }}>
+          <a href="#cta" className="text-sm font-semibold text-ember hover:underline">
             Quero testar no meu restaurante →
           </a>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-px" style={{ backgroundColor: BORDER }}>
-          {cards.map((card) => (
-            <div key={card.num} className="p-8" style={{ backgroundColor: "#fff" }}>
-              <div className="flex items-center gap-3 mb-4">
-                <span className="text-xs font-black px-2.5 py-1.5 rounded-xl text-white" style={{ backgroundColor: DARK }}>
-                  {card.num}
+        <div className="mt-12 grid gap-px overflow-hidden rounded-2xl border border-lborder bg-lborder md:grid-cols-2">
+          {FUNCIONALIDADES.map((f) => (
+            <div key={f.num} className="bg-white p-7">
+              <div className="flex items-center gap-3">
+                <span className="grid h-9 w-9 place-items-center rounded-md bg-charcoal font-mono text-xs text-cream">
+                  {f.num}
                 </span>
-                <span className="text-xs font-semibold tracking-widest" style={{ color: "#aaa" }}>
-                  FUNCIONALIDADE
+                <span className="text-xs font-medium uppercase tracking-wider text-lmuted">
+                  Funcionalidade
                 </span>
               </div>
-              <h3 className="text-xl font-black mb-2" style={{ color: DARK }}>{card.titulo}</h3>
-              <p className="text-sm leading-relaxed" style={{ color: "#666" }}>{card.descricao}</p>
+              <h3 className="mt-5 font-display text-2xl font-semibold leading-tight text-charcoal">
+                {f.titulo}
+              </h3>
+              <p className="mt-2 text-charcoal/70">{f.descricao}</p>
             </div>
           ))}
         </div>
@@ -374,63 +313,76 @@ function FuncionalidadesSection() {
   );
 }
 
-// ── Phone Mockup ──────────────────────────────────────────────────────────────
+// ── Phone Mockup (Cardápio) ───────────────────────────────────────────────────
 function PhoneMockupCardapio() {
   return (
-    <div className="relative">
-      <div
-        className="absolute -left-8 top-16 z-10 rounded-full px-3 py-1.5 text-xs font-bold shadow-lg border"
-        style={{ backgroundColor: "#fff", borderColor: BORDER, color: DARK }}
-      >
-        PAGAMENTO PIX ✓
-      </div>
-      <div
-        className="rounded-[2.5rem] border-4 shadow-2xl overflow-hidden"
-        style={{ width: 280, borderColor: DARK, backgroundColor: DARK }}
-      >
-        <div className="flex justify-center pt-2 pb-1">
-          <div className="w-20 h-4 rounded-full" style={{ backgroundColor: "#222" }}></div>
+    <div className="relative mx-auto max-w-sm">
+      <div className="absolute -left-10 top-10 hidden rotate-[-8deg] rounded-2xl bg-white p-3 shadow-lift md:block">
+        <p className="text-[10px] font-medium uppercase text-lmuted">Pagamento</p>
+        <p className="font-display text-lg font-semibold text-charcoal">PIX em 3s</p>
+        <div className="mt-1 h-1 w-24 overflow-hidden rounded-full bg-lborder">
+          <div className="h-full w-2/3 bg-whatsapp" />
         </div>
-        <div className="px-4 pb-3" style={{ background: "linear-gradient(to bottom, #f97316, #ea580c)" }}>
-          <div className="text-[10px] font-medium mb-1" style={{ color: "#fed7aa" }}>CARDÁPIO · ABERTO</div>
-          <div className="text-lg font-black text-white">Burger do Bairro</div>
-          <div className="flex gap-2 mt-2 overflow-hidden">
-            {["Mais pedidos", "Burgers", "Pizzas", "Bebidas", "Sobrem."].map((cat, i) => (
+      </div>
+      <div className="rounded-[2.2rem] border border-charcoal/15 bg-charcoal p-2 shadow-lift">
+        <div className="overflow-hidden rounded-[1.8rem] bg-cream">
+          <div
+            className="relative h-32"
+            style={{ background: "linear-gradient(to bottom right, #EA580C, #F59E0B)" }}
+          >
+            <div className="absolute bottom-3 left-4 text-cream">
+              <p className="text-[11px] uppercase tracking-wider opacity-80">Cardápio · Aberto</p>
+              <p className="font-display text-xl font-semibold">Burger do Bairro</p>
+            </div>
+          </div>
+          <div className="flex gap-2 overflow-hidden border-b border-lborder px-4 py-3 text-xs">
+            {["Mais pedidos", "Burgers", "Pizzas", "Bebidas", "Sobremesas"].map((cat, i) => (
               <span
                 key={cat}
-                className="text-[9px] px-2 py-1 rounded-full flex-shrink-0 font-medium whitespace-nowrap"
-                style={{ backgroundColor: i === 0 ? "#fff" : "rgba(255,255,255,0.2)", color: i === 0 ? ORANGE : "#fff" }}
+                className="whitespace-nowrap rounded-full px-3 py-1"
+                style={{
+                  background: i === 0 ? "#1C1917" : "#F5F0EC",
+                  color: i === 0 ? "#FBF7F4" : "#78716C",
+                }}
               >
                 {cat}
               </span>
             ))}
           </div>
-        </div>
-        <div className="bg-white p-3 space-y-3">
-          {[
-            { name: "Smash Bacon Duplo", desc: "Dois blends 90g, cheddar, bacon crocante, molho da casa.", price: "R$ 38,90", tag: "MAIS PEDIDO" },
-            { name: "Pizza Calabresa Artesanal", desc: "Massa fermentada 48h, mussarela e calabresa premium.", price: "R$ 52,00" },
-            { name: "Combo Família", desc: "4 burgers, 2 fritas grandes e 2 refris 600ml.", price: "R$ 119,90", tag: "COMBO" },
-          ].map((item) => (
-            <div key={item.name} className="flex gap-3 border-b pb-3 last:border-0" style={{ borderColor: "#f5f5f5" }}>
-              <div className="w-14 h-14 rounded-xl flex-shrink-0" style={{ backgroundColor: ORANGE }}></div>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-1.5 flex-wrap mb-0.5">
-                  <span className="text-xs font-bold" style={{ color: DARK }}>{item.name}</span>
-                  {item.tag && (
-                    <span className="text-[9px] px-1.5 py-0.5 rounded font-semibold" style={{ backgroundColor: "#fef3e2", color: "#c2410c" }}>
-                      {item.tag}
-                    </span>
-                  )}
+          <ul className="divide-y divide-lborder">
+            {[
+              { nome: "Smash Bacon Duplo", desc: "Dois blends 90g, cheddar, bacon crocante, molho da casa.", preco: "R$ 38,90", tag: "Mais pedido" },
+              { nome: "Pizza Calabresa Artesanal", desc: "Massa fermentada 48h, mussarela e calabresa premium.", preco: "R$ 52,00" },
+              { nome: "Combo Família", desc: "4 burgers, 2 fritas grandes e 2 refris 600ml.", preco: "R$ 119,90", tag: "Combo" },
+            ].map((item) => (
+              <li key={item.nome} className="flex gap-3 p-4">
+                <div
+                  className="h-16 w-16 shrink-0 rounded-lg"
+                  style={{ background: "linear-gradient(to bottom right, #F59E0B, #C2410C)" }}
+                />
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-2">
+                    <p className="truncate text-sm font-semibold text-charcoal">{item.nome}</p>
+                    {item.tag && (
+                      <span
+                        className="rounded-full px-2 py-0.5 text-[9px] font-bold uppercase text-ember"
+                        style={{ background: "rgba(234,88,12,0.12)" }}
+                      >
+                        {item.tag}
+                      </span>
+                    )}
+                  </div>
+                  <p className="mt-0.5 line-clamp-2 text-xs text-lmuted">{item.desc}</p>
+                  <p className="mt-1 text-sm font-semibold text-ember">{item.preco}</p>
                 </div>
-                <p className="text-[10px] leading-tight mb-1" style={{ color: "#888" }}>{item.desc}</p>
-                <span className="text-xs font-bold" style={{ color: ORANGE }}>{item.price}</span>
-              </div>
-            </div>
-          ))}
-          <button className="w-full text-white text-xs font-bold py-3 rounded-full" style={{ backgroundColor: ORANGE }}>
-            Finalizar pedido · R$ 92,80
-          </button>
+              </li>
+            ))}
+          </ul>
+          <div className="border-t border-lborder bg-cream p-3">
+            <button className="w-full rounded-lg bg-ember py-3 text-sm font-semibold text-white">
+              Finalizar pedido · R$ 92,80
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -440,37 +392,39 @@ function PhoneMockupCardapio() {
 // ── Cardápio Section ──────────────────────────────────────────────────────────
 function CardapioSection() {
   return (
-    <section id="cardapio" style={{ backgroundColor: CREAM, borderTop: `1px solid ${BORDER}` }} className="py-24 px-6">
-      <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
-        <div>
-          <p className="text-sm font-semibold tracking-widest mb-4" style={{ color: ORANGE }}>
-            CARDÁPIO DIGITAL
-          </p>
-          <h2 className="text-4xl lg:text-5xl font-black leading-tight mb-5" style={{ color: DARK }}>
-            Seu cardápio online pronto para vender.
-          </h2>
-          <p className="text-base leading-relaxed mb-8" style={{ color: "#555" }}>
-            Personalize cores, fotos, combos e adicionais. Funciona em qualquer celular, sem
-            instalação. Compartilhe um link, cole um QR Code — e está vendendo.
-          </p>
-          <ul className="space-y-3">
-            {[
-              "Fotos profissionais com IA de realce",
-              "Combos, adicionais e variações ilimitadas",
-              "Cupom, frete por bairro e horário de funcionamento",
-              "Pagamento PIX, cartão e dinheiro na entrega",
-            ].map((item) => (
-              <li key={item} className="flex items-center gap-3 text-sm" style={{ color: "#444" }}>
-                <div className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: ORANGE }}>
-                  <Check size={11} color="#fff" strokeWidth={3} />
-                </div>
-                {item}
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div className="flex justify-center">
-          <PhoneMockupCardapio />
+    <section id="cardapio" className="border-b border-lborder bg-sand">
+      <div className="mx-auto max-w-7xl px-5 py-20 md:py-28">
+        <div className="grid gap-12 md:grid-cols-12 md:items-center">
+          <div className="md:col-span-5">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-ember-deep">
+              Cardápio digital
+            </p>
+            <h2 className="mt-3 font-display text-4xl font-semibold leading-[1.05] text-charcoal md:text-5xl">
+              Seu cardápio online pronto para vender.
+            </h2>
+            <p className="mt-4 max-w-md text-charcoal/70">
+              Personalize cores, fotos, combos e adicionais. Funciona em qualquer celular, sem
+              instalação. Compartilhe um link, cole um QR Code — e está vendendo.
+            </p>
+            <ul className="mt-6 space-y-3 text-sm text-charcoal">
+              {[
+                "Fotos profissionais com IA de realce",
+                "Combos, adicionais e variações ilimitadas",
+                "Cupom, frete por bairro e horário de funcionamento",
+                "Pagamento PIX, cartão e dinheiro na entrega",
+              ].map((item) => (
+                <li key={item} className="flex items-start gap-3">
+                  <span className="mt-1 grid h-4 w-4 place-items-center rounded-full bg-ember text-[10px] text-white">
+                    <Check size={9} strokeWidth={3} />
+                  </span>
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="md:col-span-7">
+            <PhoneMockupCardapio />
+          </div>
         </div>
       </div>
     </section>
@@ -478,110 +432,122 @@ function CardapioSection() {
 }
 
 // ── Dashboard Section ─────────────────────────────────────────────────────────
-function DashboardSection() {
-  const metrics = [
-    { label: "PEDIDOS HOJE", value: "182", delta: "+24% vs ontem", positive: true },
-    { label: "FATURAMENTO", value: "R$ 8.640", delta: "+18% vs ontem", positive: true },
-    { label: "TICKET MÉDIO", value: "R$ 47,80", delta: "+R$ 3,20 vs ontem", positive: true },
-    { label: "TEMPO MÉDIO", value: "23 min", delta: "−4 min vs ontem", positive: false },
-  ];
-  const orders = [
-    { id: "#1024", name: "Smash Bacon Duplo", sub: "Marina Alves · Mesa 08", status: "EM PREPARO", valor: "R$ 52,80", cor: "#f97316" },
-    { id: "#1023", name: "Combo Família", sub: "João Pedro · Delivery", status: "SAIU P/ ENTREGA", valor: "R$ 119,90", cor: "#3b82f6" },
-    { id: "#1022", name: "Pizza Calabresa", sub: "Bruno C. · Mesa 03", status: "PAGO PIX", valor: "R$ 64,00", cor: "#22c55e" },
-    { id: "#1021", name: "Açaí 500ml + Granola", sub: "Patrícia B. · Balcão", status: "PRONTO", valor: "R$ 24,90", cor: "#22c55e" },
-    { id: "#1020", name: "Hambúrguer Clássico + Coca", sub: "Lucas M. · Delivery", status: "ACEITO", valor: "R$ 38,90", cor: "#666" },
-  ];
-  const clientes = [
-    { initials: "MA", name: "Marina Alves", pedidos: "12 pedidos", badge: "VIP", cor: "#f97316" },
-    { initials: "JP", name: "João Pedro", pedidos: "8 pedidos", badge: "RECORRENTE", cor: "#3b82f6" },
-    { initials: "PB", name: "Patrícia Bento", pedidos: "6 pedidos", badge: "RECORRENTE", cor: "#3b82f6" },
-    { initials: "BC", name: "Bruno Carmo", pedidos: "4 pedidos", badge: "NOVO", cor: "#666" },
-  ];
+const METRICAS = [
+  { label: "Pedidos hoje", value: "182", delta: "+24% vs ontem", cor: "#F59E0B" },
+  { label: "Faturamento", value: "R$ 8.640", delta: "+18% vs ontem", cor: "#F59E0B" },
+  { label: "Ticket médio", value: "R$ 47,80", delta: "+R$ 3,20 vs ontem", cor: "#F59E0B" },
+  { label: "Tempo médio", value: "23 min", delta: "−4 min vs ontem", cor: "#F59E0B" },
+];
 
+const PEDIDOS_LIVE = [
+  { id: "#1024", nome: "Smash Bacon Duplo", sub: "Marina Alves · Mesa 08", status: "Em preparo", valor: "R$ 52,80", bg: "rgba(234,88,12,0.15)", cor: "#EA580C" },
+  { id: "#1023", nome: "Combo Família", sub: "João Pedro · Delivery", status: "Saiu p/ entrega", valor: "R$ 119,90", bg: "rgba(37,211,102,0.15)", cor: "#4ade80" },
+  { id: "#1022", nome: "Pizza Calabresa", sub: "Bruno C. · Mesa 03", status: "Pago PIX", valor: "R$ 64,00", bg: "rgba(245,158,11,0.2)", cor: "#F59E0B" },
+  { id: "#1021", nome: "Açaí 500ml + Granola", sub: "Patrícia B. · Balcão", status: "Pronto", valor: "R$ 24,90", bg: "rgba(37,211,102,0.15)", cor: "#4ade80" },
+  { id: "#1020", nome: "Hambúrguer Clássico + Coca", sub: "Lucas M. · Delivery", status: "Aceito", valor: "R$ 38,90", bg: "rgba(234,88,12,0.15)", cor: "#EA580C" },
+];
+
+const CLIENTES = [
+  { initials: "MA", nome: "Marina Alves", pedidos: "12 pedidos", badge: "VIP" },
+  { initials: "JP", nome: "João Pedro", pedidos: "8 pedidos", badge: "Recorrente" },
+  { initials: "PB", nome: "Patrícia Bento", pedidos: "6 pedidos", badge: "Recorrente" },
+  { initials: "BC", nome: "Bruno Carmo", pedidos: "4 pedidos", badge: "Novo" },
+];
+
+function DashboardSection() {
   return (
-    <section id="dashboard" style={{ backgroundColor: "#111" }} className="py-24 px-6">
-      <div className="max-w-7xl mx-auto">
-        <div className="flex items-start justify-between mb-10 flex-wrap gap-4">
-          <div>
-            <p className="text-sm font-semibold tracking-widest mb-3" style={{ color: ORANGE }}>
-              DASHBOARD OPERACIONAL
+    <section id="dashboard" className="border-b border-white/10 bg-charcoal text-cream">
+      <div className="mx-auto max-w-7xl px-5 py-20 md:py-28">
+        <div className="flex flex-wrap items-end justify-between gap-6">
+          <div className="max-w-xl">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-amber-warm">
+              Dashboard operacional
             </p>
-            <h2 className="text-4xl lg:text-5xl font-black leading-tight text-white">
+            <h2 className="mt-3 font-display text-4xl font-semibold leading-[1.05] md:text-5xl">
               Você enxerga tudo. Em tempo real.
             </h2>
-            <p className="mt-3 text-base max-w-lg" style={{ color: "#888" }}>
+            <p className="mt-4 text-cream/70">
               Pedidos, faturamento, ticket médio, fila da cozinha, clientes recorrentes. Decisões
               na hora — sem planilha, sem achismo.
             </p>
           </div>
-          <Link
+          <a
             href="/login"
-            className="text-sm font-semibold self-end px-4 py-2 rounded-lg border"
-            style={{ borderColor: "#333", color: "#ddd" }}
+            className="rounded-md border border-cream/20 px-4 py-2 text-sm font-semibold hover:bg-cream/10"
           >
             Abrir demo do dashboard →
-          </Link>
+          </a>
         </div>
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
-          {metrics.map((m) => (
-            <div key={m.label} className="rounded-xl p-4" style={{ backgroundColor: "#1e1e1e", border: "1px solid #2a2a2a" }}>
-              <p className="text-[10px] font-semibold tracking-widest mb-2" style={{ color: "#666" }}>{m.label}</p>
-              <p className="text-2xl font-black text-white">{m.value}</p>
-              <p className="text-xs mt-1" style={{ color: m.positive ? "#4ade80" : "#888" }}>{m.delta}</p>
+
+        <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-4">
+          {METRICAS.map((m) => (
+            <div
+              key={m.label}
+              className="rounded-xl border border-cream/10 bg-graphite p-5"
+            >
+              <p className="text-[10px] uppercase tracking-wider text-cream/50">{m.label}</p>
+              <p className="mt-2 font-display text-3xl font-semibold">{m.value}</p>
+              <p className="mt-1 text-xs text-amber-warm">{m.delta}</p>
             </div>
           ))}
         </div>
-        <div className="grid lg:grid-cols-3 gap-4">
-          <div className="lg:col-span-2 rounded-xl overflow-hidden" style={{ backgroundColor: "#1a1a1a", border: "1px solid #2a2a2a" }}>
-            <div className="flex items-center justify-between px-5 py-3 border-b" style={{ borderColor: "#2a2a2a" }}>
-              <span className="font-bold text-white text-sm">Pedidos · Live</span>
-              <span className="flex items-center gap-1.5 text-xs" style={{ color: "#4ade80" }}>
-                <span className="w-1.5 h-1.5 rounded-full bg-green-400 inline-block"></span>
-                conectado
-              </span>
-            </div>
-            {orders.map((o) => (
-              <div key={o.id} className="flex items-center gap-4 px-5 py-3 border-b last:border-0" style={{ borderColor: "#2a2a2a" }}>
-                <span className="text-xs w-12 flex-shrink-0" style={{ color: "#555" }}>{o.id}</span>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-white truncate">{o.name}</p>
-                  <p className="text-xs" style={{ color: "#666" }}>{o.sub}</p>
+
+        <div className="mt-10 overflow-hidden rounded-2xl border border-cream/10 bg-graphite shadow-lift">
+          <div className="grid grid-cols-12">
+            <div className="col-span-12 border-b border-cream/10 p-5 md:col-span-8 md:border-b-0 md:border-r">
+              <div className="flex items-center justify-between">
+                <p className="text-sm font-semibold">Pedidos · Live</p>
+                <div className="flex items-center gap-2 text-[11px] text-cream/60">
+                  <span className="h-2 w-2 animate-pulse rounded-full bg-ember" />
+                  conectado
                 </div>
-                <span className="text-[10px] font-bold px-2 py-1 rounded flex-shrink-0" style={{ backgroundColor: `${o.cor}22`, color: o.cor }}>
-                  {o.status}
-                </span>
-                <span className="text-sm font-bold text-white flex-shrink-0">{o.valor}</span>
               </div>
-            ))}
-          </div>
-          <div className="rounded-xl overflow-hidden" style={{ backgroundColor: "#1a1a1a", border: "1px solid #2a2a2a" }}>
-            <div className="px-4 py-3 border-b" style={{ borderColor: "#2a2a2a" }}>
-              <span className="font-bold text-white text-sm">Clientes recorrentes</span>
+              <ul className="mt-4 divide-y divide-cream/10 text-sm">
+                {PEDIDOS_LIVE.map((o) => (
+                  <li key={o.id} className="grid grid-cols-12 gap-3 py-3">
+                    <span className="col-span-2 font-mono text-xs text-cream/50">{o.id}</span>
+                    <div className="col-span-5">
+                      <p className="font-medium">{o.nome}</p>
+                      <p className="text-xs text-cream/50">{o.sub}</p>
+                    </div>
+                    <span
+                      className="col-span-3 self-center justify-self-start rounded-full px-2.5 py-0.5 text-[10px] font-semibold uppercase"
+                      style={{ background: o.bg, color: o.cor }}
+                    >
+                      {o.status}
+                    </span>
+                    <span className="col-span-2 self-center justify-self-end text-sm font-semibold">
+                      {o.valor}
+                    </span>
+                  </li>
+                ))}
+              </ul>
             </div>
-            <div className="p-4 space-y-3">
-              {clientes.map((c) => (
-                <div key={c.name} className="flex items-center gap-3">
-                  <div
-                    className="w-9 h-9 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0"
-                    style={{ backgroundColor: c.cor }}
-                  >
-                    {c.initials}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-white">{c.name}</p>
-                    <p className="text-xs" style={{ color: "#666" }}>{c.pedidos}</p>
-                  </div>
-                  <span className="text-[9px] font-bold px-2 py-0.5 rounded flex-shrink-0" style={{ backgroundColor: `${c.cor}22`, color: c.cor }}>
-                    {c.badge}
-                  </span>
-                </div>
-              ))}
-            </div>
-            <div className="border-t p-4" style={{ borderColor: "#2a2a2a", backgroundColor: "#141414" }}>
-              <p className="text-[10px] font-semibold tracking-widest mb-1" style={{ color: "#555" }}>TOP DO DIA</p>
-              <p className="text-base font-black text-white">Smash Bacon Duplo</p>
-              <p className="text-xs" style={{ color: "#888" }}>38 unidades · R$ 1.478</p>
+            <div className="col-span-12 p-5 md:col-span-4">
+              <p className="text-sm font-semibold">Clientes recorrentes</p>
+              <ul className="mt-4 space-y-3">
+                {CLIENTES.map((c) => (
+                  <li key={c.nome} className="flex items-center gap-3">
+                    <span className="grid h-9 w-9 place-items-center rounded-full text-xs font-semibold text-ember"
+                      style={{ background: "rgba(234,88,12,0.2)" }}>
+                      {c.initials}
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm font-medium">{c.nome}</p>
+                      <p className="text-xs text-cream/50">{c.pedidos}</p>
+                    </div>
+                    <span className="rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase text-cream/70"
+                      style={{ background: "rgba(255,255,255,0.05)" }}>
+                      {c.badge}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-6 rounded-xl bg-charcoal p-4">
+                <p className="text-[10px] uppercase tracking-wider text-cream/50">Top do dia</p>
+                <p className="mt-2 font-display text-xl font-semibold">Smash Bacon Duplo</p>
+                <p className="text-xs text-cream/60">38 unidades · R$ 1.478</p>
+              </div>
             </div>
           </div>
         </div>
@@ -591,84 +557,83 @@ function DashboardSection() {
 }
 
 // ── WhatsApp + QR Section ─────────────────────────────────────────────────────
+const QR_MESAS = [
+  { label: "Mesa 01", active: false },
+  { label: "Mesa 02", active: false },
+  { label: "Mesa 03", active: false },
+  { label: "Mesa 08", active: true },
+  { label: "Balcão", active: false },
+];
+
+const QR_DOTS = [1,1,0,1,1,0,1,0,1,0,1,1,0,1,0,1,0,0,1,1,0,1,1,0,1];
+
 function WhatsAppQRSection() {
   return (
-    <section style={{ backgroundColor: CREAM, borderTop: `1px solid ${BORDER}` }} className="py-24 px-6">
-      <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-6">
-        <div className="rounded-2xl p-8 border" style={{ backgroundColor: "#fff", borderColor: BORDER }}>
-          <div className="flex items-center gap-3 mb-5">
-            <div className="w-9 h-9 rounded-xl flex items-center justify-center text-white font-black text-sm" style={{ backgroundColor: "#25d366" }}>
-              W
-            </div>
-            <span className="text-xs font-semibold tracking-widest" style={{ color: "#888" }}>INTEGRAÇÃO WHATSAPP</span>
+    <section className="border-b border-lborder bg-white">
+      <div className="mx-auto grid max-w-7xl gap-10 px-5 py-20 md:grid-cols-2 md:py-28">
+        {/* WhatsApp card */}
+        <div className="rounded-2xl border border-lborder bg-white p-7 shadow-soft">
+          <div className="flex items-center gap-2">
+            <span className="grid h-8 w-8 place-items-center rounded-md bg-whatsapp text-sm font-bold text-white">W</span>
+            <p className="text-xs font-semibold uppercase tracking-wider text-lmuted">Integração WhatsApp</p>
           </div>
-          <h3 className="text-3xl font-black leading-tight mb-3" style={{ color: DARK }}>
+          <h3 className="mt-4 font-display text-3xl font-semibold leading-tight text-charcoal">
             Menos áudio.<br />Mais venda.
           </h3>
-          <p className="text-sm leading-relaxed mb-6" style={{ color: "#666" }}>
+          <p className="mt-3 text-charcoal/70">
             Mensagens viram pedidos formais. Confirmação automática, atualizações de status e
             campanhas para sua base de clientes — tudo dentro do WhatsApp oficial.
           </p>
-          <div className="space-y-2">
+          <div className="mt-6 space-y-2">
             {[
-              { text: "Quero 2 smash bacon e uma coca 2L", side: "right", bg: "#dcfce7", color: "#166534" },
-              { text: "Pedido #1024 confirmado · R$ 92,80 · entrega em 35min", side: "left", bg: "#f5f5f5", color: "#333" },
-              { text: "PIX já fiz", side: "right", bg: "#dcfce7", color: "#166534" },
-              { text: "Recebido ✅ Cozinha já está preparando.", side: "left", bg: "#f5f5f5", color: "#333" },
+              { text: "Quero 2 smash bacon e uma coca 2L", side: "right", bg: "rgba(37,211,102,0.15)", color: "#1C1917" },
+              { text: "Pedido #1024 confirmado · R$ 92,80 · entrega em 35min", side: "left", bg: "#F5F0EC", color: "#1C1917" },
+              { text: "PIX já fiz", side: "right", bg: "rgba(37,211,102,0.15)", color: "#1C1917" },
+              { text: "Recebido ✅ Cozinha já está preparando.", side: "left", bg: "#F5F0EC", color: "#1C1917" },
             ].map((b, i) => (
               <div key={i} className={`flex ${b.side === "right" ? "justify-end" : "justify-start"}`}>
-                <span className="text-xs px-3 py-2 rounded-2xl max-w-[80%]" style={{ backgroundColor: b.bg, color: b.color }}>
+                <p
+                  className="max-w-[78%] rounded-2xl px-3 py-2 text-sm"
+                  style={{ background: b.bg, color: b.color,
+                    borderRadius: b.side === "right" ? "1rem 1rem 0.25rem 1rem" : "1rem 1rem 1rem 0.25rem" }}
+                >
                   {b.text}
-                </span>
+                </p>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="rounded-2xl p-8" style={{ backgroundColor: "#1a1a1a" }}>
-          <div className="flex items-center gap-3 mb-5">
-            <div className="w-9 h-9 rounded-xl flex items-center justify-center text-white font-black text-xs" style={{ backgroundColor: ORANGE }}>
-              QR
-            </div>
-            <span className="text-xs font-semibold tracking-widest" style={{ color: "#666" }}>QR CODE PARA MESAS</span>
+        {/* QR Code card */}
+        <div className="rounded-2xl bg-charcoal p-7 text-cream shadow-soft">
+          <div className="flex items-center gap-2">
+            <span className="grid h-8 w-8 place-items-center rounded-md bg-ember text-sm font-bold text-white">QR</span>
+            <p className="text-xs font-semibold uppercase tracking-wider text-cream/60">QR Code para mesas</p>
           </div>
-          <h3 className="text-3xl font-black leading-tight mb-3 text-white">
+          <h3 className="mt-4 font-display text-3xl font-semibold leading-tight">
             Cliente pede sem chamar garçom.
           </h3>
-          <p className="text-sm leading-relaxed mb-6" style={{ color: "#888" }}>
+          <p className="mt-3 text-cream/70">
             Cada mesa tem seu próprio QR. O cliente abre o cardápio, monta o pedido, paga no PIX
             — e o garçom só leva.
           </p>
-          <div className="grid grid-cols-5 gap-3">
-            {[
-              { label: "Mesa 01", highlight: false },
-              { label: "Mesa 02", highlight: false },
-              { label: "Mesa 03", highlight: false },
-              { label: "Mesa 08", highlight: true },
-              { label: "Balcão", highlight: false },
-            ].map((mesa) => (
-              <div key={mesa.label} className="flex flex-col items-center gap-1.5">
-                <div
-                  className="w-full aspect-square rounded-xl p-2 flex items-center justify-center"
-                  style={{ backgroundColor: mesa.highlight ? ORANGE : "#2a2a2a", border: `2px solid ${mesa.highlight ? ORANGE : "#333"}` }}
-                >
-                  <div className="w-full h-full grid grid-cols-4 gap-[2px]">
-                    {[...Array(16)].map((_, i) => (
-                      <div
-                        key={i}
-                        className="rounded-[1px]"
-                        style={{
-                          backgroundColor: [0, 1, 4, 5, 3, 7, 8, 10, 12, 13, 15].includes(i)
-                            ? mesa.highlight ? "#fff" : ORANGE
-                            : "transparent",
-                        }}
-                      ></div>
-                    ))}
-                  </div>
+          <div className="mt-6 flex flex-wrap gap-3">
+            {QR_MESAS.map((mesa) => (
+              <div
+                key={mesa.label}
+                className="rounded-xl p-3"
+                style={{ background: mesa.active ? "#EA580C" : "#292524" }}
+              >
+                <div className="grid h-16 w-16 grid-cols-5 grid-rows-5 gap-[2px] rounded-md bg-cream p-1.5">
+                  {QR_DOTS.map((on, i) => (
+                    <span
+                      key={i}
+                      className="rounded-[1px]"
+                      style={{ background: on ? "#1C1917" : "transparent" }}
+                    />
+                  ))}
                 </div>
-                <span className="text-[9px] font-medium text-center" style={{ color: "#888" }}>
-                  {mesa.label}
-                </span>
+                <p className="mt-2 text-center text-[11px] font-medium">{mesa.label}</p>
               </div>
             ))}
           </div>
@@ -679,60 +644,68 @@ function WhatsAppQRSection() {
 }
 
 // ── Depoimentos + Stats ───────────────────────────────────────────────────────
-function DepoimentosSection() {
-  const depoimentos = [
-    { initials: "PB", nome: "Patrick Bartholzai", cargo: "Dono · BBB Burger", receita: "+R$ 60 MIL/MÊS", texto: '"Saímos do caos do WhatsApp. Hoje a cozinha enxerga tudo, e os pedidos saem no tempo certo. Cresci 40% em 3 meses."' },
-    { initials: "JM", nome: "Júlia Martins", cargo: "Pizzaria da Júlia", receita: "+R$ 100 MIL/MÊS", texto: '"Atendia 1 cliente por vez no atendimento. Hoje atendo 12. O MeVêUm pagou ele mesmo na primeira semana."' },
-    { initials: "BF", nome: "Bruno Felipe", cargo: "Open Burger", receita: "+R$ 30 MIL/MÊS", texto: '"Sou de cidade pequena. Achava que tecnologia não era pra mim. Em uma noite de 40 pedidos, 3 manuais e 37 no app."' },
-  ];
+const DEPOIMENTOS = [
+  {
+    initials: "PB", nome: "Patrick Bartholzai", cargo: "Dono · BBB Burger", receita: "+R$ 60 mil/mês",
+    texto: "Saímos do caos do WhatsApp. Hoje a cozinha enxerga tudo, e os pedidos saem no tempo certo. Cresci 40% em 3 meses.",
+  },
+  {
+    initials: "JM", nome: "Júlia Martins", cargo: "Pizzaria da Júlia", receita: "+R$ 100 mil/mês",
+    texto: "Atendia 1 cliente por vez no atendimento. Hoje atendo 12. O MeVêUm pagou ele mesmo na primeira semana.",
+  },
+  {
+    initials: "BF", nome: "Bruno Felipe", cargo: "Open Burger", receita: "+R$ 30 mil/mês",
+    texto: "Sou de cidade pequena. Achava que tecnologia não era pra mim. Em uma noite de 40 pedidos, 3 manuais e 37 no app.",
+  },
+];
 
+const STATS = [
+  { value: "+2.400", label: "restaurantes ativos" },
+  { value: "30M", label: "pedidos processados" },
+  { value: "R$ 5bi", label: "transacionados" },
+  { value: "20%", label: "aumento médio em vendas" },
+];
+
+function DepoimentosSection() {
   return (
-    <section style={{ backgroundColor: CREAM, borderTop: `1px solid ${BORDER}` }} className="py-24 px-6">
-      <div className="max-w-7xl mx-auto">
-        <p className="text-sm font-semibold tracking-widest mb-3" style={{ color: ORANGE }}>
-          QUEM USA, VENDE MAIS
+    <section className="border-b border-lborder bg-sand">
+      <div className="mx-auto max-w-7xl px-5 py-20 md:py-28">
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-ember-deep">
+          Quem usa, vende mais
         </p>
-        <h2 className="text-4xl lg:text-5xl font-black mb-12" style={{ color: DARK }}>
-          Restaurantes brasileiros
-          <br />
-          que viraram a chave.
+        <h2 className="mt-3 max-w-2xl font-display text-4xl font-semibold leading-[1.05] text-charcoal md:text-5xl">
+          Restaurantes brasileiros que viraram a chave.
         </h2>
-        <div className="grid lg:grid-cols-3 gap-6 mb-16">
-          {depoimentos.map((d) => (
-            <div key={d.nome} className="rounded-2xl p-6 border" style={{ backgroundColor: "#fff", borderColor: BORDER }}>
-              <div className="flex gap-0.5 mb-3">
-                {[...Array(5)].map((_, i) => (
-                  <span key={i} style={{ color: ORANGE }}>★</span>
-                ))}
-              </div>
-              <p className="text-sm leading-relaxed mb-5" style={{ color: "#333" }}>{d.texto}</p>
-              <div className="flex items-center justify-between gap-3">
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-black flex-shrink-0" style={{ backgroundColor: "#f0ebe5", color: "#666" }}>
-                    {d.initials}
-                  </div>
-                  <div>
-                    <p className="text-sm font-bold" style={{ color: DARK }}>{d.nome}</p>
-                    <p className="text-xs" style={{ color: "#888" }}>{d.cargo}</p>
-                  </div>
+        <div className="mt-12 grid gap-5 md:grid-cols-3">
+          {DEPOIMENTOS.map((d) => (
+            <figure key={d.nome} className="flex flex-col rounded-2xl border border-lborder bg-white p-6 shadow-soft">
+              <div className="text-ember">★★★★★</div>
+              <blockquote className="mt-3 flex-1 text-pretty text-charcoal/85">
+                "{d.texto}"
+              </blockquote>
+              <figcaption className="mt-5 flex items-center gap-3 border-t border-lborder pt-4">
+                <span
+                  className="grid h-10 w-10 place-items-center rounded-full text-sm font-semibold text-ember"
+                  style={{ background: "rgba(234,88,12,0.15)" }}
+                >
+                  {d.initials}
+                </span>
+                <div className="flex-1">
+                  <p className="text-sm font-semibold text-charcoal">{d.nome}</p>
+                  <p className="text-xs text-lmuted">{d.cargo}</p>
                 </div>
-                <span className="text-[10px] font-black px-2.5 py-1 rounded-full text-white flex-shrink-0" style={{ backgroundColor: DARK }}>
+                <span className="rounded-full bg-charcoal px-2.5 py-1 text-[10px] font-bold uppercase text-cream">
                   {d.receita}
                 </span>
-              </div>
-            </div>
+              </figcaption>
+            </figure>
           ))}
         </div>
-        <div className="grid grid-cols-2 lg:grid-cols-4 border-t border-b" style={{ borderColor: BORDER }}>
-          {[
-            { value: "+2.400", label: "RESTAURANTES ATIVOS" },
-            { value: "30M", label: "PEDIDOS PROCESSADOS" },
-            { value: "R$ 5bi", label: "TRANSACIONADOS" },
-            { value: "20%", label: "AUMENTO MÉDIO EM VENDAS" },
-          ].map((s, i) => (
-            <div key={s.label} className={`py-10 text-center ${i > 0 ? "border-l" : ""}`} style={{ borderColor: BORDER }}>
-              <p className="text-4xl font-black mb-1" style={{ color: DARK }}>{s.value}</p>
-              <p className="text-[10px] font-semibold tracking-widest" style={{ color: "#aaa" }}>{s.label}</p>
+        <div className="mt-12 grid grid-cols-2 gap-4 border-t border-lborder pt-8 text-center md:grid-cols-4">
+          {STATS.map((s) => (
+            <div key={s.label}>
+              <p className="font-display text-3xl font-semibold text-charcoal md:text-4xl">{s.value}</p>
+              <p className="text-xs uppercase tracking-wider text-lmuted">{s.label}</p>
             </div>
           ))}
         </div>
@@ -755,96 +728,91 @@ function FAQSection() {
   const [open, setOpen] = useState<number | null>(0);
 
   return (
-    <section id="faq" style={{ backgroundColor: CREAM, borderTop: `1px solid ${BORDER}` }} className="py-24 px-6">
-      <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16">
-        <div>
-          <p className="text-sm font-semibold tracking-widest mb-3" style={{ color: ORANGE }}>FAQ</p>
-          <h2 className="text-4xl font-black mb-4" style={{ color: DARK }}>Ficou com dúvida?</h2>
-          <p className="text-base leading-relaxed mb-8" style={{ color: "#666" }}>
+    <section id="faq" className="border-b border-lborder bg-white">
+      <div className="mx-auto grid max-w-7xl gap-10 px-5 py-20 md:grid-cols-12 md:py-28">
+        <div className="md:col-span-4">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-ember">FAQ</p>
+          <h2 className="mt-3 font-display text-4xl font-semibold leading-[1.05] text-charcoal">
+            Ficou com dúvida?
+          </h2>
+          <p className="mt-3 text-charcoal/70">
             Fale direto com um consultor. Sem formulário longo, sem agendamento de meia hora.
           </p>
           <a
-            href="/register"
-            className="inline-block text-white text-sm font-bold px-5 py-3 rounded-lg transition-opacity hover:opacity-90"
-            style={{ backgroundColor: ORANGE }}
+            href="#cta"
+            className="mt-5 inline-flex rounded-md bg-ember px-4 py-2 text-sm font-semibold text-white shadow-ember hover:bg-ember-deep"
           >
             Falar com consultor
           </a>
         </div>
-        <div>
+        <ul className="divide-y divide-lborder md:col-span-8">
           {FAQS.map((faq, i) => (
-            <div key={faq.q} className="border-b" style={{ borderColor: BORDER }}>
+            <li key={faq.q}>
               <button
-                className="w-full flex items-center justify-between py-4 text-left"
+                className="flex w-full items-center justify-between gap-4 py-5 text-left"
                 onClick={() => setOpen(open === i ? null : i)}
               >
-                <span className="text-sm font-semibold" style={{ color: DARK }}>{faq.q}</span>
+                <span className="font-display text-lg font-medium text-charcoal">{faq.q}</span>
                 <span
-                  className="w-6 h-6 rounded-full flex items-center justify-center text-white text-xs flex-shrink-0 ml-4 font-bold"
-                  style={{ backgroundColor: open === i ? DARK : BORDER }}
+                  className="grid h-7 w-7 place-items-center rounded-full border border-lborder text-sm transition flex-shrink-0"
+                  style={open === i ? { background: "#1C1917", color: "#FBF7F4", transform: "rotate(45deg)" } : {}}
                 >
-                  {open === i ? "×" : "+"}
+                  +
                 </span>
               </button>
               {open === i && (
-                <p className="pb-4 text-sm leading-relaxed" style={{ color: "#666" }}>{faq.a}</p>
+                <p className="pb-5 pr-10 text-charcoal/70">{faq.a}</p>
               )}
-            </div>
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
     </section>
   );
 }
 
 // ── Footer ────────────────────────────────────────────────────────────────────
-function Footer() {
-  const cols = [
-    { title: "PRODUTO", links: ["Cardápio digital", "QR Code para mesas", "WhatsApp", "Cozinha", "Dashboard", "Cupons"] },
-    { title: "MEVÊUM", links: ["Sobre", "Blog", "Parceiros", "Trabalhe conosco", "Central de ajuda"] },
-    { title: "SUPORTE", links: ["Seg a sáb · 8h–23h", "Domingos · 14h–22h", "WhatsApp", "E-mail", "Status"] },
-    { title: "COMUNIDADE", links: ["Grupo de donos", "Mentoria gratuita", "Eventos"] },
-  ];
+const FOOTER_COLS = [
+  { title: "Produto", links: ["Cardápio digital", "QR Code para mesas", "WhatsApp", "Cozinha", "Dashboard", "Cupons"] },
+  { title: "MeVêUm", links: ["Sobre", "Blog", "Parceiros", "Trabalhe conosco", "Central de ajuda"] },
+  { title: "Suporte", links: ["Seg a sáb · 8h–23h", "Domingos · 14h–22h", "WhatsApp", "E-mail", "Status"] },
+  { title: "Comunidade", links: ["Grupo de donos", "Mentoria gratuita", "Eventos"] },
+];
 
+function Footer() {
   return (
-    <footer style={{ backgroundColor: "#0f0f0f" }} className="py-16 px-6">
-      <div className="max-w-7xl mx-auto">
-        <div className="grid lg:grid-cols-5 gap-10 mb-12">
-          <div className="lg:col-span-1">
-            <div className="flex items-center gap-2 mb-4">
-              <Image src="/logo.png" alt="MeVêUm" width={48} height={48} className="object-contain" />
-              <span className="font-black text-lg text-white">
-                Me<span style={{ color: ORANGE }}>Vê</span>Um
-              </span>
-            </div>
-            <p className="text-xs leading-relaxed mb-4" style={{ color: "#666" }}>
-              Sistema de pedidos, cardápio digital e gestão para restaurantes brasileiros.
-            </p>
-            <p className="text-xs" style={{ color: "#555" }}>
-              Av. Paulista, 1000 · São Paulo, SP
-              <br />
-              contato@mevenum.com.br
-            </p>
-          </div>
-          {cols.map((col) => (
-            <div key={col.title}>
-              <p className="text-[10px] font-bold tracking-widest mb-4" style={{ color: "#555" }}>{col.title}</p>
-              <ul className="space-y-2">
-                {col.links.map((link) => (
-                  <li key={link}>
-                    <a href="#" className="text-xs transition-colors" style={{ color: "#888" }}>{link}</a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+    <footer className="bg-charcoal text-cream/70">
+      <div className="mx-auto grid max-w-7xl gap-10 px-5 py-14 md:grid-cols-12">
+        <div className="md:col-span-4">
+          <Image src="/logo.png" alt="MeVêUm" width={130} height={52} className="h-12 w-auto object-contain" />
+          <p className="mt-3 max-w-xs text-sm">
+            Sistema de pedidos, cardápio digital e gestão para restaurantes brasileiros.
+          </p>
+          <p className="mt-5 text-xs">
+            Av. Paulista, 1000 · São Paulo, SP
+            <br />
+            contato@mevenum.com.br
+          </p>
         </div>
-        <div className="border-t pt-6 flex items-center justify-between flex-wrap gap-4" style={{ borderColor: "#1e1e1e" }}>
-          <p className="text-xs" style={{ color: "#555" }}>© 2025 MeVêUm. Todos os direitos reservados.</p>
-          <div className="flex gap-6">
-            {["Privacidade", "Termos", "Cookies"].map((l) => (
-              <a key={l} href="#" className="text-xs" style={{ color: "#555" }}>{l}</a>
-            ))}
+        {FOOTER_COLS.map((col) => (
+          <div key={col.title} className="md:col-span-2">
+            <p className="text-xs font-semibold uppercase tracking-wider text-cream">{col.title}</p>
+            <ul className="mt-3 space-y-2 text-sm">
+              {col.links.map((link) => (
+                <li key={link}>
+                  <a href="#" className="hover:text-cream transition-colors">{link}</a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+      <div className="border-t border-cream/10">
+        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-5 py-5 text-xs text-cream/50">
+          <p>© 2026 MeVêUm Tecnologia · Todos os direitos reservados.</p>
+          <div className="flex gap-4">
+            <a href="#">Termos de uso</a>
+            <a href="#">Política de privacidade</a>
           </div>
         </div>
       </div>
@@ -855,18 +823,20 @@ function Footer() {
 // ── Page ──────────────────────────────────────────────────────────────────────
 export default function Home() {
   return (
-    <main>
+    <div className="min-h-screen bg-white">
       <Header />
-      <Hero />
-      <LogosStrip />
-      <ProblemaSection />
-      <FuncionalidadesSection />
-      <CardapioSection />
-      <DashboardSection />
-      <WhatsAppQRSection />
-      <DepoimentosSection />
-      <FAQSection />
+      <main>
+        <Hero />
+        <IntegracoesMaquee />
+        <ProblemaSection />
+        <FuncionalidadesSection />
+        <CardapioSection />
+        <DashboardSection />
+        <WhatsAppQRSection />
+        <DepoimentosSection />
+        <FAQSection />
+      </main>
       <Footer />
-    </main>
+    </div>
   );
 }
