@@ -5,7 +5,8 @@ com `data/`, que e o volume local do PostgreSQL.
 
 ## Dados de teste
 
-O Flyway cria/atualiza os dados de teste pelas migrations `V2`, `V3` e `V4`.
+O Flyway cria/atualiza os dados de teste pelas migrations `V2`, `V3`, `V4` e
+`V5`.
 
 ```txt
 lojaId: 11111111-1111-1111-1111-111111111111
@@ -13,6 +14,7 @@ categoriaId: 22222222-2222-2222-2222-222222222222
 produtoId: 33333333-3333-3333-3333-333333333333
 grupoComplementoId: 44444444-4444-4444-4444-444444444444
 opcaoComplementoId: 55555555-5555-5555-5555-555555555555
+areaEntregaId: 77777777-7777-7777-7777-777777777777
 ```
 
 ## Collection Postman

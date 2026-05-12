@@ -54,11 +54,12 @@ Siga esta ordem preferencial para evoluir o backend. A ordem existe para que
 cada etapa desbloqueie testes manuais e funcionalidades reais do sistema.
 
 1. `cardapio/categorias`
-   - Status: iniciado.
+   - Status: concluido.
    - Manter CRUD, validators, mapper e testes unitarios como referencia para
      os proximos contextos.
 
 2. `cardapio/produtos`
+   - Status: concluido.
    - Implementar CRUD de produtos.
    - Produto deve pertencer a uma loja e, quando informado, a uma categoria da
      mesma loja.
@@ -67,17 +68,20 @@ cada etapa desbloqueie testes manuais e funcionalidades reais do sistema.
      ativo e categoria.
 
 3. `cardapio/complementos`
+   - Status: concluido.
    - Implementar grupos de complemento.
    - Implementar opcoes de complemento.
    - Implementar vinculo produto x grupo de complemento.
    - Validar minimo, maximo, obrigatoriedade e pertencimento a loja.
 
 4. `lojas`
+   - Status: concluido parcialmente.
    - Implementar consulta e atualizacao dos dados principais da loja.
    - Implementar pausa manual e status operacional.
    - Depois evoluir para horarios de funcionamento.
 
 5. `entrega`
+   - Status: proximo.
    - Implementar areas/regras de entrega da loja.
    - Validar tipo de area, taxa, pedido minimo e compatibilidade com loja.
 
