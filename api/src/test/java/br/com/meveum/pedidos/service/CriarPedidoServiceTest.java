@@ -3,13 +3,16 @@ package br.com.meveum.pedidos.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyMap;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import br.com.meveum.cardapio.entity.GrupoComplemento;
 import br.com.meveum.cardapio.entity.OpcaoComplemento;
 import br.com.meveum.cardapio.entity.Produto;
+import br.com.meveum.integracao_whatsapp.service.MontarMensagemPedidoWhatsappService;
 import br.com.meveum.lojas.entity.Loja;
+import br.com.meveum.lojas.validator.service.ValidarLojaExisteService;
 import br.com.meveum.pagamentos.entity.enums.FormaPagamento;
 import br.com.meveum.pedidos.dto.ComplementoPedidoResponse;
 import br.com.meveum.pedidos.dto.CriarComplementoPedidoRequest;
@@ -31,7 +34,6 @@ import br.com.meveum.pedidos.validator.service.ValidarComplementoPedidoService;
 import br.com.meveum.pedidos.validator.service.ValidarLojaPedidoDisponivelService;
 import br.com.meveum.pedidos.validator.service.ValidarPagamentoPedidoService;
 import br.com.meveum.pedidos.validator.service.ValidarProdutoPedidoService;
-import br.com.meveum.lojas.validator.service.ValidarLojaExisteService;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
@@ -69,6 +71,8 @@ class CriarPedidoServiceTest {
     private PedidoMapper pedidoMapper;
     @Mock
     private ObjectMapper objectMapper;
+    @Mock
+    private MontarMensagemPedidoWhatsappService montarMensagemPedidoWhatsappService;
     @InjectMocks
     private CriarPedidoService service;
 
@@ -113,6 +117,7 @@ class CriarPedidoServiceTest {
         when(pedidoRepository.save(pedido)).thenReturn(pedido);
         when(itemPedidoRepository.save(item)).thenReturn(item);
         when(complementoItemPedidoRepository.save(complemento)).thenReturn(complemento);
+        when(montarMensagemPedidoWhatsappService.montarPedidoCriado(pedido, List.of(item))).thenReturn("Mensagem do pedido");
         when(pedidoMapper.toItemPedidoResponseList(anyList(), anyMap())).thenReturn(List.of(itemResponse));
         when(pedidoMapper.toCriarPedidoResponse(pedido, List.of(itemResponse))).thenReturn(response);
 
@@ -120,10 +125,12 @@ class CriarPedidoServiceTest {
 
         assertThat(resultado).isEqualTo(response);
         assertThat(pedido.getLoja()).isEqualTo(loja);
+        assertThat(pedido.getWhatsappMessage()).isEqualTo("Mensagem do pedido");
         assertThat(item.getPedido()).isEqualTo(pedido);
         assertThat(complemento.getItemPedido()).isEqualTo(item);
         verify(pedidoValidator).validarCriacao(request);
         verify(validarLojaPedidoDisponivelService).validar(loja);
         verify(validarPagamentoPedidoService).validar(lojaId, FormaPagamento.PIX);
+        verify(pedidoRepository, times(2)).save(pedido);
     }
 }
