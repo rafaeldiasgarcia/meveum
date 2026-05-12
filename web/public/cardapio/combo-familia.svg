@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-label="Combo Familia">
+  <defs>
+    <linearGradient id="paper" x1="38" y1="35" x2="126" y2="136" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fff7ed"/>
+      <stop offset="1" stop-color="#fdba74"/>
+    </linearGradient>
+  </defs>
+  <rect width="160" height="160" rx="28" fill="#20120b"/>
+  <circle cx="80" cy="84" r="62" fill="#fff7ed"/>
+  <path d="M33 86h50l-7 50H42L33 86Z" fill="#ea580c"/>
+  <path d="M43 86h31l-5 41H48l-5-41Z" fill="#fb923c"/>
+  <g stroke="#facc15" stroke-width="7" stroke-linecap="round">
+    <path d="M43 82 39 48"/>
+    <path d="M52 82 52 42"/>
+    <path d="M61 82 67 46"/>
+    <path d="M70 82 81 51"/>
+  </g>
+  <path d="M84 67c4-19 18-28 32-28 16 0 29 9 34 28H84Z" fill="#f59e0b"/>
+  <path d="M81 73c8-6 17-5 24-2 7 3 13 2 21-1 8-4 16-3 24 3 3 2 3 7 0 9-8 5-18 4-27 1-6-3-12-2-20 1-8 4-16 3-22-1-4-2-4-8 0-10Z" fill="#7f1d1d"/>
+  <path d="M83 88h65v10H83z" fill="#facc15"/>
+  <path d="M82 100c11-4 21-3 32 1 11 3 22 3 35-2 4-1 7 1 7 5 0 3-2 6-5 7-13 4-27 4-38 1-11-3-20-3-31 1-4 1-8-2-8-6 0-3 3-6 8-7Z" fill="#451a03"/>
+  <path d="M84 116h63c-5 12-17 19-32 19s-26-7-31-19Z" fill="#b45309"/>
+  <path d="M87 33h29l7 30H94L87 33Z" fill="url(#paper)"/>
+  <path d="M95 33h21l2 9H96l-1-9Z" fill="#ef4444"/>
+  <path d="M92 52h28" stroke="#ea580c" stroke-width="4" stroke-linecap="round"/>
+</svg>

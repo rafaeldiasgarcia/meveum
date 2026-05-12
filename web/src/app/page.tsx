@@ -3,56 +3,97 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { Check } from "lucide-react";
+import { Check, Menu, QrCode, X } from "lucide-react";
+
+const HEADER_LINKS = [
+  { href: "#funcionalidades", label: "Funcionalidades" },
+  { href: "#cardapio", label: "Cardápio digital" },
+  { href: "#dashboard", label: "Dashboard" },
+  { href: "#precos", label: "Preços" },
+  { href: "#faq", label: "FAQ" },
+];
 
 // ── Header ────────────────────────────────────────────────────────────────────
 function Header() {
+  const [menuAberto, setMenuAberto] = useState(false);
+
   return (
     <header
       className="sticky top-0 z-50 border-b border-lborder/60 backdrop-blur-md"
       style={{ backgroundColor: "rgba(251,247,244,0.85)" }}
     >
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5">
-        <Link href="/" className="flex items-center">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-3 px-4 sm:px-5">
+        <Link href="/" className="flex min-w-0 items-center" aria-label="MeVêUm">
           <Image
             src="/logo.png"
             alt="MeVêUm"
             width={130}
             height={52}
-            className="h-10 w-auto object-contain"
+            className="h-8 w-auto object-contain sm:h-10"
             priority
           />
         </Link>
 
-        <nav className="hidden items-center gap-7 text-sm text-lmuted md:flex">
-          <a href="#funcionalidades" className="hover:text-charcoal transition-colors">Funcionalidades</a>
-          <a href="#cardapio" className="hover:text-charcoal transition-colors">Cardápio digital</a>
-          <a href="#dashboard" className="hover:text-charcoal transition-colors">Dashboard</a>
-          <a href="#precos" className="hover:text-charcoal transition-colors">Preços</a>
-          <a href="#faq" className="hover:text-charcoal transition-colors">FAQ</a>
+        <nav className="hidden items-center gap-7 text-sm text-lmuted lg:flex">
+          {HEADER_LINKS.map((link) => (
+            <a key={link.href} href={link.href} className="transition-colors hover:text-charcoal">
+              {link.label}
+            </a>
+          ))}
         </nav>
 
-        <div className="flex items-center gap-2">
+        <div className="flex shrink-0 items-center gap-2">
           <Link
             href="/login"
-            className="hidden rounded-md px-3 py-2 text-sm font-medium text-charcoal/80 hover:text-charcoal sm:inline-flex"
+            className="hidden rounded-md px-3 py-2 text-sm font-medium text-charcoal/80 hover:text-charcoal lg:inline-flex"
           >
             Entrar
           </Link>
           <Link
             href="#cta"
-            className="inline-flex items-center gap-2 rounded-md bg-charcoal px-4 py-2 text-sm font-semibold text-cream shadow-soft transition hover:bg-graphite"
+            className="inline-flex items-center gap-1.5 rounded-md bg-charcoal px-3 py-2 text-xs font-semibold text-cream shadow-soft transition hover:bg-graphite sm:px-4 sm:text-sm"
+            data-testid="landing-header-cta"
           >
             Teste grátis<span className="text-ember">→</span>
           </Link>
           <button
-            aria-label="Menu"
-            className="grid h-9 w-9 place-items-center rounded-md border border-lborder md:hidden"
+            type="button"
+            aria-label={menuAberto ? "Fechar menu" : "Abrir menu"}
+            aria-expanded={menuAberto}
+            onClick={() => setMenuAberto((aberto) => !aberto)}
+            className="grid h-9 w-9 place-items-center rounded-md border border-lborder bg-white text-charcoal shadow-soft lg:hidden"
+            data-testid="landing-menu-button"
           >
-            <span className="block h-px w-4 bg-charcoal" />
+            {menuAberto ? <X size={18} /> : <Menu size={18} />}
           </button>
         </div>
       </div>
+      {menuAberto && (
+        <nav
+          className="border-t border-lborder bg-cream px-4 py-3 shadow-soft lg:hidden"
+          data-testid="landing-mobile-menu"
+        >
+          <div className="mx-auto grid max-w-7xl gap-1">
+            {HEADER_LINKS.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                onClick={() => setMenuAberto(false)}
+                className="rounded-md px-3 py-2 text-sm font-medium text-charcoal/80 transition hover:bg-white hover:text-charcoal"
+              >
+                {link.label}
+              </a>
+            ))}
+            <Link
+              href="/login"
+              onClick={() => setMenuAberto(false)}
+              className="rounded-md px-3 py-2 text-sm font-semibold text-ember"
+            >
+              Entrar
+            </Link>
+          </div>
+        </nav>
+      )}
     </header>
   );
 }
@@ -139,7 +180,7 @@ function Hero() {
   return (
     <section className="relative overflow-hidden border-b border-lborder bg-cream">
       <div className="bg-grain absolute inset-0 opacity-60" />
-      <div className="relative mx-auto grid max-w-6xl items-start gap-10 px-5 pb-16 pt-12 md:grid-cols-12 md:gap-12 md:pb-20 md:pt-16">
+      <div className="relative mx-auto grid max-w-7xl items-start gap-10 px-5 pb-16 pt-12 md:grid-cols-12 md:gap-12 md:pb-20 md:pt-16">
         <div className="md:col-span-7">
           <div className="inline-flex items-center gap-2 rounded-full border border-lborder bg-white px-3 py-1 text-xs font-medium text-lmuted">
             <span className="h-1.5 w-1.5 rounded-full bg-ember" />
@@ -314,28 +355,51 @@ function FuncionalidadesSection() {
 }
 
 // ── Phone Mockup (Cardápio) ───────────────────────────────────────────────────
+const CARDAPIO_MOCKUP_ITENS = [
+  {
+    nome: "Smash Bacon Duplo",
+    desc: "Dois blends 90g, cheddar, bacon crocante, molho da casa.",
+    preco: "R$ 38,90",
+    tag: "Mais pedido",
+    foto: "/cardapio/smash-bacon-duplo.svg",
+  },
+  {
+    nome: "Pizza Calabresa Artesanal",
+    desc: "Massa fermentada 48h, mussarela e calabresa premium.",
+    preco: "R$ 52,00",
+    foto: "/cardapio/pizza-calabresa-artesanal.svg",
+  },
+  {
+    nome: "Combo Família",
+    desc: "4 burgers, 2 fritas grandes e 2 refris 600ml.",
+    preco: "R$ 119,90",
+    tag: "Combo",
+    foto: "/cardapio/combo-familia.svg",
+  },
+];
+
 function PhoneMockupCardapio() {
   return (
-    <div className="relative mx-auto max-w-sm">
-      <div className="absolute -left-10 top-10 hidden rotate-[-8deg] rounded-2xl bg-white p-3 shadow-lift md:block">
+    <div className="relative mx-auto w-full max-w-[calc(100vw-2.5rem)] sm:max-w-[23rem]">
+      <div className="absolute -left-32 top-10 z-20 hidden rotate-[-8deg] rounded-2xl bg-white p-3 shadow-lift lg:block">
         <p className="text-[10px] font-medium uppercase text-lmuted">Pagamento</p>
         <p className="font-display text-lg font-semibold text-charcoal">PIX em 3s</p>
         <div className="mt-1 h-1 w-24 overflow-hidden rounded-full bg-lborder">
           <div className="h-full w-2/3 bg-whatsapp" />
         </div>
       </div>
-      <div className="rounded-[2.2rem] border border-charcoal/15 bg-charcoal p-2 shadow-lift">
-        <div className="overflow-hidden rounded-[1.8rem] bg-cream">
+      <div className="relative z-10 rounded-[1.8rem] border border-charcoal/15 bg-charcoal p-1.5 shadow-lift sm:rounded-[2.2rem] sm:p-2">
+        <div className="overflow-hidden rounded-[1.35rem] bg-cream sm:rounded-[1.8rem]">
           <div
-            className="relative h-32"
+            className="relative h-28 sm:h-32"
             style={{ background: "linear-gradient(to bottom right, #EA580C, #F59E0B)" }}
           >
-            <div className="absolute bottom-3 left-4 text-cream">
-              <p className="text-[11px] uppercase tracking-wider opacity-80">Cardápio · Aberto</p>
-              <p className="font-display text-xl font-semibold">Burger do Bairro</p>
+            <div className="absolute bottom-3 left-3 text-cream sm:left-4">
+              <p className="text-[10px] uppercase tracking-wider opacity-80 sm:text-[11px]">Cardápio · Aberto</p>
+              <p className="font-display text-lg font-semibold sm:text-xl">Burger do Bairro</p>
             </div>
           </div>
-          <div className="flex gap-2 overflow-hidden border-b border-lborder px-4 py-3 text-xs">
+          <div className="flex gap-2 overflow-x-auto border-b border-lborder px-3 py-3 text-[11px] sm:px-4 sm:text-xs">
             {["Mais pedidos", "Burgers", "Pizzas", "Bebidas", "Sobremesas"].map((cat, i) => (
               <span
                 key={cat}
@@ -350,18 +414,17 @@ function PhoneMockupCardapio() {
             ))}
           </div>
           <ul className="divide-y divide-lborder">
-            {[
-              { nome: "Smash Bacon Duplo", desc: "Dois blends 90g, cheddar, bacon crocante, molho da casa.", preco: "R$ 38,90", tag: "Mais pedido" },
-              { nome: "Pizza Calabresa Artesanal", desc: "Massa fermentada 48h, mussarela e calabresa premium.", preco: "R$ 52,00" },
-              { nome: "Combo Família", desc: "4 burgers, 2 fritas grandes e 2 refris 600ml.", preco: "R$ 119,90", tag: "Combo" },
-            ].map((item) => (
-              <li key={item.nome} className="flex gap-3 p-4">
-                <div
-                  className="h-16 w-16 shrink-0 rounded-lg"
-                  style={{ background: "linear-gradient(to bottom right, #F59E0B, #C2410C)" }}
+            {CARDAPIO_MOCKUP_ITENS.map((item) => (
+              <li key={item.nome} className="flex gap-3 p-3 sm:p-4">
+                <Image
+                  src={item.foto}
+                  alt={item.nome}
+                  width={80}
+                  height={80}
+                  className="h-14 w-14 shrink-0 rounded-lg object-cover sm:h-16 sm:w-16"
                 />
                 <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
                     <p className="truncate text-sm font-semibold text-charcoal">{item.nome}</p>
                     {item.tag && (
                       <span
@@ -372,14 +435,14 @@ function PhoneMockupCardapio() {
                       </span>
                     )}
                   </div>
-                  <p className="mt-0.5 line-clamp-2 text-xs text-lmuted">{item.desc}</p>
+                  <p className="mt-0.5 line-clamp-2 text-[11px] text-lmuted sm:text-xs">{item.desc}</p>
                   <p className="mt-1 text-sm font-semibold text-ember">{item.preco}</p>
                 </div>
               </li>
             ))}
           </ul>
           <div className="border-t border-lborder bg-cream p-3">
-            <button className="w-full rounded-lg bg-ember py-3 text-sm font-semibold text-white">
+            <button className="w-full rounded-lg bg-ember py-2.5 text-sm font-semibold text-white sm:py-3">
               Finalizar pedido · R$ 92,80
             </button>
           </div>
@@ -574,7 +637,11 @@ function WhatsAppQRSection() {
         {/* WhatsApp card */}
         <div className="rounded-2xl border border-lborder bg-white p-7 shadow-soft">
           <div className="flex items-center gap-2">
-            <span className="grid h-8 w-8 place-items-center rounded-md bg-whatsapp text-sm font-bold text-white">W</span>
+            <span className="grid h-8 w-8 place-items-center rounded-md bg-whatsapp">
+              <svg viewBox="0 0 24 24" className="h-5 w-5 fill-white" aria-hidden="true">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+              </svg>
+            </span>
             <p className="text-xs font-semibold uppercase tracking-wider text-lmuted">Integração WhatsApp</p>
           </div>
           <h3 className="mt-4 font-display text-3xl font-semibold leading-tight text-charcoal">
@@ -607,7 +674,9 @@ function WhatsAppQRSection() {
         {/* QR Code card */}
         <div className="rounded-2xl bg-charcoal p-7 text-cream shadow-soft">
           <div className="flex items-center gap-2">
-            <span className="grid h-8 w-8 place-items-center rounded-md bg-ember text-sm font-bold text-white">QR</span>
+            <span className="grid h-8 w-8 place-items-center rounded-md bg-ember">
+              <QrCode size={18} className="text-white" />
+            </span>
             <p className="text-xs font-semibold uppercase tracking-wider text-cream/60">QR Code para mesas</p>
           </div>
           <h3 className="mt-4 font-display text-3xl font-semibold leading-tight">
@@ -646,15 +715,18 @@ function WhatsAppQRSection() {
 // ── Depoimentos + Stats ───────────────────────────────────────────────────────
 const DEPOIMENTOS = [
   {
-    initials: "PB", nome: "Patrick Bartholzai", cargo: "Dono · BBB Burger", receita: "+R$ 60 mil/mês",
+    foto: "https://i.pravatar.cc/80?img=15",
+    nome: "Patrick Bartholzai", cargo: "Dono · BBB Burger", receita: "+R$ 60 mil/mês",
     texto: "Saímos do caos do WhatsApp. Hoje a cozinha enxerga tudo, e os pedidos saem no tempo certo. Cresci 40% em 3 meses.",
   },
   {
-    initials: "JM", nome: "Júlia Martins", cargo: "Pizzaria da Júlia", receita: "+R$ 100 mil/mês",
+    foto: "https://i.pravatar.cc/80?img=47",
+    nome: "Júlia Martins", cargo: "Pizzaria da Júlia", receita: "+R$ 100 mil/mês",
     texto: "Atendia 1 cliente por vez no atendimento. Hoje atendo 12. O MeVêUm pagou ele mesmo na primeira semana.",
   },
   {
-    initials: "BF", nome: "Bruno Felipe", cargo: "Open Burger", receita: "+R$ 30 mil/mês",
+    foto: "https://i.pravatar.cc/80?img=11",
+    nome: "Bruno Felipe", cargo: "Open Burger", receita: "+R$ 30 mil/mês",
     texto: "Sou de cidade pequena. Achava que tecnologia não era pra mim. Em uma noite de 40 pedidos, 3 manuais e 37 no app.",
   },
 ];
@@ -681,15 +753,15 @@ function DepoimentosSection() {
             <figure key={d.nome} className="flex flex-col rounded-2xl border border-lborder bg-white p-6 shadow-soft">
               <div className="text-ember">★★★★★</div>
               <blockquote className="mt-3 flex-1 text-pretty text-charcoal/85">
-                "{d.texto}"
+                &ldquo;{d.texto}&rdquo;
               </blockquote>
               <figcaption className="mt-5 flex items-center gap-3 border-t border-lborder pt-4">
-                <span
-                  className="grid h-10 w-10 place-items-center rounded-full text-sm font-semibold text-ember"
-                  style={{ background: "rgba(234,88,12,0.15)" }}
-                >
-                  {d.initials}
-                </span>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={d.foto}
+                  alt={d.nome}
+                  className="h-10 w-10 rounded-full object-cover"
+                />
                 <div className="flex-1">
                   <p className="text-sm font-semibold text-charcoal">{d.nome}</p>
                   <p className="text-xs text-lmuted">{d.cargo}</p>
@@ -706,6 +778,171 @@ function DepoimentosSection() {
             <div key={s.label}>
               <p className="font-display text-3xl font-semibold text-charcoal md:text-4xl">{s.value}</p>
               <p className="text-xs uppercase tracking-wider text-lmuted">{s.label}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ── Preços Section ────────────────────────────────────────────────────────────
+const PLANOS = [
+  {
+    nome: "Trial",
+    desc: "Liberte-se das taxas e dê autonomia para o cliente pedir via WhatsApp.",
+    precoInt: "0", precoCents: "00",
+    features: [
+      "Até 30 pedidos/mês",
+      "Pedidos via WhatsApp",
+      "Link para compartilhar",
+      "Cardápio digital personalizável",
+    ],
+    cta: "Criar cardápio grátis",
+    ctaVariant: "outline" as const,
+    destaque: false,
+  },
+  {
+    nome: "Basic",
+    desc: "Receba pedidos ilimitados e tenha suporte via chat. Venda mais.",
+    precoInt: "59", precoCents: "90",
+    features: [
+      "Pedidos ilimitados",
+      "Pagamento online (PIX/Cartão)",
+      "Gestor de pedidos (KDS)",
+      "Impressão na cozinha",
+      "Relatórios de vendas",
+      "Cupons de desconto",
+      "Taxa de entrega por bairro",
+    ],
+    cta: "Começar agora",
+    ctaVariant: "primary" as const,
+    destaque: false,
+  },
+  {
+    nome: "Pro",
+    desc: "Agilize seu atendimento com impressões automáticas e atendente virtual.",
+    precoInt: "138", precoCents: "90",
+    features: [
+      "Todos os recursos do Basic",
+      "Atendente virtual (Chatbot)",
+      "Programa de fidelidade",
+      "Venda sugestiva",
+      "Impressão automática",
+      "Produtos em destaque",
+      "E-mail marketing básico",
+    ],
+    cta: "Começar agora",
+    ctaVariant: "primary" as const,
+    destaque: true,
+  },
+  {
+    nome: "Enterprise",
+    desc: "Acelere seu atendimento com integração ao PDV e logística.",
+    precoInt: "224", precoCents: "90",
+    features: [
+      "Todos os recursos do Pro",
+      "Integração com seu PDV",
+      "Entrega sob demanda (iFood)",
+      "Suporte premium",
+      "Integração com Google Analytics",
+    ],
+    cta: "Falar com consultor",
+    ctaVariant: "dark" as const,
+    destaque: false,
+  },
+];
+
+function PrecosSection() {
+  const [anual, setAnual] = useState(false);
+
+  return (
+    <section id="precos" className="border-b border-lborder bg-cream">
+      <div className="mx-auto max-w-7xl px-5 py-16 md:py-28">
+        <div className="text-center">
+          <h2 className="font-display text-3xl font-semibold leading-tight text-charcoal md:text-5xl">
+            Encontre o plano ideal para
+            <br />
+            <span className="text-ember">agilizar seu atendimento</span>
+          </h2>
+          <p className="mt-4 text-charcoal/70">Escolha o produto que melhor atende o seu negócio</p>
+
+          <div className="mt-8 inline-flex max-w-full items-center rounded-full border border-lborder bg-white p-1">
+            <button
+              onClick={() => setAnual(false)}
+              className={`rounded-full px-4 py-2 text-xs font-medium transition sm:px-5 sm:text-sm ${
+                !anual ? "bg-charcoal text-cream shadow-sm" : "text-charcoal/60 hover:text-charcoal"
+              }`}
+            >
+              Plano mensal
+            </button>
+            <button
+              onClick={() => setAnual(true)}
+              className={`rounded-full px-4 py-2 text-xs font-medium transition sm:px-5 sm:text-sm ${
+                anual ? "bg-charcoal text-cream shadow-sm" : "text-charcoal/60 hover:text-charcoal"
+              }`}
+            >
+              Economize com anual
+            </button>
+          </div>
+        </div>
+
+        <div
+          className="-mx-5 mt-10 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-5 lg:mx-0 lg:grid lg:grid-cols-4 lg:overflow-visible lg:px-0 lg:pb-0"
+          aria-label="Planos disponíveis"
+          data-testid="precos-planos-carousel"
+        >
+          {PLANOS.map((plano) => (
+            <div
+              key={plano.nome}
+              className={`relative flex min-w-[82vw] snap-center flex-col rounded-2xl bg-white p-6 shadow-soft sm:min-w-[22rem] lg:min-w-0 ${
+                plano.destaque ? "border-2 border-ember" : "border border-lborder"
+              }`}
+            >
+              {plano.destaque && (
+                <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
+                  <span className="whitespace-nowrap rounded-full bg-ember px-4 py-1 text-[10px] font-bold uppercase tracking-wider text-white">
+                    Mais vendido
+                  </span>
+                </div>
+              )}
+
+              <div>
+                <h3 className="font-display text-xl font-semibold text-charcoal">{plano.nome}</h3>
+                <p className="mt-1.5 min-h-[3rem] text-sm text-charcoal/60">{plano.desc}</p>
+              </div>
+
+              <div className="mt-5 flex items-end gap-0.5">
+                <span className="mb-1 text-sm font-semibold text-charcoal">R$</span>
+                <span className="font-display text-5xl font-bold leading-none text-charcoal">{plano.precoInt}</span>
+                <div className="mb-0.5">
+                  <span className="text-sm font-semibold text-charcoal">,{plano.precoCents}</span>
+                  <span className="block text-xs text-charcoal/50">/mês</span>
+                </div>
+              </div>
+
+              <div className="my-5 h-px bg-lborder" />
+
+              <ul className="flex-1 space-y-2.5 text-sm">
+                {plano.features.map((feature) => (
+                  <li key={feature} className="flex items-start gap-2.5 text-charcoal/80">
+                    <Check size={14} className="mt-0.5 shrink-0 text-ember" strokeWidth={2.5} />
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+
+              <button
+                className={`mt-6 w-full rounded-md py-3 text-sm font-bold uppercase tracking-wider transition ${
+                  plano.ctaVariant === "outline"
+                    ? "border border-charcoal text-charcoal hover:bg-charcoal hover:text-cream"
+                    : plano.ctaVariant === "dark"
+                    ? "bg-charcoal text-cream hover:bg-graphite"
+                    : "bg-ember text-white shadow-ember hover:bg-ember-deep"
+                }`}
+              >
+                {plano.cta}
+              </button>
             </div>
           ))}
         </div>
@@ -784,7 +1021,6 @@ function Footer() {
     <footer className="bg-charcoal text-cream/70">
       <div className="mx-auto grid max-w-7xl gap-10 px-5 py-14 md:grid-cols-12">
         <div className="md:col-span-4">
-          <Image src="/logo.png" alt="MeVêUm" width={130} height={52} className="h-12 w-auto object-contain" />
           <p className="mt-3 max-w-xs text-sm">
             Sistema de pedidos, cardápio digital e gestão para restaurantes brasileiros.
           </p>
@@ -834,6 +1070,7 @@ export default function Home() {
         <DashboardSection />
         <WhatsAppQRSection />
         <DepoimentosSection />
+        <PrecosSection />
         <FAQSection />
       </main>
       <Footer />

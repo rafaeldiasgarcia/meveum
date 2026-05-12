@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-label="Smash Bacon Duplo">
+  <defs>
+    <linearGradient id="bun" x1="22" y1="30" x2="135" y2="99" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#f6b44b"/>
+      <stop offset="1" stop-color="#d97706"/>
+    </linearGradient>
+    <linearGradient id="plate" x1="18" y1="18" x2="142" y2="142" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fff7ed"/>
+      <stop offset="1" stop-color="#fed7aa"/>
+    </linearGradient>
+  </defs>
+  <rect width="160" height="160" rx="28" fill="#27180f"/>
+  <circle cx="80" cy="86" r="61" fill="url(#plate)"/>
+  <ellipse cx="80" cy="121" rx="48" ry="10" fill="#9a3412" opacity=".2"/>
+  <path d="M37 74c5-25 25-39 45-39 22 0 39 12 46 39H37Z" fill="url(#bun)"/>
+  <g fill="#fff7ed" opacity=".95">
+    <ellipse cx="61" cy="52" rx="3" ry="1.7" transform="rotate(-22 61 52)"/>
+    <ellipse cx="79" cy="47" rx="3" ry="1.7" transform="rotate(12 79 47)"/>
+    <ellipse cx="99" cy="54" rx="3" ry="1.7" transform="rotate(-10 99 54)"/>
+  </g>
+  <path d="M34 82c8-7 18-6 27-2 8 3 16 3 25-1 11-5 22-4 34 3 4 2 5 9 1 12-7 5-18 5-29 1-8-3-15-3-24 1-12 5-23 4-33-2-5-3-5-9-1-12Z" fill="#7f1d1d"/>
+  <path d="M40 92c11 7 23 7 36 1 10-4 18-4 28 1 8 4 16 4 22 0v9H38l2-11Z" fill="#facc15"/>
+  <path d="M37 102c15-5 27-4 40 1 12 4 26 3 43-3 5-2 10 2 10 7 0 4-3 8-7 9-16 4-31 5-44 1-14-4-27-4-41 1-5 2-10-2-10-7 0-4 3-8 9-9Z" fill="#451a03"/>
+  <path d="M48 81c9-12 18-13 27-3 8 8 15 7 24-4 6-7 17-5 25 6" fill="none" stroke="#b91c1c" stroke-width="8" stroke-linecap="round"/>
+  <path d="M36 117h89c-7 15-24 24-45 24-22 0-38-9-44-24Z" fill="#b45309"/>
+</svg>

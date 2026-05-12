@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-label="Pizza Calabresa Artesanal">
+  <defs>
+    <linearGradient id="bg" x1="18" y1="19" x2="142" y2="142" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fef3c7"/>
+      <stop offset="1" stop-color="#fb923c"/>
+    </linearGradient>
+    <linearGradient id="cheese" x1="50" y1="43" x2="118" y2="126" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fde68a"/>
+      <stop offset="1" stop-color="#f59e0b"/>
+    </linearGradient>
+  </defs>
+  <rect width="160" height="160" rx="28" fill="#3b1d0d"/>
+  <circle cx="80" cy="80" r="61" fill="url(#bg)"/>
+  <path d="M42 42c34-18 74-5 92 29 5 9 7 19 7 28L42 42Z" fill="#92400e"/>
+  <path d="M50 50c27-13 59-3 74 25 4 7 6 15 6 23L50 50Z" fill="url(#cheese)"/>
+  <path d="M50 50c23 11 43 28 59 49" fill="none" stroke="#fff7ed" stroke-width="6" stroke-linecap="round" opacity=".75"/>
+  <g fill="#b91c1c" stroke="#7f1d1d" stroke-width="2">
+    <circle cx="77" cy="63" r="8"/>
+    <circle cx="100" cy="82" r="8"/>
+    <circle cx="86" cy="97" r="7"/>
+    <circle cx="117" cy="95" r="6"/>
+  </g>
+  <g fill="#f8fafc" opacity=".8">
+    <ellipse cx="90" cy="75" rx="3" ry="2" transform="rotate(-28 90 75)"/>
+    <ellipse cx="110" cy="90" rx="3" ry="2" transform="rotate(14 110 90)"/>
+    <ellipse cx="73" cy="85" rx="3" ry="2" transform="rotate(35 73 85)"/>
+  </g>
+  <path d="M43 42c4 17 10 35 17 53 6 15 12 27 18 38-24 0-46-14-56-37-9-21-4-43 21-54Z" fill="#fed7aa"/>
+  <path d="M47 50c3 12 8 27 14 42 4 11 9 21 14 31-17-2-33-14-40-31-7-16-3-32 12-42Z" fill="#f97316"/>
+</svg>
