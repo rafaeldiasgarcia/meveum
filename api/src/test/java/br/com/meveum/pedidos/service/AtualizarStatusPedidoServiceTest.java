@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import br.com.meveum.integracao_whatsapp.service.MontarMensagemPedidoWhatsappService;
 import br.com.meveum.pedidos.dto.AtualizarStatusPedidoRequest;
 import br.com.meveum.pedidos.dto.AtualizarStatusPedidoResponse;
 import br.com.meveum.pedidos.entity.Pedido;
@@ -30,6 +31,8 @@ class AtualizarStatusPedidoServiceTest {
     private PedidoRepository pedidoRepository;
     @Mock
     private PedidoMapper pedidoMapper;
+    @Mock
+    private MontarMensagemPedidoWhatsappService montarMensagemPedidoWhatsappService;
     @InjectMocks
     private AtualizarStatusPedidoService service;
 
@@ -40,6 +43,7 @@ class AtualizarStatusPedidoServiceTest {
         var pedido = new Pedido();
         var response = AtualizarStatusPedidoResponse.builder().id(pedidoId).status(StatusPedido.PREPARING).build();
         when(validarPedidoExisteService.validar(pedidoId)).thenReturn(pedido);
+        when(montarMensagemPedidoWhatsappService.montarStatusAtualizado(pedido)).thenReturn("Status atualizado");
         when(pedidoRepository.save(pedido)).thenReturn(pedido);
         when(pedidoMapper.toAtualizarStatusPedidoResponse(pedido)).thenReturn(response);
 
@@ -47,6 +51,7 @@ class AtualizarStatusPedidoServiceTest {
 
         assertThat(resultado).isEqualTo(response);
         assertThat(pedido.getStatus()).isEqualTo(StatusPedido.PREPARING);
+        assertThat(pedido.getWhatsappMessage()).isEqualTo("Status atualizado");
         verify(pedidoValidator).validarAtualizacaoStatus(request);
     }
 }

@@ -1,6 +1,7 @@
 package br.com.meveum.pedidos.service;
 
 import br.com.meveum.crm.entity.EnderecoCliente;
+import br.com.meveum.integracao_whatsapp.service.MontarMensagemPedidoWhatsappService;
 import br.com.meveum.lojas.validator.service.ValidarLojaExisteService;
 import br.com.meveum.pedidos.dto.CriarPedidoRequest;
 import br.com.meveum.pedidos.dto.CriarPedidoResponse;
@@ -43,6 +44,7 @@ public class CriarPedidoService {
     private final ComplementoItemPedidoRepository complementoItemPedidoRepository;
     private final PedidoMapper pedidoMapper;
     private final ObjectMapper objectMapper;
+    private final MontarMensagemPedidoWhatsappService montarMensagemPedidoWhatsappService;
 
     public CriarPedidoResponse criar(CriarPedidoRequest request) {
         pedidoValidator.validarCriacao(request);
@@ -101,6 +103,9 @@ public class CriarPedidoService {
             }
             complementosSalvosPorItem.put(itemSalvo, complementosSalvos);
         }
+
+        pedidoSalvo.setWhatsappMessage(montarMensagemPedidoWhatsappService.montarPedidoCriado(pedidoSalvo, itensSalvos));
+        pedidoSalvo = pedidoRepository.save(pedidoSalvo);
 
         var itensResponse = pedidoMapper.toItemPedidoResponseList(itensSalvos, complementosSalvosPorItem);
         return pedidoMapper.toCriarPedidoResponse(pedidoSalvo, itensResponse);

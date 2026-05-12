@@ -10,6 +10,7 @@ public record AtualizarStatusPedidoResponse(
     UUID id,
     UUID lojaId,
     StatusPedido status,
+    String mensagemWhatsapp,
     OffsetDateTime atualizadoEm
 ) {
 }

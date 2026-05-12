@@ -27,6 +27,7 @@ public record CriarPedidoResponse(
     BigDecimal trocoPara,
     String observacaoCliente,
     String enderecoEntrega,
+    String mensagemWhatsapp,
     List<ItemPedidoResponse> itens,
     OffsetDateTime criadoEm,
     OffsetDateTime atualizadoEm

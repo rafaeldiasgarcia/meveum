@@ -1624,6 +1624,31 @@
           }
         }
       ]
+    },
+    {
+      "name": "Integracao WhatsApp",
+      "item": [
+        {
+          "name": "Obter Mensagem do Pedido",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/integracoes/whatsapp/pedidos/{{pedidoId}}/mensagem",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "integracoes",
+                "whatsapp",
+                "pedidos",
+                "{{pedidoId}}",
+                "mensagem"
+              ]
+            }
+          }
+        }
+      ]
     }
   ]
 }

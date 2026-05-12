@@ -81,6 +81,7 @@ public class PedidoMapper {
             .trocoPara(pedido.getChangeFor())
             .observacaoCliente(pedido.getCustomerNote())
             .enderecoEntrega(pedido.getDeliveryAddressSnapshot())
+            .mensagemWhatsapp(pedido.getWhatsappMessage())
             .itens(itens)
             .criadoEm(pedido.getCreatedAt())
             .atualizadoEm(pedido.getUpdatedAt())
@@ -119,6 +120,7 @@ public class PedidoMapper {
             .trocoPara(pedido.getChangeFor())
             .observacaoCliente(pedido.getCustomerNote())
             .enderecoEntrega(pedido.getDeliveryAddressSnapshot())
+            .mensagemWhatsapp(pedido.getWhatsappMessage())
             .itens(itens)
             .criadoEm(pedido.getCreatedAt())
             .atualizadoEm(pedido.getUpdatedAt())
@@ -130,6 +132,7 @@ public class PedidoMapper {
             .id(pedido.getId())
             .lojaId(pedido.getLoja().getId())
             .status(pedido.getStatus())
+            .mensagemWhatsapp(pedido.getWhatsappMessage())
             .atualizadoEm(pedido.getUpdatedAt())
             .build();
     }
