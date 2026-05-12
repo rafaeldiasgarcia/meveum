@@ -104,11 +104,12 @@ cada etapa desbloqueie testes manuais e funcionalidades reais do sistema.
    - Implementar atualizacao de status.
 
 9. `dashboard`
-   - Status: proximo.
+   - Status: concluido.
    - Implementar metricas basicas apos pedidos existirem.
    - Priorizar faturamento, quantidade de pedidos e produtos mais vendidos.
 
 10. `integracao_whatsapp`
+    - Status: proximo.
     - Implementar apenas depois que pedidos e status estiverem estaveis.
     - Preparar envio de notificacoes e mensagens operacionais.
 
