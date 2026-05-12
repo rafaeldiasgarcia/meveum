@@ -16,13 +16,18 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.util.UUID;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Entity
 @Table(name = "store_delivery_zones")
 public class AreaEntregaLoja {
@@ -55,6 +60,7 @@ public class AreaEntregaLoja {
     private BigDecimal radiusKm;
 
     @Column(nullable = false, precision = 12, scale = 2)
+    @Builder.Default
     private BigDecimal fee = BigDecimal.ZERO;
 
     @Column(name = "minimum_order_value", precision = 12, scale = 2)
@@ -64,5 +70,6 @@ public class AreaEntregaLoja {
     private Integer estimatedMinutes;
 
     @Column(nullable = false)
+    @Builder.Default
     private Boolean active = true;
 }
