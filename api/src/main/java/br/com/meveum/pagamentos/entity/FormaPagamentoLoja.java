@@ -16,13 +16,18 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import java.util.UUID;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Entity
 @Table(
     name = "store_payment_methods",
@@ -43,5 +48,6 @@ public class FormaPagamentoLoja {
     private FormaPagamento method;
 
     @Column(nullable = false)
+    @Builder.Default
     private Boolean active = true;
 }
