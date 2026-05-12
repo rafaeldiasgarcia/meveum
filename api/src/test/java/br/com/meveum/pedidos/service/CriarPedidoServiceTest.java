@@ -32,7 +32,6 @@ import br.com.meveum.pedidos.validator.service.ValidarLojaPedidoDisponivelServic
 import br.com.meveum.pedidos.validator.service.ValidarPagamentoPedidoService;
 import br.com.meveum.pedidos.validator.service.ValidarProdutoPedidoService;
 import br.com.meveum.lojas.validator.service.ValidarLojaExisteService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
@@ -41,6 +40,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import tools.jackson.databind.ObjectMapper;
 
 @ExtendWith(MockitoExtension.class)
 class CriarPedidoServiceTest {

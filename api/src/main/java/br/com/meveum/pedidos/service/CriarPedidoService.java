@@ -18,14 +18,14 @@ import br.com.meveum.pedidos.validator.service.ValidarLojaPedidoDisponivelServic
 import br.com.meveum.pedidos.validator.service.ValidarPagamentoPedidoService;
 import br.com.meveum.pedidos.validator.service.ValidarProdutoPedidoService;
 import br.com.meveum.shared.exception.RegraNegocioException;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 
 @Service
 @RequiredArgsConstructor
@@ -129,7 +129,7 @@ public class CriarPedidoService {
             snapshot.put("cep", endereco.getZipCode());
             snapshot.put("referencia", endereco.getReference());
             return objectMapper.writeValueAsString(snapshot);
-        } catch (JsonProcessingException exception) {
+        } catch (JacksonException exception) {
             throw new RegraNegocioException("Nao foi possivel montar o endereco do pedido.");
         }
     }
