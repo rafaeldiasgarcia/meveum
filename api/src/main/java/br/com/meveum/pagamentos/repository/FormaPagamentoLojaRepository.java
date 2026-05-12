@@ -15,5 +15,7 @@ public interface FormaPagamentoLojaRepository extends JpaRepository<FormaPagamen
 
     boolean existsByLojaIdAndMethod(UUID lojaId, FormaPagamento method);
 
+    boolean existsByLojaIdAndMethodAndActiveTrue(UUID lojaId, FormaPagamento method);
+
     boolean existsByLojaIdAndMethodAndIdNot(UUID lojaId, FormaPagamento method, UUID id);
 }

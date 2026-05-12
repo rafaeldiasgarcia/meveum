@@ -91,12 +91,13 @@ cada etapa desbloqueie testes manuais e funcionalidades reais do sistema.
    - Validar tipo de pagamento, ativo/inativo e regras por loja.
 
 7. `crm/clientes`
-   - Status: proximo.
+   - Status: concluido.
    - Implementar cadastro e consulta de clientes.
    - Implementar enderecos de cliente.
    - Preparar reutilizacao no fluxo de pedido.
 
 8. `pedidos`
+   - Status: proximo.
    - Implementar criacao de pedido.
    - Calcular totais a partir de produtos e complementos.
    - Validar loja aberta, produtos ativos, complementos validos e endereco.
