@@ -97,13 +97,14 @@ cada etapa desbloqueie testes manuais e funcionalidades reais do sistema.
    - Preparar reutilizacao no fluxo de pedido.
 
 8. `pedidos`
-   - Status: proximo.
+   - Status: concluido.
    - Implementar criacao de pedido.
    - Calcular totais a partir de produtos e complementos.
    - Validar loja aberta, produtos ativos, complementos validos e endereco.
    - Implementar atualizacao de status.
 
 9. `dashboard`
+   - Status: proximo.
    - Implementar metricas basicas apos pedidos existirem.
    - Priorizar faturamento, quantidade de pedidos e produtos mais vendidos.
 
