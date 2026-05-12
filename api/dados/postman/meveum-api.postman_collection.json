@@ -1553,6 +1553,77 @@
           }
         }
       ]
+    },
+    {
+      "name": "Dashboard",
+      "item": [
+        {
+          "name": "Obter Resumo",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/dashboard/resumo?lojaId={{lojaId}}&inicio=2026-01-01T00:00:00-03:00&fim=2026-12-31T23:59:59-03:00",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "dashboard",
+                "resumo"
+              ],
+              "query": [
+                {
+                  "key": "lojaId",
+                  "value": "{{lojaId}}"
+                },
+                {
+                  "key": "inicio",
+                  "value": "2026-01-01T00:00:00-03:00"
+                },
+                {
+                  "key": "fim",
+                  "value": "2026-12-31T23:59:59-03:00"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Listar Produtos Mais Vendidos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/dashboard/produtos-mais-vendidos?lojaId={{lojaId}}&inicio=2026-01-01T00:00:00-03:00&fim=2026-12-31T23:59:59-03:00&limite=5",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "dashboard",
+                "produtos-mais-vendidos"
+              ],
+              "query": [
+                {
+                  "key": "lojaId",
+                  "value": "{{lojaId}}"
+                },
+                {
+                  "key": "inicio",
+                  "value": "2026-01-01T00:00:00-03:00"
+                },
+                {
+                  "key": "fim",
+                  "value": "2026-12-31T23:59:59-03:00"
+                },
+                {
+                  "key": "limite",
+                  "value": "5"
+                }
+              ]
+            }
+          }
+        }
+      ]
     }
   ]
 }
