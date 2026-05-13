@@ -17,4 +17,10 @@ public class ValidarSlugLojaDisponivelService {
             throw new RegraNegocioException("Ja existe uma loja com esse slug.");
         }
     }
+
+    public void validar(String slug) {
+        if (lojaRepository.existsBySlug(slug)) {
+            throw new RegraNegocioException("Ja existe uma loja com esse slug.");
+        }
+    }
 }

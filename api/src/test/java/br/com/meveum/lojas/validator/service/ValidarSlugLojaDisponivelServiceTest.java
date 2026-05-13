@@ -39,4 +39,20 @@ class ValidarSlugLojaDisponivelServiceTest {
             .isInstanceOf(RegraNegocioException.class)
             .hasMessage("Ja existe uma loja com esse slug.");
     }
+
+    @Test
+    void devePermitirSlugDisponivel() {
+        when(lojaRepository.existsBySlug("loja")).thenReturn(false);
+
+        assertThatCode(() -> service.validar("loja")).doesNotThrowAnyException();
+    }
+
+    @Test
+    void deveFalharQuandoSlugJaExistir() {
+        when(lojaRepository.existsBySlug("loja")).thenReturn(true);
+
+        assertThatThrownBy(() -> service.validar("loja"))
+            .isInstanceOf(RegraNegocioException.class)
+            .hasMessage("Ja existe uma loja com esse slug.");
+    }
 }
