@@ -1,6 +1,6 @@
 "use client";
 
-import { LogOut, Plus } from "lucide-react";
+import { LogOut } from "lucide-react";
 import { useSessaoAutenticada } from "@/features/auth/context/SessaoAutenticadaContext";
 import { toast } from "sonner";
 
@@ -16,13 +16,13 @@ export function Topbar() {
 
   return (
     <header
-      className="flex items-center justify-between px-6 pt-5 pb-4 bg-[#F8F6F3] shrink-0"
+      className="flex shrink-0 items-center justify-between border-b border-[#E8E0D6] bg-[#FBF7F4] px-6 py-3"
       data-testid="topbar"
     >
       <div>
-        <p className="text-xs text-[#A8A29E] font-medium mb-0.5">Operação · ao vivo</p>
+        <p className="text-xs text-[#78716C]">Operação · ao vivo</p>
         <h1
-          className="text-2xl font-bold text-[#1C1917] leading-tight"
+          className="text-xl font-semibold text-[#1C1917] leading-tight"
           data-testid="dashboard-greeting"
         >
           {saudacao(nome)}
@@ -31,22 +31,18 @@ export function Topbar() {
 
       <div className="flex items-center gap-3">
         {/* Live indicator */}
-        <div className="flex items-center gap-1.5">
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#EA580C] opacity-75" />
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-[#EA580C]" />
-          </span>
-          <span className="text-sm text-[#78716C]">5 pedidos novos</span>
+        <div className="hidden items-center gap-2 rounded-md border border-[#E8E0D6] bg-white px-3 py-1.5 text-xs text-[#1C1917] md:flex">
+          <span className="h-2 w-2 animate-pulse rounded-full bg-[#EA580C]" />
+          5 pedidos novos
         </div>
 
         {/* New order button */}
         <button
           type="button"
           onClick={() => toast.info("Novo pedido — em breve")}
-          className="flex items-center gap-1.5 rounded-lg bg-[#EA580C] px-4 py-2 text-sm font-semibold text-white hover:bg-[#C2410C] transition-colors"
+          className="rounded-md bg-[#EA580C] px-4 py-2 text-sm font-semibold text-white shadow-soft hover:bg-[#C2410C] transition-colors"
         >
-          <Plus className="h-4 w-4" />
-          Novo pedido
+          + Novo pedido
         </button>
 
         {/* Logout */}
@@ -54,7 +50,7 @@ export function Topbar() {
           onClick={() => void sair()}
           title="Sair"
           data-testid="logout-button"
-          className="flex h-8 w-8 items-center justify-center rounded-lg text-[#A8A29E] hover:text-[#1C1917] hover:bg-black/5 transition-colors"
+          className="flex h-8 w-8 items-center justify-center rounded-md text-[#78716C] hover:text-[#1C1917] hover:bg-black/5 transition-colors"
         >
           <LogOut className="h-4 w-4" />
         </button>

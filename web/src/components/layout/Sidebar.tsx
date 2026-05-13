@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils/cn";
-import { Logo } from "@/components/shared/Logo";
 
 const NAV_ITEMS = [
   { href: "/dashboard", label: "Operação", exact: true },
@@ -23,28 +22,25 @@ export function Sidebar() {
 
   return (
     <aside
-      className="hidden md:flex w-48 flex-col h-screen sticky top-0 shrink-0"
-      style={{ background: "#1c1917" }}
+      className="hidden w-60 shrink-0 flex-col border-r border-white/10 bg-[#1C1917] text-[#FBF7F4] md:flex"
       data-testid="sidebar"
     >
       {/* Logo */}
-      <div className="px-4 pt-5 pb-4">
-        <Logo size="sm" />
+      <div className="flex items-center gap-2 border-b border-[#FBF7F4]/10 px-5 py-4">
+        <span className="grid h-8 w-8 place-items-center rounded-md bg-[#EA580C] text-sm font-bold text-white">
+          M
+        </span>
+        <span className="text-lg font-semibold">MeVêUm</span>
       </div>
 
       {/* Restaurant info */}
-      <div className="px-4 pb-4 border-b border-white/8">
-        <p className="text-[10px] font-semibold tracking-widest text-white/35 uppercase mb-0.5">
-          Burger do Bairro
-        </p>
-        <div className="flex items-center gap-1.5">
-          <span className="h-1.5 w-1.5 rounded-full bg-green-400 shrink-0" />
-          <span className="text-xs text-white/50 truncate">Av. Paulista · Aberto</span>
-        </div>
+      <div className="px-5 py-4">
+        <p className="text-[10px] uppercase tracking-wider text-[#FBF7F4]/40">Burger do Bairro</p>
+        <p className="text-sm font-semibold">Av. Paulista · Aberto</p>
       </div>
 
       {/* Nav */}
-      <nav className="flex-1 overflow-y-auto py-3 flex flex-col gap-0.5">
+      <nav className="flex-1 overflow-y-auto px-3 text-sm" aria-label="Navegação principal">
         {NAV_ITEMS.map(({ href, label, exact }) => {
           const active = exact
             ? pathname === href
@@ -56,16 +52,16 @@ export function Sidebar() {
               href={href}
               data-testid={`nav-${label.toLowerCase().replace(/[\s/()]/g, "-")}`}
               className={cn(
-                "flex items-center gap-2.5 pl-4 pr-3 py-2 text-sm transition-colors border-l-2",
+                "mb-1 flex items-center gap-2 rounded-md px-3 py-2 transition-colors",
                 active
-                  ? "border-[#EA580C] text-white bg-white/5"
-                  : "border-transparent text-white/45 hover:text-white/80 hover:bg-white/4"
+                  ? "bg-[#EA580C]/15 text-[#EA580C] font-semibold"
+                  : "text-[#FBF7F4]/70 hover:bg-[#FBF7F4]/5",
               )}
             >
               <span
                 className={cn(
-                  "h-1.5 w-1.5 rounded-full shrink-0",
-                  active ? "bg-[#EA580C]" : "bg-white/25"
+                  "h-1.5 w-1.5 shrink-0 rounded-full",
+                  active ? "bg-[#EA580C]" : "bg-[#FBF7F4]/30",
                 )}
               />
               {label}
@@ -73,6 +69,13 @@ export function Sidebar() {
           );
         })}
       </nav>
+
+      {/* Footer */}
+      <div className="border-t border-[#FBF7F4]/10 p-4">
+        <Link href="/" className="text-xs text-[#FBF7F4]/60 hover:text-[#FBF7F4] transition-colors">
+          ← voltar para o site
+        </Link>
+      </div>
     </aside>
   );
 }

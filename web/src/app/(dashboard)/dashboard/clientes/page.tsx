@@ -32,14 +32,14 @@ export default function ClientesPage() {
   );
 
   return (
-    <div className="p-6 overflow-y-auto h-full space-y-5">
+    <div className="p-6 space-y-5">
       <div>
-        <h1 className="text-xl font-bold text-[var(--color-foreground)]">Clientes</h1>
-        <p className="text-sm text-[var(--color-muted)]">{clientes.length} clientes cadastrados</p>
+        <h1 className="text-xl font-bold text-[#1C1917]">Clientes</h1>
+        <p className="text-sm text-[#78716C]">{clientes.length} clientes cadastrados</p>
       </div>
 
       <div className="relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--color-muted)]" />
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#78716C]" />
         <Input
           placeholder="Buscar por nome ou telefone..."
           className="pl-9"
@@ -53,7 +53,7 @@ export default function ClientesPage() {
         <div className="lg:col-span-2">
           {loading ? (
             <div className="flex justify-center py-16" data-testid="clientes-loading">
-              <div className="h-6 w-6 animate-spin rounded-full border-2 border-[var(--color-orange)] border-t-transparent" />
+              <div className="h-6 w-6 animate-spin rounded-full border-2 border-[#EA580C] border-t-transparent" />
             </div>
           ) : clientesFiltrados.length === 0 ? (
             <EmptyState
@@ -68,26 +68,26 @@ export default function ClientesPage() {
                 <button
                   key={cliente.id}
                   onClick={() => setSelecionado(selecionado?.id === cliente.id ? null : cliente)}
-                  className={`w-full text-left rounded-[var(--radius-lg)] border transition-colors p-4 ${
+                  className={`w-full text-left rounded-xl border transition-colors p-4 ${
                     selecionado?.id === cliente.id
-                      ? "border-[var(--color-orange)]/40 bg-[var(--color-orange-dim)]"
-                      : "border-[var(--color-border)] bg-[var(--color-surface)] hover:bg-[var(--color-surface-2)]"
+                      ? "border-[#EA580C]/40 bg-[#EA580C]/8"
+                      : "border-[#E8E0D6] bg-white hover:bg-[#F8F6F3]"
                   }`}
                   data-testid={`cliente-card-${cliente.id}`}
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[var(--color-surface-2)] border border-[var(--color-border)] text-sm font-bold text-[var(--color-orange)]">
+                      <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#F8F6F3] border border-[#E8E0D6] text-sm font-bold text-[#EA580C]">
                         {cliente.nome[0].toUpperCase()}
                       </div>
                       <div>
-                        <p className="font-semibold text-sm text-[var(--color-foreground)]">{cliente.nome}</p>
-                        <p className="text-xs text-[var(--color-muted)]">{cliente.telefone}</p>
+                        <p className="font-semibold text-sm text-[#1C1917]">{cliente.nome}</p>
+                        <p className="text-xs text-[#78716C]">{cliente.telefone}</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
                       <FrequenciaBadge total={cliente.totalPedidos} />
-                      <span className="text-sm font-semibold text-[var(--color-foreground)]">
+                      <span className="text-sm font-semibold text-[#1C1917]">
                         {formatCurrency(cliente.totalGasto)}
                       </span>
                     </div>
@@ -100,14 +100,14 @@ export default function ClientesPage() {
 
         {/* Detalhe cliente */}
         {selecionado && (
-          <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] p-5 space-y-4" data-testid="cliente-detalhe">
+          <div className="rounded-xl border border-[#E8E0D6] bg-white p-5 space-y-4" data-testid="cliente-detalhe">
             <div className="flex items-center gap-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[var(--color-orange)] text-lg font-bold text-white">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#EA580C] text-lg font-bold text-white">
                 {selecionado.nome[0]}
               </div>
               <div>
-                <p className="font-bold text-[var(--color-foreground)]">{selecionado.nome}</p>
-                <p className="text-sm text-[var(--color-muted)]">{selecionado.telefone}</p>
+                <p className="font-bold text-[#1C1917]">{selecionado.nome}</p>
+                <p className="text-sm text-[#78716C]">{selecionado.telefone}</p>
               </div>
             </div>
 
@@ -118,15 +118,15 @@ export default function ClientesPage() {
                 { label: "Ticket médio", val: formatCurrency(selecionado.totalGasto / selecionado.totalPedidos) },
                 { label: "Último pedido", val: formatDate(selecionado.ultimoPedido) },
               ].map(({ label, val }) => (
-                <div key={label} className="rounded-[var(--radius-md)] bg-[var(--color-surface-2)] border border-[var(--color-border)] p-3">
-                  <p className="text-xs text-[var(--color-muted)]">{label}</p>
-                  <p className="text-sm font-semibold text-[var(--color-foreground)]">{val}</p>
+                <div key={label} className="rounded-lg bg-[#F8F6F3] border border-[#E8E0D6] p-3">
+                  <p className="text-xs text-[#78716C]">{label}</p>
+                  <p className="text-sm font-semibold text-[#1C1917]">{val}</p>
                 </div>
               ))}
             </div>
 
             <div className="flex items-center justify-between">
-              <span className="text-xs text-[var(--color-muted)]">Cliente desde {formatDate(selecionado.criadoEm)}</span>
+              <span className="text-xs text-[#78716C]">Cliente desde {formatDate(selecionado.criadoEm)}</span>
               <FrequenciaBadge total={selecionado.totalPedidos} />
             </div>
           </div>

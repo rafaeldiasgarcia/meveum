@@ -73,11 +73,11 @@ export default function PedidosPage() {
   }
 
   return (
-    <div className="p-6 overflow-y-auto h-full space-y-5">
+    <div className="p-6 space-y-5">
       <div className="flex items-start justify-between">
         <div>
-          <h1 className="text-xl font-bold text-[var(--color-foreground)]">Pedidos</h1>
-          <p className="text-sm text-[var(--color-muted)]">{pedidos.length} pedidos no sistema</p>
+          <h1 className="text-xl font-bold text-[#1C1917]">Pedidos</h1>
+          <p className="text-sm text-[#78716C]">{pedidos.length} pedidos no sistema</p>
         </div>
         <Select
           value={filtroStatus}
@@ -99,7 +99,7 @@ export default function PedidosPage() {
         <div>
           {loading ? (
             <div className="flex justify-center py-16" data-testid="pedidos-loading">
-              <div className="h-6 w-6 animate-spin rounded-full border-2 border-[var(--color-orange)] border-t-transparent" />
+              <div className="h-6 w-6 animate-spin rounded-full border-2 border-[#EA580C] border-t-transparent" />
             </div>
           ) : pedidosFiltrados.length === 0 ? (
             <EmptyState
@@ -114,23 +114,23 @@ export default function PedidosPage() {
                 <button
                   key={pedido.id}
                   onClick={() => setDetalhe(detalhe?.id === pedido.id ? null : pedido)}
-                  className={`w-full text-left rounded-[var(--radius-lg)] border transition-colors p-4 ${
+                  className={`w-full text-left rounded-xl border transition-colors p-4 ${
                     detalhe?.id === pedido.id
-                      ? "border-[var(--color-orange)]/40 bg-[var(--color-orange-dim)]"
-                      : "border-[var(--color-border)] bg-[var(--color-surface)] hover:bg-[var(--color-surface-2)]"
+                      ? "border-[#EA580C]/40 bg-[#EA580C]/8"
+                      : "border-[#E8E0D6] bg-white hover:bg-[#F8F6F3]"
                   }`}
                   data-testid={`pedido-card-${pedido.id}`}
                 >
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-bold text-[var(--color-muted)]">#{pedido.numero}</span>
-                      <span className="font-semibold text-sm text-[var(--color-foreground)]">{pedido.nomeCliente}</span>
+                      <span className="text-xs font-bold text-[#78716C]">#{pedido.numero}</span>
+                      <span className="font-semibold text-sm text-[#1C1917]">{pedido.nomeCliente}</span>
                     </div>
                     <StatusPedidoBadge status={pedido.status} />
                   </div>
-                  <div className="flex items-center justify-between text-xs text-[var(--color-muted)]">
+                  <div className="flex items-center justify-between text-xs text-[#78716C]">
                     <span>{pedido.itens.length} {pedido.itens.length === 1 ? "item" : "itens"} · {pedido.tipo === "delivery" ? "Entrega" : "Retirada"}</span>
-                    <span className="font-semibold text-[var(--color-foreground)]">{formatCurrency(pedido.total)}</span>
+                    <span className="font-semibold text-[#1C1917]">{formatCurrency(pedido.total)}</span>
                   </div>
                 </button>
               ))}
@@ -144,47 +144,47 @@ export default function PedidosPage() {
             <CardContent className="p-5 space-y-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="font-bold text-[var(--color-foreground)]">Pedido #{detalhe.numero}</p>
-                  <p className="text-xs text-[var(--color-muted)]">{formatDateTime(detalhe.criadoEm)}</p>
+                  <p className="font-bold text-[#1C1917]">Pedido #{detalhe.numero}</p>
+                  <p className="text-xs text-[#78716C]">{formatDateTime(detalhe.criadoEm)}</p>
                 </div>
                 <StatusPedidoBadge status={detalhe.status} />
               </div>
 
-              <div className="rounded-[var(--radius-md)] bg-[var(--color-surface-2)] border border-[var(--color-border)] p-3 space-y-1">
-                <p className="text-xs font-semibold text-[var(--color-muted)] uppercase">Cliente</p>
-                <p className="text-sm font-medium text-[var(--color-foreground)]">{detalhe.nomeCliente}</p>
-                <p className="text-xs text-[var(--color-muted)]">{detalhe.telefoneCliente}</p>
+              <div className="rounded-lg bg-[#F8F6F3] border border-[#E8E0D6] p-3 space-y-1">
+                <p className="text-xs font-semibold text-[#78716C] uppercase">Cliente</p>
+                <p className="text-sm font-medium text-[#1C1917]">{detalhe.nomeCliente}</p>
+                <p className="text-xs text-[#78716C]">{detalhe.telefoneCliente}</p>
                 {detalhe.tipo === "delivery" && detalhe.enderecoEntrega && (
-                  <p className="text-xs text-[var(--color-muted)]">{detalhe.enderecoEntrega} — {detalhe.bairroEntrega}</p>
+                  <p className="text-xs text-[#78716C]">{detalhe.enderecoEntrega} — {detalhe.bairroEntrega}</p>
                 )}
               </div>
 
               <div>
-                <p className="text-xs font-semibold text-[var(--color-muted)] uppercase mb-2">Itens</p>
+                <p className="text-xs font-semibold text-[#78716C] uppercase mb-2">Itens</p>
                 <div className="space-y-1.5" data-testid="pedido-itens">
                   {detalhe.itens.map((item) => (
                     <div key={item.id} className="flex justify-between text-sm">
-                      <span className="text-[var(--color-foreground)]">{item.quantidade}× {item.nomeProduto}</span>
-                      <span className="text-[var(--color-muted)]">{formatCurrency(item.subtotal)}</span>
+                      <span className="text-[#1C1917]">{item.quantidade}× {item.nomeProduto}</span>
+                      <span className="text-[#78716C]">{formatCurrency(item.subtotal)}</span>
                     </div>
                   ))}
                   {detalhe.taxaEntrega && (
-                    <div className="flex justify-between text-sm border-t border-[var(--color-border)] pt-1.5 mt-1.5">
-                      <span className="text-[var(--color-muted)]">Taxa de entrega</span>
-                      <span className="text-[var(--color-muted)]">{formatCurrency(detalhe.taxaEntrega)}</span>
+                    <div className="flex justify-between text-sm border-t border-[#E8E0D6] pt-1.5 mt-1.5">
+                      <span className="text-[#78716C]">Taxa de entrega</span>
+                      <span className="text-[#78716C]">{formatCurrency(detalhe.taxaEntrega)}</span>
                     </div>
                   )}
-                  <div className="flex justify-between text-sm font-bold border-t border-[var(--color-border)] pt-1.5 mt-1.5">
-                    <span className="text-[var(--color-foreground)]">Total</span>
-                    <span className="text-[var(--color-orange)]">{formatCurrency(detalhe.total)}</span>
+                  <div className="flex justify-between text-sm font-bold border-t border-[#E8E0D6] pt-1.5 mt-1.5">
+                    <span className="text-[#1C1917]">Total</span>
+                    <span className="text-[#EA580C]">{formatCurrency(detalhe.total)}</span>
                   </div>
                 </div>
               </div>
 
               {detalhe.observacao && (
-                <div className="rounded-[var(--radius-md)] bg-amber-500/10 border border-amber-500/20 p-3">
-                  <p className="text-xs font-semibold text-amber-400 uppercase mb-1">Observação</p>
-                  <p className="text-sm text-[var(--color-foreground)]">{detalhe.observacao}</p>
+                <div className="rounded-lg bg-amber-50 border border-amber-200 p-3">
+                  <p className="text-xs font-semibold text-amber-700 uppercase mb-1">Observação</p>
+                  <p className="text-sm text-[#1C1917]">{detalhe.observacao}</p>
                 </div>
               )}
 
@@ -192,7 +192,7 @@ export default function PedidosPage() {
                 {PROXIMOS_STATUS[detalhe.status] && (
                   <button
                     onClick={() => avancarStatus(detalhe)}
-                    className="flex-1 rounded-[var(--radius-md)] bg-[var(--color-orange)] text-white text-sm font-semibold py-2.5 hover:bg-[var(--color-orange-hover)] transition-colors"
+                    className="flex-1 rounded-lg bg-[#EA580C] text-white text-sm font-semibold py-2.5 hover:bg-[#C2410C] transition-colors"
                     data-testid="pedido-avancar-status-button"
                   >
                     {LABEL_PROXIMO[detalhe.status]}
@@ -201,7 +201,7 @@ export default function PedidosPage() {
                 {detalhe.status !== "cancelado" && detalhe.status !== "finalizado" && (
                   <button
                     onClick={() => cancelar(detalhe)}
-                    className="rounded-[var(--radius-md)] border border-red-500/20 bg-red-500/10 text-red-400 text-sm font-medium px-4 py-2.5 hover:bg-red-500/20 transition-colors"
+                    className="rounded-lg border border-red-200 bg-red-50 text-red-600 text-sm font-medium px-4 py-2.5 hover:bg-red-100 transition-colors"
                     data-testid="pedido-cancelar-button"
                   >
                     Cancelar
