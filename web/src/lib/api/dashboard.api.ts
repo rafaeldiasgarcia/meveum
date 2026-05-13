@@ -1,7 +1,19 @@
-import type { MetricasDashboard, DadoGrafico } from "@/types";
-import { mockMetricas, mockGraficoSemanal } from "@/lib/mocks/dashboard.mock";
-import { mockPedidos } from "@/lib/mocks/pedidos.mock";
-import type { Pedido } from "@/types";
+import type {
+  MetricasDashboard,
+  DadoGrafico,
+  KDSItem,
+  TopProduto,
+  ClienteRecorrente,
+  PedidoResumo,
+} from "@/types";
+import {
+  mockMetricas,
+  mockGraficoSemanal,
+  mockKDSItems,
+  mockTopProdutos,
+  mockClientesRecorrentes,
+  mockPedidosResumo,
+} from "@/lib/mocks/dashboard.mock";
 
 const delay = (ms = 400) => new Promise((r) => setTimeout(r, ms));
 
@@ -15,9 +27,22 @@ export async function buscarGraficoSemanal(): Promise<DadoGrafico[]> {
   return mockGraficoSemanal;
 }
 
-export async function buscarPedidosRecentes(): Promise<Pedido[]> {
+export async function buscarPedidosResumo(): Promise<PedidoResumo[]> {
   await delay(300);
-  return [...mockPedidos]
-    .sort((a, b) => new Date(b.criadoEm).getTime() - new Date(a.criadoEm).getTime())
-    .slice(0, 5);
+  return mockPedidosResumo;
+}
+
+export async function buscarKDSItems(): Promise<KDSItem[]> {
+  await delay(200);
+  return mockKDSItems;
+}
+
+export async function buscarTopProdutos(): Promise<TopProduto[]> {
+  await delay(200);
+  return mockTopProdutos;
+}
+
+export async function buscarClientesRecorrentes(): Promise<ClienteRecorrente[]> {
+  await delay(200);
+  return mockClientesRecorrentes;
 }

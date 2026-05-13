@@ -1,62 +1,63 @@
 "use client";
 
-import { Bell, LogOut, Store } from "lucide-react";
-import { Logo } from "@/components/shared/Logo";
-import { Button } from "@/components/ui/button";
+import { LogOut, Plus } from "lucide-react";
 import { useSessaoAutenticada } from "@/features/auth/context/SessaoAutenticadaContext";
+import { toast } from "sonner";
+
+function saudacao(nome: string) {
+  const h = new Date().getHours();
+  const prefix = h < 12 ? "Bom dia" : h < 18 ? "Boa tarde" : "Boa noite";
+  return `${prefix}, ${nome.split(" ")[0]} 👋`;
+}
 
 export function Topbar() {
   const { usuario, sair } = useSessaoAutenticada();
-  const nomeUsuario = usuario?.nome ?? "Usuario";
-  const inicialUsuario = nomeUsuario.trim().charAt(0).toUpperCase() || "U";
+  const nome = usuario?.nome ?? "usuário";
 
   return (
     <header
-      className="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-[var(--color-border)] bg-[var(--color-surface)]/80 backdrop-blur px-4 md:px-6"
+      className="flex items-center justify-between px-6 pt-5 pb-4 bg-[#F8F6F3] shrink-0"
       data-testid="topbar"
     >
-      <div className="md:hidden">
-        <Logo size="sm" />
-      </div>
-
-      <div className="hidden md:flex items-center gap-2">
-        <div className="flex h-7 w-7 items-center justify-center rounded bg-[var(--color-surface-2)] border border-[var(--color-border)]">
-          <Store className="h-3.5 w-3.5 text-[var(--color-muted)]" />
-        </div>
-        <span className="text-sm font-medium text-[var(--color-foreground)]">Painel da loja</span>
-        <div className="ml-1 h-2 w-2 rounded-full bg-green-400" title="Loja aberta" />
-      </div>
-
-      <div className="flex items-center gap-2">
-        <Button variant="ghost" size="icon" className="relative" aria-label="Notificações">
-          <Bell className="h-4 w-4" />
-          <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-[var(--color-orange)]" />
-        </Button>
-
-        <button
-          className="flex items-center gap-2 rounded-[var(--radius-md)] px-2 py-1.5 hover:bg-[var(--color-surface-2)] transition-colors"
-          data-testid="user-menu-button"
+      <div>
+        <p className="text-xs text-[#A8A29E] font-medium mb-0.5">Operação · ao vivo</p>
+        <h1
+          className="text-2xl font-bold text-[#1C1917] leading-tight"
+          data-testid="dashboard-greeting"
         >
-          <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[var(--color-orange)] text-xs font-bold text-white">
-            {inicialUsuario}
-          </div>
-          <span
-            className="hidden sm:block text-sm font-medium text-[var(--color-foreground)]"
-            data-testid="user-menu-name"
-          >
-            {nomeUsuario}
+          {saudacao(nome)}
+        </h1>
+      </div>
+
+      <div className="flex items-center gap-3">
+        {/* Live indicator */}
+        <div className="flex items-center gap-1.5">
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#EA580C] opacity-75" />
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-[#EA580C]" />
           </span>
+          <span className="text-sm text-[#78716C]">5 pedidos novos</span>
+        </div>
+
+        {/* New order button */}
+        <button
+          type="button"
+          onClick={() => toast.info("Novo pedido — em breve")}
+          className="flex items-center gap-1.5 rounded-lg bg-[#EA580C] px-4 py-2 text-sm font-semibold text-white hover:bg-[#C2410C] transition-colors"
+        >
+          <Plus className="h-4 w-4" />
+          Novo pedido
         </button>
-        <Button
-          variant="ghost"
-          size="icon"
-          aria-label="Sair"
-          title="Sair"
+
+        {/* Logout */}
+        <button
           onClick={() => void sair()}
+          title="Sair"
           data-testid="logout-button"
+          className="flex h-8 w-8 items-center justify-center rounded-lg text-[#A8A29E] hover:text-[#1C1917] hover:bg-black/5 transition-colors"
         >
           <LogOut className="h-4 w-4" />
-        </Button>
+        </button>
       </div>
     </header>
   );

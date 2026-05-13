@@ -152,7 +152,7 @@ export default function CardapioPage() {
   }
 
   return (
-    <div className="space-y-5">
+    <div className="p-6 overflow-y-auto h-full space-y-5">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-xl font-bold text-[var(--color-foreground)]">Cardápio</h1>

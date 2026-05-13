@@ -32,7 +32,7 @@ export default function ClientesPage() {
   );
 
   return (
-    <div className="space-y-5">
+    <div className="p-6 overflow-y-auto h-full space-y-5">
       <div>
         <h1 className="text-xl font-bold text-[var(--color-foreground)]">Clientes</h1>
         <p className="text-sm text-[var(--color-muted)]">{clientes.length} clientes cadastrados</p>

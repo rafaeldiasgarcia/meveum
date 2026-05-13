@@ -58,13 +58,13 @@ export default function ConfiguracoesPage() {
   }
 
   if (loading) {
-    return <div className="flex justify-center py-16" data-testid="configuracoes-loading">
+    return <div className="p-6 flex justify-center py-16" data-testid="configuracoes-loading">
       <div className="h-6 w-6 animate-spin rounded-full border-2 border-[var(--color-orange)] border-t-transparent" />
     </div>;
   }
 
   return (
-    <div className="space-y-5 max-w-2xl">
+    <div className="p-6 overflow-y-auto h-full space-y-5 max-w-2xl">
       <div>
         <h1 className="text-xl font-bold text-[var(--color-foreground)]">Configurações</h1>
         <p className="text-sm text-[var(--color-muted)]">Gerencie os dados e preferências da sua loja</p>
