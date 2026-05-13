@@ -78,6 +78,7 @@ export type CriarProdutoRequest = {
   descricao?: string;
   preco: number;
   categoriaId: string;
+  imagemUrl?: string;
   disponivel: boolean;
   destaque: boolean;
 };
