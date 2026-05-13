@@ -16,10 +16,14 @@ export function CardProduto({ produto, lojaAberta, onSelecionar }: Props) {
     <button
       onClick={() => lojaAberta && onSelecionar(produto)}
       disabled={!lojaAberta}
+      data-testid={`public-product-card-${produto.id}`}
       className="w-full text-left bg-white rounded-2xl shadow-sm flex gap-3 p-3 hover:shadow-md transition-shadow disabled:opacity-50 disabled:cursor-not-allowed"
     >
       <div className="flex-1 min-w-0 flex flex-col gap-1 py-1">
-        <span className="font-semibold text-gray-900 text-sm leading-snug">
+        <span
+          className="font-semibold text-gray-900 text-sm leading-snug"
+          data-testid={`public-product-name-${produto.id}`}
+        >
           {produto.nome}
         </span>
         {produto.descricao && (

@@ -7,7 +7,10 @@ type Props = { loja: LojaPublica };
 
 export function HeaderLoja({ loja }: Props) {
   return (
-    <header className="pt-10 pb-6 flex flex-col items-center gap-2 bg-[#FFF8F4]">
+    <header
+      className="pt-10 pb-6 flex flex-col items-center gap-2 bg-[#FFF8F4]"
+      data-testid="public-store-header"
+    >
       <div className="relative">
         {loja.logoUrl ? (
           <Image
@@ -30,11 +33,15 @@ export function HeaderLoja({ loja }: Props) {
               ? "bg-green-500 text-white"
               : "bg-red-500 text-white"
           }`}
+          data-testid="public-store-status"
         >
           {loja.operacional ? "ABERTO" : "FECHADO"}
         </span>
       </div>
-      <h1 className="mt-4 font-bold text-gray-900 text-2xl text-center leading-tight">
+      <h1
+        className="mt-4 font-bold text-gray-900 text-2xl text-center leading-tight"
+        data-testid="public-store-name"
+      >
         {loja.nome}
       </h1>
     </header>

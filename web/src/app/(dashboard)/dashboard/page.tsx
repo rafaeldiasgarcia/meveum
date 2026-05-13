@@ -43,7 +43,12 @@ export default function DashboardPage() {
       {/* Header */}
       <div className="flex items-start justify-between">
         <div>
-          <h1 className="text-xl font-bold text-[var(--color-foreground)]">Bom dia, {usuario?.nome ?? "usuario"}.</h1>
+          <h1
+            className="text-xl font-bold text-[var(--color-foreground)]"
+            data-testid="dashboard-greeting"
+          >
+            Bom dia, {usuario?.nome ?? "usuario"}.
+          </h1>
           <p className="text-sm text-[var(--color-muted)]">Aqui está um resumo do que está acontecendo hoje.</p>
         </div>
         <div className="flex items-center gap-2">
