@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import br.com.meveum.auth.validator.service.ValidarAcessoLojaService;
 import br.com.meveum.lojas.validator.service.ValidarLojaExisteService;
 import br.com.meveum.pedidos.dto.ListarPedidoResponse;
 import br.com.meveum.pedidos.entity.Pedido;
@@ -24,6 +25,8 @@ class ListarPedidoServiceTest {
     @Mock
     private ValidarLojaExisteService validarLojaExisteService;
     @Mock
+    private ValidarAcessoLojaService validarAcessoLojaService;
+    @Mock
     private PedidoRepository pedidoRepository;
     @Mock
     private PedidoMapper pedidoMapper;
@@ -42,6 +45,7 @@ class ListarPedidoServiceTest {
 
         assertThat(resultado).containsExactly(response);
         verify(validarLojaExisteService).validar(lojaId);
+        verify(validarAcessoLojaService).validar(lojaId);
     }
 
     @Test
@@ -50,5 +54,6 @@ class ListarPedidoServiceTest {
         when(pedidoRepository.findByLojaIdOrderByCreatedAtDesc(lojaId)).thenReturn(List.of());
 
         assertThat(service.listar(lojaId, null)).isEmpty();
+        verify(validarAcessoLojaService).validar(lojaId);
     }
 }
