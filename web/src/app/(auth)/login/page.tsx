@@ -67,13 +67,13 @@ export default function LoginPage() {
       {/* ── Lado esquerdo — formulário ──────────────────────────────────── */}
       <div className="flex w-full flex-col bg-[#FBF7F4] lg:w-1/2">
         {/* Header */}
-        <header className="flex items-center justify-between px-8 py-5">
+        <header className="flex items-center justify-between px-4 py-5 sm:px-6">
           <Image
-            src="/logo-header.png"
+            src="/logo.png"
             alt="MeVêUm"
-            width={120}
-            height={36}
-            className="object-contain"
+            width={130}
+            height={52}
+            className="h-8 w-auto object-contain sm:h-10"
             priority
           />
           <Link
@@ -86,7 +86,7 @@ export default function LoginPage() {
         </header>
 
         {/* Content */}
-        <div className="flex flex-1 flex-col justify-center px-8 py-10 md:px-16">
+        <div className="flex flex-1 flex-col justify-center px-4 py-10 sm:px-6">
           <div className="mx-auto w-full max-w-sm">
             {/* Badge */}
             <div className="mb-6 inline-flex items-center gap-1.5 rounded-full border border-[#E8E0D6] bg-white px-3 py-1.5 shadow-soft">
@@ -222,7 +222,7 @@ export default function LoginPage() {
         </div>
 
         {/* Footer */}
-        <footer className="px-8 py-4 text-xs text-[#A8A29E]">
+        <footer className="px-4 py-4 text-xs text-[#A8A29E] sm:px-6">
           © 2026 MeVêUm · Sistema para restaurantes brasileiros
         </footer>
       </div>
