@@ -1,5 +1,6 @@
 package br.com.meveum.pedidos.service;
 
+import br.com.meveum.auth.validator.service.ValidarAcessoLojaService;
 import br.com.meveum.lojas.validator.service.ValidarLojaExisteService;
 import br.com.meveum.pedidos.dto.ListarPedidoResponse;
 import br.com.meveum.pedidos.entity.enums.StatusPedido;
@@ -15,11 +16,13 @@ import org.springframework.stereotype.Service;
 public class ListarPedidoService {
 
     private final ValidarLojaExisteService validarLojaExisteService;
+    private final ValidarAcessoLojaService validarAcessoLojaService;
     private final PedidoRepository pedidoRepository;
     private final PedidoMapper pedidoMapper;
 
     public List<ListarPedidoResponse> listar(UUID lojaId, StatusPedido status) {
         validarLojaExisteService.validar(lojaId);
+        validarAcessoLojaService.validar(lojaId);
         var pedidos = status == null
             ? pedidoRepository.findByLojaIdOrderByCreatedAtDesc(lojaId)
             : pedidoRepository.findByLojaIdAndStatusOrderByCreatedAtDesc(lojaId, status);

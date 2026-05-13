@@ -73,6 +73,15 @@ class AuthValidatorTest {
             .hasMessage("Senhas nao conferem.");
     }
 
+    @Test
+    void deveRecusarRegistroComSenhaCurta() {
+        var request = registro("Rafael", "Loja", "11999999999", "admin@meveum.com", "12345", "12345");
+
+        assertThatThrownBy(() -> authValidator.validarRegistro(request))
+            .isInstanceOf(RegraNegocioException.class)
+            .hasMessage("Senha deve ter no minimo 6 caracteres.");
+    }
+
     private RegistrarRequest registro(String nome, String nomeLoja, String telefone, String email, String senha, String confirmarSenha) {
         return new RegistrarRequest(nome, nomeLoja, telefone, email, senha, confirmarSenha);
     }

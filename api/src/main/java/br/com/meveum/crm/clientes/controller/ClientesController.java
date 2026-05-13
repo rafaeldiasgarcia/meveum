@@ -60,8 +60,11 @@ public class ClientesController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<ListarClienteResponse> listar(@RequestParam UUID lojaId) {
-        return listarClienteService.listar(lojaId);
+    public List<ListarClienteResponse> listar(
+        @RequestParam UUID lojaId,
+        @RequestParam(required = false) String search
+    ) {
+        return listarClienteService.listar(lojaId, search);
     }
 
     @GetMapping("/{clienteId}")

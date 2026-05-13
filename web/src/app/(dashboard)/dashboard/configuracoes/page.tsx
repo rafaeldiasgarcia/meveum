@@ -9,7 +9,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
-import { buscarLoja, atualizarLoja, toggleAberta, atualizarHorarios } from "@/lib/api/configuracoes.api";
+import {
+  buscarLoja,
+  atualizarLoja,
+  toggleAberta,
+  atualizarHorarios,
+  criarTaxaEntrega,
+  removerTaxaEntrega,
+} from "@/lib/api/configuracoes.api";
 import type { Loja, HorarioFuncionamento } from "@/types";
 
 const DIA_LABELS: Record<string, string> = {
@@ -57,19 +64,37 @@ export default function ConfiguracoesPage() {
     toast.success(atualizada.aberta ? "Loja aberta!" : "Loja fechada.");
   }
 
+  async function adicionarTaxa() {
+    setSalvando(true);
+    try {
+      const atualizada = await criarTaxaEntrega();
+      setLoja(atualizada);
+      toast.success("Taxa de entrega adicionada.");
+    } catch { toast.error("Erro ao adicionar taxa."); }
+    finally { setSalvando(false); }
+  }
+
+  async function removerTaxa(id: string) {
+    setSalvando(true);
+    try {
+      const atualizada = await removerTaxaEntrega(id);
+      setLoja(atualizada);
+      toast.success("Taxa de entrega removida.");
+    } catch { toast.error("Erro ao remover taxa."); }
+    finally { setSalvando(false); }
+  }
+
   if (loading) {
-    return (
-      <div className="p-6 flex justify-center py-16" data-testid="configuracoes-loading">
-        <div className="h-6 w-6 animate-spin rounded-full border-2 border-[#EA580C] border-t-transparent" />
-      </div>
-    );
+    return <div className="flex justify-center py-16" data-testid="configuracoes-loading">
+      <div className="h-6 w-6 animate-spin rounded-full border-2 border-[var(--color-orange)] border-t-transparent" />
+    </div>;
   }
 
   return (
-    <div className="p-6 space-y-5 max-w-2xl">
+    <div className="space-y-5 max-w-2xl">
       <div>
-        <h1 className="text-xl font-bold text-[#1C1917]">Configurações</h1>
-        <p className="text-sm text-[#78716C]">Gerencie os dados e preferências da sua loja</p>
+        <h1 className="text-xl font-bold text-[var(--color-foreground)]">Configurações</h1>
+        <p className="text-sm text-[var(--color-muted)]">Gerencie os dados e preferências da sua loja</p>
       </div>
 
       {/* Status da loja */}
@@ -77,11 +102,11 @@ export default function ConfiguracoesPage() {
         <CardContent className="p-5">
           <div className="flex items-center justify-between">
             <div>
-              <p className="font-semibold text-[#1C1917]">Status da loja</p>
-              <p className="text-sm text-[#78716C]">{loja?.aberta ? "Aceitando pedidos agora" : "Não está aceitando pedidos"}</p>
+              <p className="font-semibold text-[var(--color-foreground)]">Status da loja</p>
+              <p className="text-sm text-[var(--color-muted)]">{loja?.aberta ? "Aceitando pedidos agora" : "Não está aceitando pedidos"}</p>
             </div>
             <div className="flex items-center gap-3">
-              <span className={`text-sm font-medium ${loja?.aberta ? "text-green-600" : "text-[#78716C]"}`}>
+              <span className={`text-sm font-medium ${loja?.aberta ? "text-green-400" : "text-[var(--color-muted)]"}`}>
                 {loja?.aberta ? "Aberta" : "Fechada"}
               </span>
               <Switch
@@ -97,8 +122,8 @@ export default function ConfiguracoesPage() {
       {/* Dados da loja */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-sm flex items-center gap-2 text-[#1C1917]">
-            <Store className="h-4 w-4 text-[#78716C]" />
+          <CardTitle className="text-sm flex items-center gap-2">
+            <Store className="h-4 w-4 text-[var(--color-muted)]" />
             Dados da loja
           </CardTitle>
         </CardHeader>
@@ -106,25 +131,41 @@ export default function ConfiguracoesPage() {
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
               <Label>Nome da loja</Label>
-              <Input value={form.nome} onChange={(e) => setForm((f) => ({ ...f, nome: e.target.value }))} data-testid="loja-nome-input" />
+              <Input
+                value={form.nome}
+                onChange={(e) => setForm((f) => ({ ...f, nome: e.target.value }))}
+                data-testid="loja-nome-input"
+              />
             </div>
             <div className="space-y-1.5">
               <Label>Telefone</Label>
-              <Input value={form.telefone} onChange={(e) => setForm((f) => ({ ...f, telefone: e.target.value }))} data-testid="loja-telefone-input" />
+              <Input
+                value={form.telefone}
+                onChange={(e) => setForm((f) => ({ ...f, telefone: e.target.value }))}
+                data-testid="loja-telefone-input"
+              />
             </div>
           </div>
 
           <div className="space-y-1.5">
             <Label>Descrição</Label>
-            <Input value={form.descricao} onChange={(e) => setForm((f) => ({ ...f, descricao: e.target.value }))} data-testid="loja-descricao-input" />
+            <Input
+              value={form.descricao}
+              onChange={(e) => setForm((f) => ({ ...f, descricao: e.target.value }))}
+              data-testid="loja-descricao-input"
+            />
           </div>
 
           <div className="space-y-1.5">
             <Label>
-              <MapPin className="inline h-3.5 w-3.5 mr-1 text-[#78716C]" />
+              <MapPin className="inline h-3.5 w-3.5 mr-1 text-[var(--color-muted)]" />
               Endereço
             </Label>
-            <Input value={form.endereco} onChange={(e) => setForm((f) => ({ ...f, endereco: e.target.value }))} data-testid="loja-endereco-input" />
+            <Input
+              value={form.endereco}
+              onChange={(e) => setForm((f) => ({ ...f, endereco: e.target.value }))}
+              data-testid="loja-endereco-input"
+            />
           </div>
 
           <Separator />
@@ -132,17 +173,27 @@ export default function ConfiguracoesPage() {
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
               <Label>
-                <CreditCard className="inline h-3.5 w-3.5 mr-1 text-[#78716C]" />
+                <CreditCard className="inline h-3.5 w-3.5 mr-1 text-[var(--color-muted)]" />
                 Chave PIX
               </Label>
-              <Input value={form.pixKey} onChange={(e) => setForm((f) => ({ ...f, pixKey: e.target.value }))} placeholder="email, CPF, CNPJ ou chave aleatória" data-testid="loja-pix-input" />
+              <Input
+                value={form.pixKey}
+                onChange={(e) => setForm((f) => ({ ...f, pixKey: e.target.value }))}
+                placeholder="email, CPF, CNPJ ou chave aleatória"
+                data-testid="loja-pix-input"
+              />
             </div>
             <div className="space-y-1.5">
               <Label>
-                <MessageCircle className="inline h-3.5 w-3.5 mr-1 text-[#25D366]" />
+                <MessageCircle className="inline h-3.5 w-3.5 mr-1 text-[var(--color-green-wa)]" />
                 WhatsApp
               </Label>
-              <Input value={form.whatsapp} onChange={(e) => setForm((f) => ({ ...f, whatsapp: e.target.value }))} placeholder="(11) 99999-9999" data-testid="loja-whatsapp-input" />
+              <Input
+                value={form.whatsapp}
+                onChange={(e) => setForm((f) => ({ ...f, whatsapp: e.target.value }))}
+                placeholder="(11) 99999-9999"
+                data-testid="loja-whatsapp-input"
+              />
             </div>
           </div>
 
@@ -157,20 +208,20 @@ export default function ConfiguracoesPage() {
       {/* Horários */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-sm flex items-center gap-2 text-[#1C1917]">
-            <Clock className="h-4 w-4 text-[#78716C]" />
+          <CardTitle className="text-sm flex items-center gap-2">
+            <Clock className="h-4 w-4 text-[var(--color-muted)]" />
             Horário de funcionamento
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-2" data-testid="horarios-form">
           {horarios.map((h, idx) => (
-            <div key={h.id} className="flex items-center gap-3 py-2 border-b border-[#E8E0D6] last:border-0">
+            <div key={h.id} className="flex items-center gap-3 py-2 border-b border-[var(--color-border)] last:border-0">
               <Switch
                 checked={h.ativo}
                 onCheckedChange={(v) => setHorarios((prev) => prev.map((x, i) => i === idx ? { ...x, ativo: v } : x))}
                 data-testid={`horario-${h.diaSemana}-switch`}
               />
-              <span className="w-20 text-sm font-medium text-[#1C1917]">{DIA_LABELS[h.diaSemana]}</span>
+              <span className="w-20 text-sm font-medium text-[var(--color-foreground)]">{DIA_LABELS[h.diaSemana]}</span>
               <div className={`flex items-center gap-2 flex-1 ${!h.ativo ? "opacity-40" : ""}`}>
                 <Input
                   type="time"
@@ -180,7 +231,7 @@ export default function ConfiguracoesPage() {
                   className="w-28 text-xs"
                   data-testid={`horario-${h.diaSemana}-abertura`}
                 />
-                <span className="text-xs text-[#78716C]">até</span>
+                <span className="text-xs text-[var(--color-muted)]">até</span>
                 <Input
                   type="time"
                   value={h.fechamento}
@@ -204,11 +255,11 @@ export default function ConfiguracoesPage() {
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
-            <CardTitle className="text-sm flex items-center gap-2 text-[#1C1917]">
-              <MapPin className="h-4 w-4 text-[#78716C]" />
+            <CardTitle className="text-sm flex items-center gap-2">
+              <MapPin className="h-4 w-4 text-[var(--color-muted)]" />
               Taxas de entrega
             </CardTitle>
-            <Button variant="ghost" size="sm" data-testid="adicionar-taxa-button">
+            <Button variant="ghost" size="sm" onClick={adicionarTaxa} loading={salvando} data-testid="adicionar-taxa-button">
               <Plus className="h-3.5 w-3.5" /> Adicionar
             </Button>
           </div>
@@ -216,17 +267,17 @@ export default function ConfiguracoesPage() {
         <CardContent data-testid="taxas-list">
           <div className="space-y-2">
             {loja?.taxasEntrega.map((taxa) => (
-              <div key={taxa.id} className="flex items-center justify-between rounded-lg border border-[#E8E0D6] bg-[#F8F6F3] px-4 py-3" data-testid={`taxa-${taxa.id}`}>
+              <div key={taxa.id} className="flex items-center justify-between rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-surface-2)] px-4 py-3" data-testid={`taxa-${taxa.id}`}>
                 <div>
-                  <p className="text-sm font-medium text-[#1C1917]">{taxa.bairro}</p>
-                  <p className="text-xs text-[#78716C]">{taxa.tempoMin} min estimado</p>
+                  <p className="text-sm font-medium text-[var(--color-foreground)]">{taxa.bairro}</p>
+                  <p className="text-xs text-[var(--color-muted)]">{taxa.tempoMin} min estimado</p>
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className="text-sm font-semibold text-[#1C1917]">
+                  <span className="text-sm font-semibold text-[var(--color-foreground)]">
                     {taxa.taxa === 0 ? "Grátis" : `R$ ${taxa.taxa.toFixed(2)}`}
                   </span>
-                  <Button variant="ghost" size="icon" data-testid={`taxa-remover-${taxa.id}`}>
-                    <Trash2 className="h-3.5 w-3.5 text-red-500" />
+                  <Button variant="ghost" size="icon" onClick={() => removerTaxa(taxa.id)} data-testid={`taxa-remover-${taxa.id}`}>
+                    <Trash2 className="h-3.5 w-3.5 text-red-400" />
                   </Button>
                 </div>
               </div>

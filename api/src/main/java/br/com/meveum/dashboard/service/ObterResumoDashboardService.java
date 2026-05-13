@@ -1,5 +1,6 @@
 package br.com.meveum.dashboard.service;
 
+import br.com.meveum.auth.validator.service.ValidarAcessoLojaService;
 import br.com.meveum.dashboard.dto.ObterResumoDashboardResponse;
 import br.com.meveum.dashboard.mapper.DashboardMapper;
 import br.com.meveum.dashboard.validator.DashboardValidator;
@@ -19,12 +20,14 @@ public class ObterResumoDashboardService {
 
     private final DashboardValidator dashboardValidator;
     private final ValidarLojaExisteService validarLojaExisteService;
+    private final ValidarAcessoLojaService validarAcessoLojaService;
     private final PedidoRepository pedidoRepository;
     private final DashboardMapper dashboardMapper;
 
     public ObterResumoDashboardResponse obter(UUID lojaId, OffsetDateTime inicio, OffsetDateTime fim) {
         dashboardValidator.validarPeriodo(inicio, fim);
         validarLojaExisteService.validar(lojaId);
+        validarAcessoLojaService.validar(lojaId);
         var faturamentoTotal = pedidoRepository.somarFaturamentoPorLojaEPeriodo(lojaId, inicio, fim);
         var quantidadePedidos = pedidoRepository.contarPedidosValidosPorLojaEPeriodo(lojaId, inicio, fim);
         var ticketMedio = calcularTicketMedio(faturamentoTotal, quantidadePedidos);

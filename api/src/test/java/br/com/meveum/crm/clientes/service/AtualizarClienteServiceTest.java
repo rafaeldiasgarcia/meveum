@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import br.com.meveum.auth.validator.service.ValidarAcessoLojaService;
 import br.com.meveum.crm.clientes.dto.AtualizarClienteRequest;
 import br.com.meveum.crm.clientes.dto.AtualizarClienteResponse;
 import br.com.meveum.crm.clientes.mapper.ClienteMapper;
@@ -30,6 +31,8 @@ class AtualizarClienteServiceTest {
     @Mock
     private ValidarTelefoneClienteDisponivelService validarTelefoneClienteDisponivelService;
     @Mock
+    private ValidarAcessoLojaService validarAcessoLojaService;
+    @Mock
     private ClienteRepository clienteRepository;
     @Mock
     private ClienteMapper clienteMapper;
@@ -53,6 +56,7 @@ class AtualizarClienteServiceTest {
 
         assertThat(resultado).isEqualTo(response);
         verify(clienteValidator).validarAtualizacao(request);
+        verify(validarAcessoLojaService).validar(lojaId);
         verify(validarTelefoneClienteDisponivelService).validarAtualizacao(lojaId, clienteId, "11888888888");
         verify(clienteMapper).toEntity(request, cliente);
     }

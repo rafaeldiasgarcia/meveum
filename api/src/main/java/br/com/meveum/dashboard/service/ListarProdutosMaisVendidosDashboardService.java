@@ -1,5 +1,6 @@
 package br.com.meveum.dashboard.service;
 
+import br.com.meveum.auth.validator.service.ValidarAcessoLojaService;
 import br.com.meveum.dashboard.dto.ListarProdutoMaisVendidoResponse;
 import br.com.meveum.dashboard.mapper.DashboardMapper;
 import br.com.meveum.dashboard.validator.DashboardValidator;
@@ -17,6 +18,7 @@ public class ListarProdutosMaisVendidosDashboardService {
 
     private final DashboardValidator dashboardValidator;
     private final ValidarLojaExisteService validarLojaExisteService;
+    private final ValidarAcessoLojaService validarAcessoLojaService;
     private final ItemPedidoRepository itemPedidoRepository;
     private final DashboardMapper dashboardMapper;
 
@@ -24,6 +26,7 @@ public class ListarProdutosMaisVendidosDashboardService {
         dashboardValidator.validarPeriodo(inicio, fim);
         dashboardValidator.validarLimite(limite);
         validarLojaExisteService.validar(lojaId);
+        validarAcessoLojaService.validar(lojaId);
         return itemPedidoRepository.listarProdutosMaisVendidos(lojaId, inicio, fim, limite)
             .stream()
             .map(dashboardMapper::toListarProdutoMaisVendidoResponse)

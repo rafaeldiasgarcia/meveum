@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import br.com.meveum.auth.validator.service.ValidarAcessoLojaService;
 import br.com.meveum.crm.clientes.dto.ListarClienteResponse;
 import br.com.meveum.crm.clientes.mapper.ClienteMapper;
 import br.com.meveum.crm.entity.Cliente;
@@ -23,6 +24,8 @@ class ListarClienteServiceTest {
     @Mock
     private ValidarLojaExisteService validarLojaExisteService;
     @Mock
+    private ValidarAcessoLojaService validarAcessoLojaService;
+    @Mock
     private ClienteRepository clienteRepository;
     @Mock
     private ClienteMapper clienteMapper;
@@ -37,9 +40,24 @@ class ListarClienteServiceTest {
         when(clienteRepository.findByLojaIdOrderByNameAsc(lojaId)).thenReturn(List.of(cliente));
         when(clienteMapper.toListarClienteResponse(cliente)).thenReturn(response);
 
-        var resultado = service.listar(lojaId);
+        var resultado = service.listar(lojaId, null);
 
         assertThat(resultado).containsExactly(response);
         verify(validarLojaExisteService).validar(lojaId);
+        verify(validarAcessoLojaService).validar(lojaId);
+    }
+
+    @Test
+    void deveBuscarClientesPorTermo() {
+        var lojaId = UUID.randomUUID();
+        var cliente = new Cliente();
+        var response = ListarClienteResponse.builder().id(UUID.randomUUID()).build();
+        when(clienteRepository.buscarPorLojaETermo(lojaId, "rafa")).thenReturn(List.of(cliente));
+        when(clienteMapper.toListarClienteResponse(cliente)).thenReturn(response);
+
+        var resultado = service.listar(lojaId, " rafa ");
+
+        assertThat(resultado).containsExactly(response);
+        verify(validarAcessoLojaService).validar(lojaId);
     }
 }

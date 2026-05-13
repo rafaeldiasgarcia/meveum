@@ -2,6 +2,13 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 
 const BASE = "http://localhost:8080";
 
+type FetchMockResponse = {
+  ok: boolean;
+  status: number;
+  json: () => Promise<unknown>;
+  text: () => Promise<string>;
+};
+
 function mockFetch(responses: Record<string, unknown>) {
   return vi.fn((url: string) => {
     const path = url.replace(BASE, "");
@@ -15,6 +22,17 @@ function mockFetch(responses: Record<string, unknown>) {
       text: () => Promise.resolve(ok ? "" : "Not found"),
     });
   });
+}
+
+function mockPostFetch(body: unknown) {
+  return vi.fn((_url: string, _init?: RequestInit): Promise<FetchMockResponse> =>
+    Promise.resolve({
+      ok: true,
+      status: 200,
+      json: () => Promise.resolve(body),
+      text: () => Promise.resolve(""),
+    }),
+  );
 }
 
 describe("buscarLojaPorSlug", () => {
@@ -124,9 +142,7 @@ describe("criarCliente", () => {
 
   it("deve fazer POST /clientes com os dados corretos", async () => {
     const clienteFake = { id: "cli-1", lojaId: "loja-1", nome: "João", telefone: "11999999999" };
-    const fetchMock = vi.fn(() =>
-      Promise.resolve({ ok: true, json: () => Promise.resolve(clienteFake) })
-    );
+    const fetchMock = mockPostFetch(clienteFake);
     vi.stubGlobal("fetch", fetchMock);
 
     const { criarCliente } = await import("@/lib/api/cardapio-publico.api");
@@ -165,9 +181,7 @@ describe("criarPedido", () => {
 
   it("deve fazer POST /pedidos com tipoRecebimento e formaPagamento corretos", async () => {
     const pedidoFake = { id: "ped-1", nomeCliente: "Maria", total: 32.9, status: "NEW" };
-    const fetchMock = vi.fn(() =>
-      Promise.resolve({ ok: true, json: () => Promise.resolve(pedidoFake) })
-    );
+    const fetchMock = mockPostFetch(pedidoFake);
     vi.stubGlobal("fetch", fetchMock);
 
     const { criarPedido } = await import("@/lib/api/cardapio-publico.api");
@@ -188,9 +202,7 @@ describe("criarPedido", () => {
   });
 
   it("deve incluir enderecoClienteId quando delivery", async () => {
-    const fetchMock = vi.fn(() =>
-      Promise.resolve({ ok: true, json: () => Promise.resolve({ id: "ped-2", total: 50, status: "NEW" }) })
-    );
+    const fetchMock = mockPostFetch({ id: "ped-2", total: 50, status: "NEW" });
     vi.stubGlobal("fetch", fetchMock);
 
     const { criarPedido } = await import("@/lib/api/cardapio-publico.api");

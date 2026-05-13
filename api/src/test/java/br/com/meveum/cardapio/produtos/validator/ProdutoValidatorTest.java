@@ -40,12 +40,21 @@ class ProdutoValidatorTest {
     }
 
     @Test
-    void deveFalharAoValidarCriacaoComPrecoNegativo() {
+    void deveFalharAoValidarCriacaoComPrecoNaoPositivo() {
         var request = new CriarProdutoRequest(UUID.randomUUID(), UUID.randomUUID(), "Pizza", null, BigDecimal.valueOf(-1), null, 0);
 
         assertThatThrownBy(() -> produtoValidator.validarCriacao(request))
             .isInstanceOf(RegraNegocioException.class)
-            .hasMessage("Preco do produto nao pode ser negativo.");
+            .hasMessage("Preco do produto deve ser maior que zero.");
+    }
+
+    @Test
+    void deveFalharAoValidarCriacaoComPrecoZero() {
+        var request = new CriarProdutoRequest(UUID.randomUUID(), UUID.randomUUID(), "Pizza", null, BigDecimal.ZERO, null, 0);
+
+        assertThatThrownBy(() -> produtoValidator.validarCriacao(request))
+            .isInstanceOf(RegraNegocioException.class)
+            .hasMessage("Preco do produto deve ser maior que zero.");
     }
 
     @Test
