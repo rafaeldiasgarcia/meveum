@@ -13,7 +13,7 @@ export function Logo({ className, size = "md", showTag = false }: Props) {
     <div className={cn("flex items-center gap-2", className)}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src="/logo.png"
+        src="/logo-header.png"
         alt="MeVêUm"
         className={cn("object-contain", sizes[size])}
       />
