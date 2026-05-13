@@ -35,7 +35,7 @@ class PedidoValidatorTest {
 
     @Test
     void deveLancarErroQuandoTrocoSemValor() {
-        var request = new CriarPedidoRequest(UUID.randomUUID(), null, null, "Rafael", "11999999999", TipoRecebimento.PICKUP, FormaPagamento.CASH, true, null, null, List.of(item()));
+        var request = new CriarPedidoRequest(UUID.randomUUID(), null, null, null, "Rafael", "11999999999", TipoRecebimento.PICKUP, FormaPagamento.CASH, true, null, null, List.of(item()));
 
         assertThatThrownBy(() -> pedidoValidator.validarCriacao(request))
             .isInstanceOf(RegraNegocioException.class)
@@ -44,7 +44,7 @@ class PedidoValidatorTest {
 
     @Test
     void deveLancarErroQuandoPedidoSemItens() {
-        var request = new CriarPedidoRequest(UUID.randomUUID(), null, null, "Rafael", "11999999999", TipoRecebimento.PICKUP, FormaPagamento.PIX, false, null, null, List.of());
+        var request = new CriarPedidoRequest(UUID.randomUUID(), null, null, null, "Rafael", "11999999999", TipoRecebimento.PICKUP, FormaPagamento.PIX, false, null, null, List.of());
 
         assertThatThrownBy(() -> pedidoValidator.validarCriacao(request))
             .isInstanceOf(RegraNegocioException.class)
@@ -64,7 +64,7 @@ class PedidoValidatorTest {
     }
 
     private CriarPedidoRequest request(TipoRecebimento tipoRecebimento, UUID enderecoId) {
-        return new CriarPedidoRequest(UUID.randomUUID(), null, enderecoId, "Rafael", "11999999999", tipoRecebimento, FormaPagamento.PIX, false, BigDecimal.TEN, null, List.of(item()));
+        return new CriarPedidoRequest(UUID.randomUUID(), null, enderecoId, null, "Rafael", "11999999999", tipoRecebimento, FormaPagamento.PIX, false, BigDecimal.TEN, null, List.of(item()));
     }
 
     private CriarItemPedidoRequest item() {

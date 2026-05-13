@@ -6,6 +6,7 @@ import type {
   OpcaoComplemento,
   AreaEntrega,
   FormaPagamentoLoja,
+  ClientePublico,
   CriarClienteRequest,
   CriarClienteResponse,
   CriarEnderecoRequest,
@@ -63,6 +64,10 @@ export async function listarAreasEntrega(lojaId: string): Promise<AreaEntrega[]>
 
 export async function listarFormasPagamento(lojaId: string): Promise<FormaPagamentoLoja[]> {
   return http<FormaPagamentoLoja[]>(`/pagamentos/formas?lojaId=${lojaId}`);
+}
+
+export async function listarClientes(lojaId: string): Promise<ClientePublico[]> {
+  return http<ClientePublico[]>(`/clientes?lojaId=${lojaId}`);
 }
 
 export async function criarCliente(data: CriarClienteRequest): Promise<CriarClienteResponse> {

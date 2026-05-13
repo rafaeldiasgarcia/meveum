@@ -15,6 +15,7 @@ public record CriarPedidoRequest(
     @NotNull UUID lojaId,
     UUID clienteId,
     UUID enderecoClienteId,
+    UUID areaEntregaId,
     @NotBlank @Size(max = 120) String nomeCliente,
     @NotBlank @Size(max = 20) String telefoneCliente,
     @NotNull TipoRecebimento tipoRecebimento,
