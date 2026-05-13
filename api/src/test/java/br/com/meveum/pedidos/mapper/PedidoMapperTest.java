@@ -26,7 +26,7 @@ class PedidoMapperTest {
 
     @Test
     void deveConverterCriarRequestParaPedido() {
-        var request = new CriarPedidoRequest(UUID.randomUUID(), null, null, "Rafael", "11999999999", TipoRecebimento.PICKUP, FormaPagamento.PIX, false, null, "Sem cebola", List.of(itemRequest()));
+        var request = new CriarPedidoRequest(UUID.randomUUID(), null, null, null, "Rafael", "11999999999", TipoRecebimento.PICKUP, FormaPagamento.PIX, false, null, "Sem cebola", List.of(itemRequest()));
 
         var pedido = pedidoMapper.toEntity(request, BigDecimal.TEN, BigDecimal.ZERO, BigDecimal.TEN, null);
 

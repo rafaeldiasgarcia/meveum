@@ -7,6 +7,7 @@ import { formatCurrency } from "@/lib/utils/format";
 import {
   listarAreasEntrega,
   listarFormasPagamento,
+  listarClientes,
   criarCliente,
   criarEndereco,
   criarPedido,
@@ -63,6 +64,7 @@ export function CheckoutDrawer({ lojaId, onFechar, onVoltarCarrinho }: Props) {
   const [formas, setFormas] = useState<FormaPagamentoLoja[]>([]);
   const [enviando, setEnviando] = useState(false);
   const [pedidoId, setPedidoId] = useState<string | null>(null);
+  const [erro, setErro] = useState<string | null>(null);
 
   useEffect(() => {
     listarAreasEntrega(lojaId).then(setAreas).catch(() => []);
@@ -90,8 +92,10 @@ export function CheckoutDrawer({ lojaId, onFechar, onVoltarCarrinho }: Props) {
 
   async function finalizar() {
     setEnviando(true);
+    setErro(null);
+    const janelaWhatsapp = window.open("", "_blank");
     try {
-      const cliente = await criarCliente({ lojaId, nome: dados.nome, telefone: dados.telefone });
+      const cliente = await obterOuCriarCliente();
 
       let enderecoId: string | undefined;
       if (dados.tipo === "DELIVERY") {
@@ -112,6 +116,7 @@ export function CheckoutDrawer({ lojaId, onFechar, onVoltarCarrinho }: Props) {
         lojaId,
         clienteId: cliente.id,
         enderecoClienteId: enderecoId,
+        areaEntregaId: dados.areaEntregaId ?? undefined,
         nomeCliente: dados.nome,
         telefoneCliente: dados.telefone,
         tipoRecebimento: dados.tipo!,
@@ -132,14 +137,36 @@ export function CheckoutDrawer({ lojaId, onFechar, onVoltarCarrinho }: Props) {
       setPedidoId(pedido.id);
 
       const msg = await buscarMensagemWhatsapp(pedido.id);
-      window.open(msg.urlEnvio, "_blank");
+      if (janelaWhatsapp) {
+        janelaWhatsapp.location.href = msg.urlEnvio;
+      } else {
+        window.open(msg.urlEnvio, "_blank");
+      }
 
       limpar();
     } catch (err) {
       console.error(err);
+      janelaWhatsapp?.close();
+      setErro(err instanceof Error ? err.message : "Nao foi possivel finalizar o pedido.");
     } finally {
       setEnviando(false);
     }
+  }
+
+  async function obterOuCriarCliente() {
+    const telefoneNormalizado = somenteDigitos(dados.telefone);
+    const clientes = await listarClientes(lojaId).catch(() => []);
+    const clienteExistente = clientes.find((cliente) => somenteDigitos(cliente.telefone) === telefoneNormalizado);
+
+    if (clienteExistente) {
+      return clienteExistente;
+    }
+
+    return criarCliente({ lojaId, nome: dados.nome, telefone: dados.telefone });
+  }
+
+  function somenteDigitos(valor: string) {
+    return valor.replace(/\D/g, "");
   }
 
   const areaSelected = areas.find((a) => a.id === dados.areaEntregaId);
@@ -458,6 +485,11 @@ export function CheckoutDrawer({ lojaId, onFechar, onVoltarCarrinho }: Props) {
         </div>
 
         <div className="px-4 py-4 border-t border-gray-100">
+          {erro && (
+            <p className="mb-3 rounded-xl bg-red-50 px-3 py-2 text-sm font-medium text-red-700">
+              {erro}
+            </p>
+          )}
           {etapa === "resumo" ? (
             <button
               onClick={finalizar}
@@ -476,7 +508,7 @@ export function CheckoutDrawer({ lojaId, onFechar, onVoltarCarrinho }: Props) {
               disabled={
                 (etapa === "tipo" && !dados.tipo) ||
                 (etapa === "dados" && (!dados.nome.trim() || !dados.telefone.trim())) ||
-                (etapa === "endereco" && (!dados.rua.trim() || !dados.numero.trim() || !dados.bairro.trim() || !dados.cidade.trim() || !dados.estado.trim())) ||
+                (etapa === "endereco" && (!dados.rua.trim() || !dados.numero.trim() || !dados.bairro.trim() || !dados.cidade.trim() || !dados.estado.trim() || !dados.areaEntregaId)) ||
                 (etapa === "pagamento" && !dados.formaPagamento)
               }
               className="w-full py-3.5 rounded-2xl bg-orange-500 text-white font-semibold text-sm flex items-center justify-center gap-2 hover:bg-orange-600 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"

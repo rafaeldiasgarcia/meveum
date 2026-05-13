@@ -1,14 +1,23 @@
 // ─── Auth ─────────────────────────────────────────────────────────────────────
 export type Usuario = {
   id: string;
+  lojaId?: string;
   nome: string;
   email: string;
+  role?: "OWNER" | "MANAGER" | "STAFF";
   avatar?: string;
 };
 
 export type LoginRequest = { email: string; senha: string };
 export type LoginResponse = { token: string; usuario: Usuario };
-export type CadastroRequest = { nome: string; email: string; senha: string; nomeLoja: string; telefone: string };
+export type CadastroRequest = {
+  nome: string;
+  email: string;
+  senha: string;
+  confirmarSenha: string;
+  nomeLoja: string;
+  telefone: string;
+};
 
 // ─── Loja ─────────────────────────────────────────────────────────────────────
 export type Loja = {

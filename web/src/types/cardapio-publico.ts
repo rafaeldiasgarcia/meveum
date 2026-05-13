@@ -65,6 +65,13 @@ export type FormaPagamentoLoja = {
   ativo: boolean;
 };
 
+export type ClientePublico = {
+  id: string;
+  lojaId: string;
+  nome: string;
+  telefone: string;
+};
+
 // ─── Carrinho ─────────────────────────────────────────────────────────────────
 export type ComplementoSelecionado = {
   opcaoComplementoId: string;
@@ -133,6 +140,7 @@ export type CriarPedidoRequest = {
   lojaId: string;
   clienteId: string;
   enderecoClienteId?: string;
+  areaEntregaId?: string;
   nomeCliente: string;
   telefoneCliente: string;
   tipoRecebimento: "DELIVERY" | "PICKUP";

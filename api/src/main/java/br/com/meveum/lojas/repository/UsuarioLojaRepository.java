@@ -9,5 +9,9 @@ public interface UsuarioLojaRepository extends JpaRepository<UsuarioLoja, UUID> 
 
     Optional<UsuarioLoja> findByEmail(String email);
 
+    Optional<UsuarioLoja> findByEmailIgnoreCase(String email);
+
+    boolean existsByEmailIgnoreCase(String email);
+
     boolean existsByEmail(String email);
 }

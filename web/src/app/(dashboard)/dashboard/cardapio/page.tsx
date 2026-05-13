@@ -14,7 +14,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { EmptyState } from "@/components/shared/EmptyState";
-import { produtoSchema, type ProdutoFormData } from "@/lib/validations/cardapio.schema";
+import { produtoSchema, type ProdutoFormData, type ProdutoFormInput } from "@/lib/validations/cardapio.schema";
 import { listarCategorias, listarProdutos, criarProduto, atualizarProduto, toggleDisponibilidade, excluirProduto } from "@/lib/api/cardapio.api";
 import { formatCurrency } from "@/lib/utils/format";
 import type { Produto, Categoria } from "@/types";
@@ -27,7 +27,7 @@ function ProdutoForm({
   onSave: () => void;
   onClose: () => void;
 }) {
-  const { register, handleSubmit, setValue, watch, formState: { errors, isSubmitting } } = useForm<ProdutoFormData>({
+  const { register, handleSubmit, setValue, watch, formState: { errors, isSubmitting } } = useForm<ProdutoFormInput, unknown, ProdutoFormData>({
     resolver: zodResolver(produtoSchema),
     defaultValues: produto ? {
       nome: produto.nome,
@@ -89,7 +89,7 @@ function ProdutoForm({
         <div className="flex items-center gap-2">
           <Switch
             id="disponivel"
-            checked={watch("disponivel")}
+            checked={Boolean(watch("disponivel"))}
             onCheckedChange={(v) => setValue("disponivel", v)}
             data-testid="produto-disponivel-switch"
           />
@@ -98,7 +98,7 @@ function ProdutoForm({
         <div className="flex items-center gap-2">
           <Switch
             id="destaque"
-            checked={watch("destaque")}
+            checked={Boolean(watch("destaque"))}
             onCheckedChange={(v) => setValue("destaque", v)}
             data-testid="produto-destaque-switch"
           />

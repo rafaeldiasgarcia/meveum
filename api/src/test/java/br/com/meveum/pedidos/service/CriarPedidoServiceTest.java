@@ -10,6 +10,8 @@ import static org.mockito.Mockito.when;
 import br.com.meveum.cardapio.entity.GrupoComplemento;
 import br.com.meveum.cardapio.entity.OpcaoComplemento;
 import br.com.meveum.cardapio.entity.Produto;
+import br.com.meveum.entrega.entity.AreaEntregaLoja;
+import br.com.meveum.entrega.areas.validator.service.ValidarAreaEntregaExisteService;
 import br.com.meveum.integracao_whatsapp.service.MontarMensagemPedidoWhatsappService;
 import br.com.meveum.lojas.entity.Loja;
 import br.com.meveum.lojas.validator.service.ValidarLojaExisteService;
@@ -58,6 +60,8 @@ class CriarPedidoServiceTest {
     @Mock
     private ValidarClientePedidoService validarClientePedidoService;
     @Mock
+    private ValidarAreaEntregaExisteService validarAreaEntregaExisteService;
+    @Mock
     private ValidarProdutoPedidoService validarProdutoPedidoService;
     @Mock
     private ValidarComplementoPedidoService validarComplementoPedidoService;
@@ -83,6 +87,7 @@ class CriarPedidoServiceTest {
         var opcaoId = UUID.randomUUID();
         var request = new CriarPedidoRequest(
             lojaId,
+            null,
             null,
             null,
             "Rafael",
@@ -132,5 +137,55 @@ class CriarPedidoServiceTest {
         verify(validarLojaPedidoDisponivelService).validar(loja);
         verify(validarPagamentoPedidoService).validar(lojaId, FormaPagamento.PIX);
         verify(pedidoRepository, times(2)).save(pedido);
+    }
+
+    @Test
+    void deveCriarPedidoEntregaComTaxaDaAreaEntrega() {
+        var lojaId = UUID.randomUUID();
+        var produtoId = UUID.randomUUID();
+        var areaEntregaId = UUID.randomUUID();
+        var enderecoClienteId = UUID.randomUUID();
+        var request = new CriarPedidoRequest(
+            lojaId,
+            null,
+            enderecoClienteId,
+            areaEntregaId,
+            "Rafael",
+            "11999999999",
+            TipoRecebimento.DELIVERY,
+            FormaPagamento.PIX,
+            false,
+            null,
+            null,
+            List.of(new CriarItemPedidoRequest(produtoId, 2, null, List.of()))
+        );
+        var loja = new Loja();
+        var produto = Produto.builder().id(produtoId).name("Burger").basePrice(BigDecimal.TEN).active(true).build();
+        var areaEntrega = AreaEntregaLoja.builder()
+            .id(areaEntregaId)
+            .fee(BigDecimal.valueOf(8))
+            .minimumOrderValue(BigDecimal.valueOf(15))
+            .active(true)
+            .build();
+        var pedido = new Pedido();
+        var item = new ItemPedido();
+        var response = CriarPedidoResponse.builder().id(UUID.randomUUID()).lojaId(lojaId).build();
+        when(validarLojaExisteService.validar(lojaId)).thenReturn(loja);
+        when(validarClientePedidoService.validarCliente(lojaId, null)).thenReturn(null);
+        when(validarClientePedidoService.validarEndereco(TipoRecebimento.DELIVERY, null, enderecoClienteId)).thenReturn(null);
+        when(validarProdutoPedidoService.validar(lojaId, produtoId)).thenReturn(produto);
+        when(validarAreaEntregaExisteService.validar(areaEntregaId, lojaId)).thenReturn(areaEntrega);
+        when(pedidoMapper.toEntity(request, BigDecimal.valueOf(20), BigDecimal.valueOf(8), BigDecimal.valueOf(28), null)).thenReturn(pedido);
+        when(pedidoMapper.toEntity(request.itens().getFirst(), produto, BigDecimal.valueOf(20))).thenReturn(item);
+        when(pedidoRepository.save(pedido)).thenReturn(pedido);
+        when(itemPedidoRepository.save(item)).thenReturn(item);
+        when(montarMensagemPedidoWhatsappService.montarPedidoCriado(pedido, List.of(item))).thenReturn("Mensagem do pedido");
+        when(pedidoMapper.toItemPedidoResponseList(anyList(), anyMap())).thenReturn(List.of());
+        when(pedidoMapper.toCriarPedidoResponse(pedido, List.of())).thenReturn(response);
+
+        var resultado = service.criar(request);
+
+        assertThat(resultado).isEqualTo(response);
+        verify(validarAreaEntregaExisteService).validar(areaEntregaId, lojaId);
     }
 }

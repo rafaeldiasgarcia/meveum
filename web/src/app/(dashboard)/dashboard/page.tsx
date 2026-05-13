@@ -13,9 +13,11 @@ import { StatusPedidoBadge } from "@/components/shared/StatusPedidoBadge";
 import { GraficoVendas } from "@/features/dashboard/components/GraficoVendas";
 import { buscarMetricas, buscarGraficoSemanal, buscarPedidosRecentes } from "@/lib/api/dashboard.api";
 import { formatCurrency, formatTime } from "@/lib/utils/format";
+import { useSessaoAutenticada } from "@/features/auth/context/SessaoAutenticadaContext";
 import type { MetricasDashboard, DadoGrafico, Pedido } from "@/types";
 
 export default function DashboardPage() {
+  const { usuario } = useSessaoAutenticada();
   const [metricas, setMetricas] = useState<MetricasDashboard | null>(null);
   const [grafico, setGrafico] = useState<DadoGrafico[]>([]);
   const [pedidos, setPedidos] = useState<Pedido[]>([]);
@@ -41,7 +43,7 @@ export default function DashboardPage() {
       {/* Header */}
       <div className="flex items-start justify-between">
         <div>
-          <h1 className="text-xl font-bold text-[var(--color-foreground)]">Bom dia, Bryan 👋</h1>
+          <h1 className="text-xl font-bold text-[var(--color-foreground)]">Bom dia, {usuario?.nome ?? "usuario"}.</h1>
           <p className="text-sm text-[var(--color-muted)]">Aqui está um resumo do que está acontecendo hoje.</p>
         </div>
         <div className="flex items-center gap-2">

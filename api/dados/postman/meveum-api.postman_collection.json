@@ -57,9 +57,119 @@
     {
       "key": "complementoItemPedidoId",
       "value": "dddddddd-dddd-dddd-dddd-dddddddddddd"
+    },
+    {
+      "key": "authToken",
+      "value": ""
     }
   ],
   "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login Admin Teste",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const body = pm.response.json();",
+                  "pm.collectionVariables.set(\"authToken\", body.token);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@meveum.com\",\n  \"senha\": \"meveum123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Registrar Loja",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Usuario Teste\",\n  \"nomeLoja\": \"Loja Postman Nova\",\n  \"telefone\": \"11999999999\",\n  \"email\": \"usuario.postman@meveum.com\",\n  \"senha\": \"meveum123\",\n  \"confirmarSenha\": \"meveum123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/registrar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "registrar"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Obter Usuario Autenticado",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/me",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "me"
+              ]
+            }
+          }
+        }
+      ]
+    },
     {
       "name": "Lojas",
       "item": [
@@ -274,7 +384,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"lojaId\": \"{{lojaId}}\",\n  \"nome\": \"Categoria Teste Bruno Nova\",\n  \"descricao\": \"Categoria criada manualmente pelo Bruno\",\n  \"ordem\": 2\n}",
+              "raw": "{\n  \"lojaId\": \"{{lojaId}}\",\n  \"nome\": \"Categoria Teste Postman Nova\",\n  \"descricao\": \"Categoria criada manualmente pelo Postman\",\n  \"ordem\": 2\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -343,7 +453,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"nome\": \"Categoria Teste Bruno Atualizada\",\n  \"descricao\": \"Categoria atualizada manualmente pelo Bruno\",\n  \"ordem\": 3,\n  \"ativo\": true\n}",
+              "raw": "{\n  \"nome\": \"Categoria Teste Postman Atualizada\",\n  \"descricao\": \"Categoria atualizada manualmente pelo Postman\",\n  \"ordem\": 3,\n  \"ativo\": true\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -396,7 +506,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"lojaId\": \"{{lojaId}}\",\n  \"categoriaId\": \"{{categoriaId}}\",\n  \"nome\": \"Produto Teste Bruno Novo\",\n  \"descricao\": \"Produto criado manualmente pelo Bruno\",\n  \"preco\": 39.90,\n  \"imagemUrl\": null,\n  \"ordem\": 2\n}",
+              "raw": "{\n  \"lojaId\": \"{{lojaId}}\",\n  \"categoriaId\": \"{{categoriaId}}\",\n  \"nome\": \"Produto Teste Postman Novo\",\n  \"descricao\": \"Produto criado manualmente pelo Postman\",\n  \"preco\": 39.90,\n  \"imagemUrl\": null,\n  \"ordem\": 2\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -491,7 +601,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"categoriaId\": \"{{categoriaId}}\",\n  \"nome\": \"Produto Teste Bruno Atualizado\",\n  \"descricao\": \"Produto atualizado manualmente pelo Bruno\",\n  \"preco\": 44.90,\n  \"imagemUrl\": null,\n  \"ordem\": 3,\n  \"ativo\": true\n}",
+              "raw": "{\n  \"categoriaId\": \"{{categoriaId}}\",\n  \"nome\": \"Produto Teste Postman Atualizado\",\n  \"descricao\": \"Produto atualizado manualmente pelo Postman\",\n  \"preco\": 44.90,\n  \"imagemUrl\": null,\n  \"ordem\": 3,\n  \"ativo\": true\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -544,7 +654,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"lojaId\": \"{{lojaId}}\",\n  \"nome\": \"Grupo Complemento Teste Bruno Nova\",\n  \"descricao\": \"Grupo criado manualmente pelo Bruno\",\n  \"quantidadeMinima\": 0,\n  \"quantidadeMaxima\": 2,\n  \"ordem\": 2\n}",
+              "raw": "{\n  \"lojaId\": \"{{lojaId}}\",\n  \"nome\": \"Grupo Complemento Teste Postman Nova\",\n  \"descricao\": \"Grupo criado manualmente pelo Postman\",\n  \"quantidadeMinima\": 0,\n  \"quantidadeMaxima\": 2,\n  \"ordem\": 2\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -616,7 +726,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"nome\": \"Grupo Complemento Teste Bruno Atualizado\",\n  \"descricao\": \"Grupo atualizado manualmente pelo Bruno\",\n  \"quantidadeMinima\": 0,\n  \"quantidadeMaxima\": 3,\n  \"ordem\": 1,\n  \"ativo\": true\n}",
+              "raw": "{\n  \"nome\": \"Grupo Complemento Teste Postman Atualizado\",\n  \"descricao\": \"Grupo atualizado manualmente pelo Postman\",\n  \"quantidadeMinima\": 0,\n  \"quantidadeMaxima\": 3,\n  \"ordem\": 1,\n  \"ativo\": true\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -648,7 +758,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"lojaId\": \"{{lojaId}}\",\n  \"grupoComplementoId\": \"{{grupoComplementoId}}\",\n  \"nome\": \"Opcao Complemento Teste Bruno Nova\",\n  \"descricao\": \"Opcao criada manualmente pelo Bruno\",\n  \"precoAdicional\": 3.5,\n  \"ordem\": 2\n}",
+              "raw": "{\n  \"lojaId\": \"{{lojaId}}\",\n  \"grupoComplementoId\": \"{{grupoComplementoId}}\",\n  \"nome\": \"Opcao Complemento Teste Postman Nova\",\n  \"descricao\": \"Opcao criada manualmente pelo Postman\",\n  \"precoAdicional\": 3.5,\n  \"ordem\": 2\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -720,7 +830,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"nome\": \"Opcao Complemento Teste Bruno Atualizada\",\n  \"descricao\": \"Opcao atualizada manualmente pelo Bruno\",\n  \"precoAdicional\": 5,\n  \"ordem\": 1,\n  \"ativo\": true\n}",
+              "raw": "{\n  \"nome\": \"Opcao Complemento Teste Postman Atualizada\",\n  \"descricao\": \"Opcao atualizada manualmente pelo Postman\",\n  \"precoAdicional\": 5,\n  \"ordem\": 1,\n  \"ativo\": true\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -1446,7 +1556,7 @@
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"lojaId\": \"{{lojaId}}\",\n  \"clienteId\": \"{{clienteId}}\",\n  \"enderecoClienteId\": \"{{enderecoClienteId}}\",\n  \"nomeCliente\": \"Cliente Teste\",\n  \"telefoneCliente\": \"11999999999\",\n  \"tipoRecebimento\": \"DELIVERY\",\n  \"formaPagamento\": \"PIX\",\n  \"precisaTroco\": false,\n  \"observacaoCliente\": \"Pedido entrega criado pelo Postman\",\n  \"itens\": [\n    {\n      \"produtoId\": \"{{produtoId}}\",\n      \"quantidade\": 1,\n      \"observacao\": null,\n      \"complementos\": []\n    }\n  ]\n}",
+              "raw": "{\n  \"lojaId\": \"{{lojaId}}\",\n  \"clienteId\": \"{{clienteId}}\",\n  \"enderecoClienteId\": \"{{enderecoClienteId}}\",\n  \"nomeCliente\": \"Cliente Teste\",\n  \"telefoneCliente\": \"11999999999\",\n  \"tipoRecebimento\": \"DELIVERY\",\n  \"formaPagamento\": \"PIX\",\n  \"precisaTroco\": false,\n  \"observacaoCliente\": \"Pedido entrega criado pelo Postman\",\n  \"itens\": [\n    {\n      \"produtoId\": \"{{produtoId}}\",\n      \"quantidade\": 1,\n      \"observacao\": null,\n      \"complementos\": []\n    }\n  ],\n  \"areaEntregaId\": \"{{areaEntregaId}}\"\n}",
               "options": {
                 "raw": {
                   "language": "json"

@@ -145,6 +145,21 @@ describe("criarCliente", () => {
   });
 });
 
+describe("listarClientes", () => {
+  afterEach(() => vi.restoreAllMocks());
+
+  it("deve chamar GET /clientes?lojaId=", async () => {
+    const clientesFake = [{ id: "cli-1", lojaId: "loja-1", nome: "Joao", telefone: "11999999999" }];
+    vi.stubGlobal("fetch", mockFetch({ "/clientes": clientesFake }));
+
+    const { listarClientes } = await import("@/lib/api/cardapio-publico.api");
+    const clientes = await listarClientes("loja-1");
+
+    expect(clientes).toHaveLength(1);
+    expect(clientes[0].telefone).toBe("11999999999");
+  });
+});
+
 describe("criarPedido", () => {
   afterEach(() => vi.restoreAllMocks());
 
@@ -183,6 +198,7 @@ describe("criarPedido", () => {
       lojaId: "loja-1",
       clienteId: "cli-1",
       enderecoClienteId: "end-1",
+      areaEntregaId: "area-1",
       nomeCliente: "Maria",
       telefoneCliente: "11988888888",
       tipoRecebimento: "DELIVERY",
@@ -194,6 +210,7 @@ describe("criarPedido", () => {
 
     const body = JSON.parse(fetchMock.mock.calls[0][1]?.body as string);
     expect(body.enderecoClienteId).toBe("end-1");
+    expect(body.areaEntregaId).toBe("area-1");
     expect(body.tipoRecebimento).toBe("DELIVERY");
     expect(body.precisaTroco).toBe(true);
     expect(body.trocoPara).toBe(50);

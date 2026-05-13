@@ -1,6 +1,8 @@
 package br.com.meveum.pedidos.service;
 
 import br.com.meveum.crm.entity.EnderecoCliente;
+import br.com.meveum.entrega.areas.validator.service.ValidarAreaEntregaExisteService;
+import br.com.meveum.entrega.entity.AreaEntregaLoja;
 import br.com.meveum.integracao_whatsapp.service.MontarMensagemPedidoWhatsappService;
 import br.com.meveum.lojas.validator.service.ValidarLojaExisteService;
 import br.com.meveum.pedidos.dto.CriarPedidoRequest;
@@ -37,6 +39,7 @@ public class CriarPedidoService {
     private final ValidarLojaPedidoDisponivelService validarLojaPedidoDisponivelService;
     private final ValidarPagamentoPedidoService validarPagamentoPedidoService;
     private final ValidarClientePedidoService validarClientePedidoService;
+    private final ValidarAreaEntregaExisteService validarAreaEntregaExisteService;
     private final ValidarProdutoPedidoService validarProdutoPedidoService;
     private final ValidarComplementoPedidoService validarComplementoPedidoService;
     private final PedidoRepository pedidoRepository;
@@ -81,7 +84,8 @@ public class CriarPedidoService {
             subtotal = subtotal.add(totalItem);
         }
 
-        var taxaEntrega = BigDecimal.ZERO;
+        var areaEntrega = validarAreaEntrega(request, subtotal);
+        var taxaEntrega = areaEntrega == null ? BigDecimal.ZERO : areaEntrega.getFee();
         var total = subtotal.add(taxaEntrega);
         validarTroco(request.trocoPara(), total);
 
@@ -115,6 +119,27 @@ public class CriarPedidoService {
         if (trocoPara != null && trocoPara.compareTo(total) < 0) {
             throw new RegraNegocioException("Valor para troco deve ser maior ou igual ao total do pedido.");
         }
+    }
+
+    private AreaEntregaLoja validarAreaEntrega(CriarPedidoRequest request, BigDecimal subtotal) {
+        if (request.tipoRecebimento() == br.com.meveum.pedidos.entity.enums.TipoRecebimento.PICKUP) {
+            return null;
+        }
+
+        if (request.areaEntregaId() == null) {
+            throw new RegraNegocioException("Area de entrega e obrigatoria para pedidos de entrega.");
+        }
+
+        var areaEntrega = validarAreaEntregaExisteService.validar(request.areaEntregaId(), request.lojaId());
+        if (!Boolean.TRUE.equals(areaEntrega.getActive())) {
+            throw new RegraNegocioException("Area de entrega esta inativa.");
+        }
+
+        if (areaEntrega.getMinimumOrderValue() != null && subtotal.compareTo(areaEntrega.getMinimumOrderValue()) < 0) {
+            throw new RegraNegocioException("Pedido nao atingiu o valor minimo da area de entrega.");
+        }
+
+        return areaEntrega;
     }
 
     private String toEnderecoSnapshot(EnderecoCliente endereco) {
