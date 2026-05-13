@@ -24,12 +24,12 @@ import type {
 
 // ── Status badge ──────────────────────────────────────────────────────────────
 const STATUS_CONFIG: Record<StatusPedido, { label: string; className: string }> = {
-  recebido:     { label: "ACEITO",          className: "bg-[#44403C] text-white" },
-  em_preparo:   { label: "EM PREPARO",      className: "bg-[#EA580C] text-white" },
-  pronto:       { label: "PRONTO",          className: "bg-green-600 text-white" },
-  saiu_entrega: { label: "SAIU P/ ENTREGA", className: "bg-emerald-600 text-white" },
-  finalizado:   { label: "CONCLUÍDO",       className: "bg-[#44403C] text-white" },
-  cancelado:    { label: "CANCELADO",       className: "bg-red-600 text-white" },
+  recebido:     { label: "ACEITO",          className: "bg-stone-100 text-stone-600" },
+  em_preparo:   { label: "EM PREPARO",      className: "bg-orange-100 text-orange-600" },
+  pronto:       { label: "PRONTO",          className: "bg-green-100 text-green-700" },
+  saiu_entrega: { label: "SAIU P/ ENTREGA", className: "bg-emerald-100 text-emerald-700" },
+  finalizado:   { label: "CONCLUÍDO",       className: "bg-stone-100 text-stone-500" },
+  cancelado:    { label: "CANCELADO",       className: "bg-red-100 text-red-600" },
 };
 
 function StatusBadge({
@@ -41,7 +41,7 @@ function StatusBadge({
 }) {
   const isPagoPix = status === "finalizado" && formaPagamento === "pix";
   const cfg = isPagoPix
-    ? { label: "PAGO PIX", className: "bg-blue-600 text-white" }
+    ? { label: "PAGO PIX", className: "bg-blue-100 text-blue-600" }
     : STATUS_CONFIG[status];
   return (
     <span
