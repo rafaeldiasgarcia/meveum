@@ -2,12 +2,12 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff, Sparkles, Shield, ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
+import { Logo } from "@/components/shared/Logo";
 import { AuthCarousel } from "@/features/auth/components/AuthCarousel";
 import { cadastroSchema, type CadastroFormData } from "@/lib/validations/auth.schema";
 import { cadastrar } from "@/lib/api/auth.api";
@@ -73,14 +73,7 @@ export default function RegisterPage() {
       <div className="flex w-full flex-col bg-[#FBF7F4] lg:w-1/2">
         {/* Header */}
         <header className="flex items-center justify-between px-4 py-5 sm:px-5 lg:pl-[max(1.25rem,calc((100vw-80rem)/2+1.25rem))] lg:pr-10">
-          <Image
-            src="/logo.png"
-            alt="MeVêUm"
-            width={130}
-            height={52}
-            className="h-8 w-auto object-contain sm:h-10"
-            priority
-          />
+          <Logo size="md" />
           <Link
             href="/"
             className="flex items-center gap-1.5 text-sm text-[#78716C] transition-colors hover:text-[#1C1917]"

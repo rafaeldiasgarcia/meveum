@@ -61,7 +61,7 @@ export function AuthCarousel() {
       }}
     >
       {/* Top bar */}
-      <div className="flex items-center justify-between px-8 pt-8">
+      <div className="flex items-center justify-between px-10 pt-8 pr-[max(1.25rem,calc((100vw-80rem)/2+1.25rem))]">
         <div className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5">
           <span className="h-2 w-2 rounded-full bg-[#EA580C]" />
           <span className="text-xs font-medium text-white/80">Por que MeVêUm</span>
@@ -72,7 +72,7 @@ export function AuthCarousel() {
       </div>
 
       {/* Main content */}
-      <div className="flex flex-1 flex-col justify-center px-8">
+      <div className="flex flex-1 flex-col justify-center px-10 pr-[max(1.25rem,calc((100vw-80rem)/2+1.25rem))]">
         <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#EA580C]">
           <Icon className="h-7 w-7 text-white" />
         </div>
@@ -96,7 +96,7 @@ export function AuthCarousel() {
       </div>
 
       {/* Bottom bar */}
-      <div className="flex items-center justify-between px-8 pb-8">
+      <div className="flex items-center justify-between px-10 pb-8 pr-[max(1.25rem,calc((100vw-80rem)/2+1.25rem))]">
         <div className="flex gap-2">
           {SLIDES.map((_, i) => (
             <button

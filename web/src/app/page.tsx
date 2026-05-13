@@ -25,7 +25,7 @@ function Header() {
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-3 px-4 sm:px-5">
         <Link href="/" className="flex min-w-0 items-center" aria-label="MeVêUm">
           <Image
-            src="/logo.png"
+            src="/logo-header.png"
             alt="MeVêUm"
             width={130}
             height={52}
