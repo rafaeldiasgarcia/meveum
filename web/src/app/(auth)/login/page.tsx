@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Github, Chrome, Apple } from "lucide-react";
+import { Apple, Code2, Globe } from "lucide-react";
 import { toast } from "sonner";
 import { Logo } from "@/components/shared/Logo";
 import { Button } from "@/components/ui/button";
@@ -50,8 +50,8 @@ export default function LoginPage() {
         {/* Social logins */}
         <div className="mb-5 grid grid-cols-3 gap-2">
           {[
-            { icon: Chrome, label: "Google" },
-            { icon: Github, label: "GitHub" },
+            { icon: Globe, label: "Google" },
+            { icon: Code2, label: "GitHub" },
             { icon: Apple, label: "Apple" },
           ].map(({ icon: Icon, label }) => (
             <Button
@@ -125,8 +125,8 @@ export default function LoginPage() {
           </Button>
 
           <p className="text-center text-xs text-[var(--color-muted)]">
-            Use <span className="text-[var(--color-foreground)] font-mono">demo@meveum.com.br</span> · senha{" "}
-            <span className="text-[var(--color-foreground)] font-mono">demo1234</span> para testar
+            Use <span className="text-[var(--color-foreground)] font-mono">admin@meveum.com</span> · senha{" "}
+            <span className="text-[var(--color-foreground)] font-mono">meveum123</span> para testar
           </p>
         </form>
       </div>
