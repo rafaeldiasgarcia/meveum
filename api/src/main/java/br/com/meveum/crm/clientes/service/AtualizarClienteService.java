@@ -1,5 +1,6 @@
 package br.com.meveum.crm.clientes.service;
 
+import br.com.meveum.auth.validator.service.ValidarAcessoLojaService;
 import br.com.meveum.crm.clientes.dto.AtualizarClienteRequest;
 import br.com.meveum.crm.clientes.dto.AtualizarClienteResponse;
 import br.com.meveum.crm.clientes.mapper.ClienteMapper;
@@ -18,6 +19,7 @@ public class AtualizarClienteService {
     private final ClienteValidator clienteValidator;
     private final ValidarClienteExisteService validarClienteExisteService;
     private final ValidarTelefoneClienteDisponivelService validarTelefoneClienteDisponivelService;
+    private final ValidarAcessoLojaService validarAcessoLojaService;
     private final ClienteRepository clienteRepository;
     private final ClienteMapper clienteMapper;
 
@@ -25,6 +27,7 @@ public class AtualizarClienteService {
         clienteValidator.validarAtualizacao(request);
         var cliente = validarClienteExisteService.validar(clienteId);
         var lojaId = cliente.getLoja().getId();
+        validarAcessoLojaService.validar(lojaId);
         validarTelefoneClienteDisponivelService.validarAtualizacao(lojaId, clienteId, request.telefone());
         clienteMapper.toEntity(request, cliente);
         var clienteSalvo = clienteRepository.save(cliente);

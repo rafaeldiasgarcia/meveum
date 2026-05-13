@@ -4,6 +4,7 @@ import br.com.meveum.pedidos.dto.AtualizarStatusPedidoRequest;
 import br.com.meveum.pedidos.dto.CriarComplementoPedidoRequest;
 import br.com.meveum.pedidos.dto.CriarItemPedidoRequest;
 import br.com.meveum.pedidos.dto.CriarPedidoRequest;
+import br.com.meveum.pedidos.entity.enums.StatusPedido;
 import br.com.meveum.pedidos.entity.enums.TipoRecebimento;
 import br.com.meveum.shared.exception.RegraNegocioException;
 import java.math.BigDecimal;
@@ -22,6 +23,27 @@ public class PedidoValidator {
     public void validarAtualizacaoStatus(AtualizarStatusPedidoRequest request) {
         if (request.status() == null) {
             throw new RegraNegocioException("Status do pedido e obrigatorio.");
+        }
+    }
+
+    public void validarTransicaoStatus(StatusPedido statusAtual, StatusPedido proximoStatus) {
+        validarAtualizacaoStatus(new AtualizarStatusPedidoRequest(proximoStatus));
+
+        if (statusAtual == proximoStatus) {
+            return;
+        }
+
+        var permitido = switch (statusAtual) {
+            case NEW -> proximoStatus == StatusPedido.PREPARING || proximoStatus == StatusPedido.CANCELED;
+            case PREPARING -> proximoStatus == StatusPedido.OUT_FOR_DELIVERY
+                || proximoStatus == StatusPedido.DONE
+                || proximoStatus == StatusPedido.CANCELED;
+            case OUT_FOR_DELIVERY -> proximoStatus == StatusPedido.DONE || proximoStatus == StatusPedido.CANCELED;
+            case DONE, CANCELED -> false;
+        };
+
+        if (!permitido) {
+            throw new RegraNegocioException("Transicao de status do pedido nao permitida.");
         }
     }
 

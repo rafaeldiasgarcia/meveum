@@ -22,8 +22,8 @@ public class AtualizarStatusPedidoService {
     private final MontarMensagemPedidoWhatsappService montarMensagemPedidoWhatsappService;
 
     public AtualizarStatusPedidoResponse atualizar(UUID pedidoId, AtualizarStatusPedidoRequest request) {
-        pedidoValidator.validarAtualizacaoStatus(request);
         var pedido = validarPedidoExisteService.validar(pedidoId);
+        pedidoValidator.validarTransicaoStatus(pedido.getStatus(), request.status());
         pedido.setStatus(request.status());
         pedido.setWhatsappMessage(montarMensagemPedidoWhatsappService.montarStatusAtualizado(pedido));
         var pedidoSalvo = pedidoRepository.save(pedido);

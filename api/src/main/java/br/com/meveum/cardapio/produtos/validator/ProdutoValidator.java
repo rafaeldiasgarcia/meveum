@@ -32,8 +32,8 @@ public class ProdutoValidator {
             throw new RegraNegocioException("Preco do produto e obrigatorio.");
         }
 
-        if (preco.signum() < 0) {
-            throw new RegraNegocioException("Preco do produto nao pode ser negativo.");
+        if (preco.signum() <= 0) {
+            throw new RegraNegocioException("Preco do produto deve ser maior que zero.");
         }
     }
 

@@ -1,5 +1,6 @@
 package br.com.meveum.lojas.validator;
 
+import br.com.meveum.lojas.dto.AtualizarHorarioFuncionamentoRequest;
 import br.com.meveum.lojas.dto.AtualizarLojaRequest;
 import br.com.meveum.lojas.dto.AtualizarPausaManualLojaRequest;
 import br.com.meveum.lojas.dto.AtualizarStatusLojaRequest;
@@ -20,6 +21,16 @@ public class LojaValidator {
     public void validarPausaManual(AtualizarPausaManualLojaRequest request) {
         if (request.pausadaManualmente() == null) {
             throw new RegraNegocioException("Pausa manual da loja e obrigatoria.");
+        }
+    }
+
+    public void validarHorarioFuncionamento(AtualizarHorarioFuncionamentoRequest request) {
+        if (request.diaSemana() < 1 || request.diaSemana() > 7) {
+            throw new RegraNegocioException("Dia da semana do horario e invalido.");
+        }
+
+        if (!request.fechamento().isAfter(request.abertura())) {
+            throw new RegraNegocioException("Horario de fechamento deve ser maior que abertura.");
         }
     }
 

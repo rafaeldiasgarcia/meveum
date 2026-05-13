@@ -64,16 +64,19 @@ public class CriarPedidoService {
         for (var itemRequest : request.itens()) {
             var produto = validarProdutoPedidoService.validar(request.lojaId(), itemRequest.produtoId());
             var complementos = new ArrayList<ComplementoItemPedido>();
+            var quantidadePorGrupo = new HashMap<java.util.UUID, Integer>();
             var totalComplementos = BigDecimal.ZERO;
 
             if (itemRequest.complementos() != null) {
                 for (var complementoRequest : itemRequest.complementos()) {
                     var opcao = validarComplementoPedidoService.validar(request.lojaId(), produto.getId(), complementoRequest.opcaoComplementoId());
+                    quantidadePorGrupo.merge(opcao.getGrupoComplemento().getId(), complementoRequest.quantidade(), Integer::sum);
                     var totalComplemento = opcao.getAdditionalPrice().multiply(BigDecimal.valueOf(complementoRequest.quantidade()));
                     totalComplementos = totalComplementos.add(totalComplemento);
                     complementos.add(pedidoMapper.toEntity(opcao, complementoRequest.quantidade(), totalComplemento));
                 }
             }
+            validarComplementoPedidoService.validarQuantidadesObrigatorias(produto.getId(), quantidadePorGrupo);
 
             var totalItem = produto.getBasePrice()
                 .multiply(BigDecimal.valueOf(itemRequest.quantidade()))
