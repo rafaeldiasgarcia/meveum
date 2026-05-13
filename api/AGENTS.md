@@ -109,9 +109,26 @@ cada etapa desbloqueie testes manuais e funcionalidades reais do sistema.
    - Priorizar faturamento, quantidade de pedidos e produtos mais vendidos.
 
 10. `integracao_whatsapp`
-    - Status: proximo.
+    - Status: concluido.
     - Implementar apenas depois que pedidos e status estiverem estaveis.
     - Preparar envio de notificacoes e mensagens operacionais.
+
+11. `auth`
+    - Status: concluido parcialmente.
+    - Login e cadastro inicial com JWT implementados para usuarios de loja.
+    - Proteger rotas administrativas e manter endpoints publicos do cardapio
+      liberados para clientes.
+    - Depois evoluir para refresh token, recuperacao de senha e permissoes por
+      perfil.
+
+12. `painel autenticado`
+    - Status: proximo.
+    - Substituir mocks restantes do dashboard, pedidos, clientes,
+      configuracoes e cardapio administrativo por chamadas reais da API.
+    - Garantir envio do JWT nas rotas protegidas e tratamento padronizado de
+      expiracao de sessao.
+    - Manter o frontend consumindo o usuario autenticado e o contexto da loja
+      vindos da sessao, sem textos fixos de demonstracao.
 
 Ao iniciar um item do roadmap, mantenha o padrao de arquitetura deste arquivo e
 crie commits separados por contexto.
