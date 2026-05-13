@@ -221,32 +221,32 @@ export function CheckoutDrawer({ lojaId, onFechar, onVoltarCarrinho }: Props) {
           {etapa === "dados" && (
             <div className="space-y-3">
               <div>
-                <label className="text-xs font-medium text-gray-600 mb-1 block">Nome *</label>
+                <label className="text-xs font-semibold text-gray-700 mb-1 block">Nome *</label>
                 <input
                   value={dados.nome}
                   onChange={(e) => set("nome", e.target.value)}
                   placeholder="Seu nome completo"
-                  className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+                  className="w-full px-3 py-2.5 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400"
                 />
               </div>
               <div>
-                <label className="text-xs font-medium text-gray-600 mb-1 block">Telefone / WhatsApp *</label>
+                <label className="text-xs font-semibold text-gray-700 mb-1 block">Telefone / WhatsApp *</label>
                 <input
                   value={dados.telefone}
                   onChange={(e) => set("telefone", e.target.value)}
                   placeholder="(11) 99999-9999"
                   type="tel"
-                  className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+                  className="w-full px-3 py-2.5 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400"
                 />
               </div>
               <div>
-                <label className="text-xs font-medium text-gray-600 mb-1 block">Observação (opcional)</label>
+                <label className="text-xs font-semibold text-gray-700 mb-1 block">Observação (opcional)</label>
                 <textarea
                   value={dados.observacao}
                   onChange={(e) => set("observacao", e.target.value)}
                   placeholder="Ex: Tocar a campainha, cachorro bravo"
                   rows={2}
-                  className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 resize-none"
+                  className="w-full px-3 py-2.5 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400 resize-none"
                 />
               </div>
             </div>
@@ -256,83 +256,83 @@ export function CheckoutDrawer({ lojaId, onFechar, onVoltarCarrinho }: Props) {
             <div className="space-y-3">
               <div className="grid grid-cols-3 gap-2">
                 <div className="col-span-2">
-                  <label className="text-xs font-medium text-gray-600 mb-1 block">Rua *</label>
+                  <label className="text-xs font-semibold text-gray-700 mb-1 block">Rua *</label>
                   <input
                     value={dados.rua}
                     onChange={(e) => set("rua", e.target.value)}
                     placeholder="Rua das Flores"
-                    className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+                    className="w-full px-3 py-2.5 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400"
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-medium text-gray-600 mb-1 block">Número *</label>
+                  <label className="text-xs font-semibold text-gray-700 mb-1 block">Número *</label>
                   <input
                     value={dados.numero}
                     onChange={(e) => set("numero", e.target.value)}
                     placeholder="123"
-                    className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+                    className="w-full px-3 py-2.5 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400"
                   />
                 </div>
               </div>
               <div>
-                <label className="text-xs font-medium text-gray-600 mb-1 block">Complemento</label>
+                <label className="text-xs font-semibold text-gray-700 mb-1 block">Complemento</label>
                 <input
                   value={dados.complemento}
                   onChange={(e) => set("complemento", e.target.value)}
                   placeholder="Apto 12, Bloco B"
-                  className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+                  className="w-full px-3 py-2.5 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400"
                 />
               </div>
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="text-xs font-medium text-gray-600 mb-1 block">Bairro *</label>
+                  <label className="text-xs font-semibold text-gray-700 mb-1 block">Bairro *</label>
                   <input
                     value={dados.bairro}
                     onChange={(e) => set("bairro", e.target.value)}
                     placeholder="Centro"
-                    className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+                    className="w-full px-3 py-2.5 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400"
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-medium text-gray-600 mb-1 block">CEP</label>
+                  <label className="text-xs font-semibold text-gray-700 mb-1 block">CEP</label>
                   <input
                     value={dados.cep}
                     onChange={(e) => set("cep", e.target.value)}
                     placeholder="00000-000"
-                    className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+                    className="w-full px-3 py-2.5 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400"
                   />
                 </div>
               </div>
               <div className="grid grid-cols-3 gap-2">
                 <div className="col-span-2">
-                  <label className="text-xs font-medium text-gray-600 mb-1 block">Cidade *</label>
+                  <label className="text-xs font-semibold text-gray-700 mb-1 block">Cidade *</label>
                   <input
                     value={dados.cidade}
                     onChange={(e) => set("cidade", e.target.value)}
                     placeholder="São Paulo"
-                    className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+                    className="w-full px-3 py-2.5 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400"
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-medium text-gray-600 mb-1 block">UF *</label>
+                  <label className="text-xs font-semibold text-gray-700 mb-1 block">UF *</label>
                   <input
                     value={dados.estado}
                     onChange={(e) => set("estado", e.target.value.toUpperCase().slice(0, 2))}
                     placeholder="SP"
                     maxLength={2}
-                    className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+                    className="w-full px-3 py-2.5 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400"
                   />
                 </div>
               </div>
 
               {areas.length > 0 && (
                 <div>
-                  <label className="text-xs font-medium text-gray-600 mb-1 block">Área de entrega</label>
+                  <label className="text-xs font-semibold text-gray-700 mb-1 block">Área de entrega</label>
                   <div className="space-y-1.5">
                     {areas.filter((a) => a.ativo).map((area) => (
                       <label
                         key={area.id}
-                        className="flex items-center gap-3 p-2.5 rounded-xl border border-gray-100 cursor-pointer hover:bg-orange-50 hover:border-orange-200 transition-colors"
+                        className="flex items-center gap-3 p-3 rounded-xl border border-gray-300 cursor-pointer hover:bg-orange-50 hover:border-orange-400 transition-colors"
                       >
                         <input
                           type="radio"
@@ -344,7 +344,7 @@ export function CheckoutDrawer({ lojaId, onFechar, onVoltarCarrinho }: Props) {
                           }}
                           className="accent-orange-500"
                         />
-                        <span className="flex-1 text-sm text-gray-700">{area.nome}</span>
+                        <span className="flex-1 text-sm font-medium text-gray-900">{area.nome}</span>
                         <span className="text-sm font-medium text-gray-500">
                           {area.taxa === 0 ? "Grátis" : `+${formatCurrency(area.taxa)}`}
                           {" · "}
@@ -363,7 +363,7 @@ export function CheckoutDrawer({ lojaId, onFechar, onVoltarCarrinho }: Props) {
               {formas.filter((f) => f.ativo).map((forma) => (
                 <label
                   key={forma.id}
-                  className="flex items-center gap-3 p-3 rounded-xl border border-gray-100 cursor-pointer hover:bg-orange-50 hover:border-orange-200 transition-colors"
+                  className="flex items-center gap-3 p-3 rounded-xl border border-gray-300 cursor-pointer hover:bg-orange-50 hover:border-orange-400 transition-colors"
                 >
                   <input
                     type="radio"
@@ -372,7 +372,7 @@ export function CheckoutDrawer({ lojaId, onFechar, onVoltarCarrinho }: Props) {
                     onChange={() => set("formaPagamento", forma.formaPagamento)}
                     className="accent-orange-500"
                   />
-                  <span className="text-sm font-medium text-gray-700">
+                  <span className="text-sm font-semibold text-gray-900">
                     {LABELS_PAGAMENTO[forma.formaPagamento] ?? forma.formaPagamento}
                   </span>
                 </label>
@@ -380,7 +380,7 @@ export function CheckoutDrawer({ lojaId, onFechar, onVoltarCarrinho }: Props) {
 
               {dados.formaPagamento === "CASH" && (
                 <div className="mt-3 space-y-2 p-3 bg-gray-50 rounded-xl">
-                  <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
+                  <label className="flex items-center gap-2 text-sm font-medium text-gray-900 cursor-pointer">
                     <input
                       type="checkbox"
                       checked={dados.precisaTroco}
@@ -391,13 +391,13 @@ export function CheckoutDrawer({ lojaId, onFechar, onVoltarCarrinho }: Props) {
                   </label>
                   {dados.precisaTroco && (
                     <div>
-                      <label className="text-xs font-medium text-gray-600 mb-1 block">Troco para quanto?</label>
+                      <label className="text-xs font-semibold text-gray-700 mb-1 block">Troco para quanto?</label>
                       <input
                         value={dados.trocoPara}
                         onChange={(e) => set("trocoPara", e.target.value)}
                         placeholder="Ex: 50,00"
                         type="number"
-                        className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+                        className="w-full px-3 py-2.5 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400"
                       />
                     </div>
                   )}

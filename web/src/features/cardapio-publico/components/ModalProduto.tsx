@@ -91,17 +91,19 @@ export function ModalProduto({ produto, onFechar }: Props) {
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center">
       <div className="absolute inset-0 bg-black/50" onClick={onFechar} />
-      <div className="relative bg-white w-full sm:max-w-lg rounded-t-2xl sm:rounded-2xl max-h-[90vh] flex flex-col overflow-hidden">
-        <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
-          <h2 className="font-semibold text-gray-900 text-base">{produto.nome}</h2>
+      <div className="relative bg-white w-full sm:max-w-lg rounded-t-3xl sm:rounded-3xl max-h-[90vh] flex flex-col overflow-hidden">
+        <div className="w-10 h-1 bg-gray-300 rounded-full mx-auto mt-3" />
+
+        <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 mt-1">
+          <h2 className="font-bold text-gray-900 text-base">{produto.nome}</h2>
           <button onClick={onFechar} className="p-1 rounded-full hover:bg-gray-100">
-            <X className="w-5 h-5 text-gray-500" />
+            <X className="w-5 h-5 text-gray-600" />
           </button>
         </div>
 
         <div className="overflow-y-auto flex-1 px-4 py-4 space-y-5">
           {produto.descricao && (
-            <p className="text-sm text-gray-500">{produto.descricao}</p>
+            <p className="text-sm text-gray-600 leading-relaxed">{produto.descricao}</p>
           )}
 
           {carregando ? (
@@ -118,12 +120,12 @@ export function ModalProduto({ produto, onFechar }: Props) {
 
               return (
                 <div key={grupo.id}>
-                  <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center justify-between mb-3">
                     <div>
-                      <span className="font-medium text-gray-800 text-sm">
+                      <span className="font-bold text-gray-900 text-sm">
                         {grupo.nomeGrupoComplemento}
                       </span>
-                      <span className="ml-2 text-xs text-gray-400">
+                      <span className="ml-2 text-xs text-gray-500">
                         {grupo.quantidadeMaxima === 1
                           ? "Escolha 1"
                           : `Até ${grupo.quantidadeMaxima}`}
@@ -131,23 +133,27 @@ export function ModalProduto({ produto, onFechar }: Props) {
                     </div>
                     {obrigatorio && (
                       <span
-                        className={`text-xs font-medium px-2 py-0.5 rounded-full ${
+                        className={`text-xs font-semibold px-2 py-0.5 rounded-full ${
                           satisfeito
                             ? "bg-green-100 text-green-700"
-                            : "bg-orange-100 text-orange-600"
+                            : "bg-orange-100 text-orange-700"
                         }`}
                       >
                         {satisfeito ? "OK" : "Obrigatório"}
                       </span>
                     )}
                   </div>
-                  <div className="space-y-1.5">
+                  <div className="space-y-2">
                     {grupo.opcoes.map((opcao) => {
                       const selecionado = selecionados.some((o) => o.opcaoId === opcao.id);
                       return (
                         <label
                           key={opcao.id}
-                          className="flex items-center gap-3 p-2.5 rounded-xl border border-gray-100 cursor-pointer hover:bg-orange-50 hover:border-orange-200 transition-colors"
+                          className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-colors ${
+                            selecionado
+                              ? "border-orange-400 bg-orange-50"
+                              : "border-gray-300 hover:border-orange-300 hover:bg-orange-50"
+                          }`}
                         >
                           <input
                             type={grupo.quantidadeMaxima === 1 ? "radio" : "checkbox"}
@@ -156,11 +162,11 @@ export function ModalProduto({ produto, onFechar }: Props) {
                             onChange={() =>
                               toggleOpcao(grupo, opcao.id, opcao.nome, opcao.precoAdicional)
                             }
-                            className="accent-orange-500"
+                            className="accent-orange-500 w-4 h-4"
                           />
-                          <span className="flex-1 text-sm text-gray-700">{opcao.nome}</span>
+                          <span className="flex-1 text-sm font-medium text-gray-900">{opcao.nome}</span>
                           {opcao.precoAdicional > 0 && (
-                            <span className="text-sm font-medium text-orange-600">
+                            <span className="text-sm font-semibold text-orange-600">
                               +{formatCurrency(opcao.precoAdicional)}
                             </span>
                           )}
@@ -174,27 +180,27 @@ export function ModalProduto({ produto, onFechar }: Props) {
           )}
         </div>
 
-        <div className="px-4 py-4 border-t border-gray-100 space-y-3">
-          <div className="flex items-center justify-center gap-4">
+        <div className="px-4 py-4 border-t border-gray-200 space-y-3">
+          <div className="flex items-center justify-center gap-5">
             <button
               onClick={() => setQuantidade((q) => Math.max(1, q - 1))}
-              className="w-9 h-9 rounded-full border border-gray-200 flex items-center justify-center hover:bg-gray-50"
+              className="w-10 h-10 rounded-full border-2 border-gray-300 flex items-center justify-center hover:border-orange-400 hover:bg-orange-50 transition-colors"
             >
-              <Minus className="w-4 h-4" />
+              <Minus className="w-4 h-4 text-gray-700" />
             </button>
-            <span className="font-semibold text-gray-900 w-6 text-center">{quantidade}</span>
+            <span className="font-bold text-gray-900 text-lg w-6 text-center">{quantidade}</span>
             <button
               onClick={() => setQuantidade((q) => q + 1)}
-              className="w-9 h-9 rounded-full border border-gray-200 flex items-center justify-center hover:bg-gray-50"
+              className="w-10 h-10 rounded-full border-2 border-gray-300 flex items-center justify-center hover:border-orange-400 hover:bg-orange-50 transition-colors"
             >
-              <Plus className="w-4 h-4" />
+              <Plus className="w-4 h-4 text-gray-700" />
             </button>
           </div>
 
           <button
             onClick={handleAdicionar}
             disabled={!podeConcluir}
-            className="w-full py-3 rounded-xl bg-orange-500 text-white font-semibold text-sm flex items-center justify-between px-4 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-orange-600 transition-colors"
+            className="w-full py-3.5 rounded-2xl bg-orange-500 text-white font-bold text-sm flex items-center justify-between px-4 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-orange-600 transition-colors"
           >
             <span>Adicionar ao carrinho</span>
             <span>{formatCurrency(totalItem)}</span>
