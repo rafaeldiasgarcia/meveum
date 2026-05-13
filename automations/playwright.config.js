@@ -42,14 +42,14 @@ export default defineConfig({
       testMatch: /.*frontend\/.*\.spec\.js/,
       use: {
         ...devices['Desktop Chrome'],
-        baseURL: 'http://localhost:3000',
+        baseURL: 'http://127.0.0.1:3000',
       },
     },
     {
       name: 'rest',
       testMatch: /.*api\/.*\.spec\.js/,
       use: {
-        baseURL: 'http://localhost:8080',
+        baseURL: 'http://127.0.0.1:8080',
       },
     },
   ],
