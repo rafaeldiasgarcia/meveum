@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import br.com.meveum.auth.validator.service.ValidarAcessoLojaService;
 import br.com.meveum.dashboard.dto.ObterResumoDashboardResponse;
 import br.com.meveum.dashboard.mapper.DashboardMapper;
 import br.com.meveum.dashboard.validator.DashboardValidator;
@@ -26,6 +27,8 @@ class ObterResumoDashboardServiceTest {
     private DashboardValidator dashboardValidator;
     @Mock
     private ValidarLojaExisteService validarLojaExisteService;
+    @Mock
+    private ValidarAcessoLojaService validarAcessoLojaService;
     @Mock
     private PedidoRepository pedidoRepository;
     @Mock
@@ -63,6 +66,7 @@ class ObterResumoDashboardServiceTest {
         assertThat(resultado).isEqualTo(response);
         verify(dashboardValidator).validarPeriodo(inicio, fim);
         verify(validarLojaExisteService).validar(lojaId);
+        verify(validarAcessoLojaService).validar(lojaId);
     }
 
     @Test

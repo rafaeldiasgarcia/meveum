@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import br.com.meveum.auth.validator.service.ValidarAcessoLojaService;
 import br.com.meveum.lojas.dto.AtualizarLojaRequest;
 import br.com.meveum.lojas.dto.AtualizarLojaResponse;
 import br.com.meveum.lojas.entity.Loja;
@@ -29,6 +30,8 @@ class AtualizarLojaServiceTest {
     @Mock
     private ValidarSlugLojaDisponivelService validarSlugLojaDisponivelService;
     @Mock
+    private ValidarAcessoLojaService validarAcessoLojaService;
+    @Mock
     private LojaRepository lojaRepository;
     @Mock
     private LojaMapper lojaMapper;
@@ -40,6 +43,7 @@ class AtualizarLojaServiceTest {
         var lojaId = UUID.randomUUID();
         var request = new AtualizarLojaRequest("Loja", "loja", null, "5511999999999");
         var loja = new Loja();
+        loja.setId(lojaId);
         var response = AtualizarLojaResponse.builder().id(lojaId).slug("loja").build();
         when(validarLojaExisteService.validar(lojaId)).thenReturn(loja);
         when(lojaRepository.save(loja)).thenReturn(loja);
@@ -49,6 +53,7 @@ class AtualizarLojaServiceTest {
 
         assertThat(resultado).isEqualTo(response);
         verify(lojaValidator).validarAtualizacao(request);
+        verify(validarAcessoLojaService).validar(lojaId);
         verify(validarSlugLojaDisponivelService).validarAtualizacao(lojaId, "loja");
         verify(lojaMapper).toEntity(request, loja);
     }
