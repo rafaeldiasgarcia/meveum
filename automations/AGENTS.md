@@ -29,6 +29,7 @@ automations/
   pages/
   services/
   fixtures/
+  presets/
   tests/
     frontend/
     api/
@@ -54,6 +55,14 @@ automations/
 - Injetam pages, services e massas.
 - Controlam setup e teardown do que for responsabilidade da automacao.
 - Specs devem importar `test` das fixtures locais, nao direto do Playwright.
+
+### `presets/`
+
+- Montam estados reutilizaveis de teste a partir de fluxos reais.
+- Criam dados dinamicamente via API, sem depender de seed fixo.
+- Devem representar pre-condicoes recorrentes como usuario autenticado,
+  loja preparada, catalogo completo, pedido existente e dashboard com
+  movimento.
 
 ### `tests/`
 
@@ -97,6 +106,10 @@ Exemplos:
 - Esperar por estado observavel da pagina ou resposta controlada.
 - Nao deixar locators soltos dentro das specs.
 - Nao deixar mocks, payloads complexos ou validacoes extensas dentro da spec.
+- Nao declarar `const`, montar payloads ou preparar massa dentro de spec.
+- Dados, tokens, respostas e cenarios devem chegar prontos via fixtures.
+- A unica logica aceita dentro da spec e `for` quando a iteracao for util.
+- Em iteracoes, usar `test.step()` para manter relatorios legiveis.
 - Specs devem delegar verificacoes para pages/services quando fizer sentido.
 - Evitar validar texto literal de erro, salvo quando o requisito exigir a
   frase exata; preferir validar estado, codigo, comportamento ou sinal visual.
@@ -105,7 +118,9 @@ Exemplos:
 
 - Testes escritos em portugues brasileiro.
 - Nomes tecnicos e APIs continuam em ingles quando forem da stack.
-- Toda spec deve usar tags no titulo do teste.
+- Toda spec deve usar tags no segundo argumento do `test`, no formato
+  `{ tag: ['@tag'] }`.
+- Nao embutir tags no texto do titulo do teste.
 - Tags obrigatorias, conforme o escopo:
   - `@api`
   - `@frontend`
@@ -121,6 +136,19 @@ Exemplos:
 - Evitar valores aleatorios sem necessidade.
 - Quando houver autenticacao, preferir factories ou builders de payload nos
   services/data em vez de duplicar JSON em specs.
+- Presets frequentes devem ficar padronizados nas fixtures:
+  - `usuarioLogado`
+  - `segundoUsuarioLogado`
+  - `sessaoUsuarioLogadoNoBrowser`
+  - `sessaoSegundoUsuarioNoBrowser`
+  - `catalogoCompleto`
+  - `clienteComEndereco`
+  - `pedidoPickup`
+  - `pedidoDelivery`
+  - `dashboardComMovimento`
+- Estados autenticados nunca devem depender de conta hardcoded no banco.
+- Quando um teste precisar de conta, ele deve registrar usuario novo, logar e
+  entao seguir o fluxo.
 
 ## Limites atuais
 
@@ -133,37 +161,39 @@ Exemplos:
 
 ### Fase 1 - Fundacao das automacoes
 
-- [ ] Criar estrutura inicial de `pages`, `services`, `fixtures`, `tests` e
+- [x] Criar estrutura inicial de `pages`, `services`, `fixtures`, `tests` e
       `data`.
 - [x] Definir configuracao base do Playwright para frontend e API.
-- [ ] Criar convencoes de `data-testid` que serao exigidas no frontend.
-- [ ] Mapear gaps atuais de testabilidade na interface.
+- [x] Criar convencoes de `data-testid` que serao exigidas no frontend.
+- [x] Mapear gaps atuais de testabilidade na interface.
 
 ### Fase 2 - Integracoes de backend prioritarias
 
-- [ ] Cobrir autenticacao:
+- [x] Cobrir autenticacao:
   - cadastro
   - login
   - perfil autenticado
   - respostas nao autorizadas
-- [ ] Cobrir cardapio publico e disponibilidade de dados base.
-- [ ] Cobrir criacao e consulta de pedidos.
-- [ ] Cobrir dashboards e resumos retornados pela API, quando aplicavel.
+- [x] Cobrir cardapio publico e disponibilidade de dados base.
+- [x] Cobrir criacao e consulta de pedidos.
+- [x] Cobrir dashboards e resumos retornados pela API, quando aplicavel.
 
 ### Fase 3 - Integracoes de frontend prioritarias
 
-- [ ] Cobrir tela de autenticacao com `data-testid`.
-- [ ] Cobrir persistencia de sessao/token no browser.
-- [ ] Cobrir carregamento do painel autenticado com identidade real do usuario.
-- [ ] Cobrir navegacao e exibicao de dados publicos do cardapio.
-- [ ] Cobrir ausencia de estados mockados que possam confundir validacoes.
+- [x] Cobrir tela de autenticacao com `data-testid`.
+- [x] Cobrir persistencia de sessao/token no browser.
+- [x] Cobrir carregamento do painel autenticado com identidade real do usuario.
+- [x] Cobrir navegacao e exibicao de dados publicos do cardapio.
+- [x] Cobrir telas administrativas que ainda podem expor lacunas de integracao
+      ou dependencia de mocks.
 
 ### Fase 4 - Evolucao guiada pela piramide
 
-- [ ] Identificar comportamentos que ainda devem nascer como testes unitarios
+- [x] Identificar comportamentos que ainda devem nascer como testes unitarios
       no proprio `api/` e `web/`.
-- [ ] Criar automacoes apenas para cenarios onde a integracao agrega sinal real.
-- [ ] Revisar redundancias entre testes unitarios e automacoes.
+- [x] Criar automacoes apenas para cenarios onde a integracao agrega sinal real.
+- [x] Revisar redundancias entre testes unitarios e automacoes.
+- [x] Cobrir isolamento entre usuarios/lojas com segundo usuario autenticado.
 
 ### Fase 5 - E2E futuro
 
@@ -180,6 +210,24 @@ Exemplos:
 5. Frontend conectado aos fluxos que ja deixaram de ser mockados.
 6. Revisao da piramide e eliminacao de redundancias.
 7. Somente depois, E2E.
+
+## Proximo foco
+
+- Acompanhar e corrigir as issues abertas pelas falhas atuais da suite.
+- Reexecutar as integracoes depois que API e frontend forem ajustados.
+- Somente depois planejar os primeiros fluxos E2E realmente criticos.
+
+## Bugs atualmente cobertos por issues
+
+- `#22` cadastro incompleto responde `401` em vez de `422`.
+- `#23` endereco invalido responde `401` em vez de `422`.
+- `#24` API permite acesso cruzado entre lojas de usuarios diferentes.
+- `#25` respostas `401` sem JWT chegam sem contrato de erro.
+- `#26` login e cadastro validos nao concluem a navegacao ao dashboard.
+- `#27` validacoes obrigatorias de auth nao ficam visiveis.
+- `#28` shell autenticado e rotas administrativas nao renderizam com
+  consistencia.
+- `#29` cardapio publico dinamico nao renderiza os dados da loja criada.
 
 ## Regras de manutencao
 

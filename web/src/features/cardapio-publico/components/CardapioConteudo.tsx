@@ -36,15 +36,16 @@ export function CardapioConteudo({ lojaId, loja, categorias, produtos }: Props) 
             placeholder="Buscar no cardápio..."
             value={busca}
             onChange={(e) => setBusca(e.target.value)}
+            data-testid="public-menu-search-input"
             className="w-full pl-9 pr-4 py-2.5 bg-white border border-gray-200 rounded-2xl text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent shadow-sm"
           />
         </div>
       </div>
 
       {produtosFiltrados ? (
-        <section className="mt-2 flex flex-col gap-2">
+        <section className="mt-2 flex flex-col gap-2" data-testid="public-search-results">
           {produtosFiltrados.length === 0 ? (
-            <p className="text-center text-gray-400 py-12 text-sm">
+            <p className="text-center text-gray-400 py-12 text-sm" data-testid="public-search-empty">
               Nenhum produto encontrado para &quot;{busca}&quot;
             </p>
           ) : (
@@ -63,7 +64,12 @@ export function CardapioConteudo({ lojaId, loja, categorias, produtos }: Props) 
           const itensDaCategoria = produtos.filter((p) => p.categoriaId === cat.id);
           if (itensDaCategoria.length === 0) return null;
           return (
-            <section key={cat.id} id={`cat-${cat.id}`} className="mt-6">
+            <section
+              key={cat.id}
+              id={`cat-${cat.id}`}
+              className="mt-6"
+              data-testid={`public-category-section-${cat.id}`}
+            >
               <h2 className="font-bold text-gray-900 text-base mb-3 pl-3 border-l-4 border-orange-500">
                 {cat.nome}
               </h2>

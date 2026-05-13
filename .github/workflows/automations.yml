@@ -5,11 +5,15 @@ on:
     branches: [main]
     paths:
       - 'automations/**'
+      - 'api/**'
+      - 'web/**'
       - '.github/workflows/automations.yml'
   pull_request:
     branches: [main]
     paths:
       - 'automations/**'
+      - 'api/**'
+      - 'web/**'
       - '.github/workflows/automations.yml'
   workflow_dispatch:
 
@@ -19,17 +23,35 @@ concurrency:
 
 jobs:
   playwright:
-    name: Playwright - validar estrutura
+    name: Playwright - integracoes
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
-    defaults:
-      run:
-        working-directory: automations
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: meveum
+          POSTGRES_USER: meveum
+          POSTGRES_PASSWORD: meveum
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U meveum -d meveum"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Configurar Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
 
       - name: Configurar Node.js
         uses: actions/setup-node@v4
@@ -39,18 +61,61 @@ jobs:
           cache-dependency-path: automations/package-lock.json
 
       - name: Instalar dependencias
+        working-directory: automations
         run: npm ci
 
       - name: Instalar navegador Chromium
+        working-directory: automations
         run: npx playwright install --with-deps chromium
 
-      - name: Validar suites de API
-        run: npm run test:api -- --pass-with-no-tests
-        env:
-          CI: true
+      - name: Garantir permissao do Maven Wrapper
+        working-directory: api
+        run: chmod +x mvnw
 
-      - name: Validar suites de frontend
-        run: npm run test:frontend -- --pass-with-no-tests
+      - name: Subir API
+        working-directory: api
+        run: ./mvnw spring-boot:run > ../api-automations.log 2>&1 &
+
+      - name: Aguardar API
+        run: |
+          for tentativa in {1..60}; do
+            if curl --fail --silent http://127.0.0.1:8080/v3/api-docs > /dev/null; then
+              exit 0
+            fi
+            sleep 2
+          done
+          exit 1
+
+      - name: Instalar dependencias da web
+        working-directory: web
+        run: npm ci
+
+      - name: Build da web para automacoes
+        working-directory: web
+        run: npm run build
+        env:
+          NEXT_PUBLIC_API_URL: http://127.0.0.1:8080
+
+      - name: Subir web
+        working-directory: web
+        run: npm run start > ../web-automations.log 2>&1 &
+        env:
+          PORT: 3000
+          NEXT_PUBLIC_API_URL: http://127.0.0.1:8080
+
+      - name: Aguardar web
+        run: |
+          for tentativa in {1..60}; do
+            if curl --fail --silent http://127.0.0.1:3000/login > /dev/null; then
+              exit 0
+            fi
+            sleep 2
+          done
+          exit 1
+
+      - name: Rodar suites de automacao
+        working-directory: automations
+        run: npm test
         env:
           CI: true
 
@@ -69,5 +134,16 @@ jobs:
         with:
           name: playwright-test-results
           path: automations/test-results/
+          retention-days: 30
+          if-no-files-found: ignore
+
+      - name: Publicar logs dos servidores
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: automations-server-logs
+          path: |
+            api-automations.log
+            web-automations.log
           retention-days: 30
           if-no-files-found: ignore

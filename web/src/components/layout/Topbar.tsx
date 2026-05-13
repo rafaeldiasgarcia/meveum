@@ -40,7 +40,12 @@ export function Topbar() {
           <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[var(--color-orange)] text-xs font-bold text-white">
             {inicialUsuario}
           </div>
-          <span className="hidden sm:block text-sm font-medium text-[var(--color-foreground)]">{nomeUsuario}</span>
+          <span
+            className="hidden sm:block text-sm font-medium text-[var(--color-foreground)]"
+            data-testid="user-menu-name"
+          >
+            {nomeUsuario}
+          </span>
         </button>
         <Button
           variant="ghost"
