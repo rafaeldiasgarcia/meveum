@@ -3,11 +3,13 @@ package br.com.meveum.lojas.validator;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import br.com.meveum.lojas.dto.AtualizarHorarioFuncionamentoRequest;
 import br.com.meveum.lojas.dto.AtualizarLojaRequest;
 import br.com.meveum.lojas.dto.AtualizarPausaManualLojaRequest;
 import br.com.meveum.lojas.dto.AtualizarStatusLojaRequest;
 import br.com.meveum.lojas.entity.enums.LojaStatus;
 import br.com.meveum.shared.exception.RegraNegocioException;
+import java.time.LocalTime;
 import org.junit.jupiter.api.Test;
 
 class LojaValidatorTest {
@@ -80,5 +82,45 @@ class LojaValidatorTest {
         var request = new AtualizarStatusLojaRequest(LojaStatus.ACTIVE);
 
         assertThatCode(() -> lojaValidator.validarStatus(request)).doesNotThrowAnyException();
+    }
+
+    @Test
+    void deveValidarHorarioFuncionamentoValido() {
+        var request = new AtualizarHorarioFuncionamentoRequest(
+            (short) 1,
+            LocalTime.of(8, 0),
+            LocalTime.of(18, 0),
+            true
+        );
+
+        assertThatCode(() -> lojaValidator.validarHorarioFuncionamento(request)).doesNotThrowAnyException();
+    }
+
+    @Test
+    void deveFalharQuandoDiaDaSemanaDoHorarioForInvalido() {
+        var request = new AtualizarHorarioFuncionamentoRequest(
+            (short) 8,
+            LocalTime.of(8, 0),
+            LocalTime.of(18, 0),
+            true
+        );
+
+        assertThatThrownBy(() -> lojaValidator.validarHorarioFuncionamento(request))
+            .isInstanceOf(RegraNegocioException.class)
+            .hasMessage("Dia da semana do horario e invalido.");
+    }
+
+    @Test
+    void deveFalharQuandoFechamentoNaoForMaiorQueAbertura() {
+        var request = new AtualizarHorarioFuncionamentoRequest(
+            (short) 1,
+            LocalTime.of(18, 0),
+            LocalTime.of(18, 0),
+            true
+        );
+
+        assertThatThrownBy(() -> lojaValidator.validarHorarioFuncionamento(request))
+            .isInstanceOf(RegraNegocioException.class)
+            .hasMessage("Horario de fechamento deve ser maior que abertura.");
     }
 }

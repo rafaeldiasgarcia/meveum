@@ -12,6 +12,8 @@ import br.com.meveum.cardapio.repository.ProdutoGrupoComplementoRepository;
 import br.com.meveum.shared.exception.RecursoNaoEncontradoException;
 import br.com.meveum.shared.exception.RegraNegocioException;
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
@@ -82,18 +84,65 @@ class ValidarComplementoPedidoServiceTest {
             .hasMessage("Complemento nao pertence ao produto informado.");
     }
 
+    @Test
+    void deveValidarQuantidadesObrigatorias() {
+        var produtoId = UUID.randomUUID();
+        var grupo = grupo(1, 2, true);
+        when(produtoGrupoComplementoRepository.findByProdutoIdOrderBySortOrderAsc(produtoId))
+            .thenReturn(List.of(vinculo(grupo, true)));
+
+        service.validarQuantidadesObrigatorias(produtoId, Map.of(grupo.getId(), 1));
+    }
+
+    @Test
+    void deveLancarErroQuandoComplementoObrigatorioNaoInformado() {
+        var produtoId = UUID.randomUUID();
+        var grupo = grupo(1, 2, true);
+        when(produtoGrupoComplementoRepository.findByProdutoIdOrderBySortOrderAsc(produtoId))
+            .thenReturn(List.of(vinculo(grupo, true)));
+
+        assertThatThrownBy(() -> service.validarQuantidadesObrigatorias(produtoId, Map.of()))
+            .isInstanceOf(RegraNegocioException.class)
+            .hasMessage("Quantidade minima de complementos nao atingida.");
+    }
+
+    @Test
+    void deveLancarErroQuandoMaximoComplementoForExcedido() {
+        var produtoId = UUID.randomUUID();
+        var grupo = grupo(0, 1, true);
+        when(produtoGrupoComplementoRepository.findByProdutoIdOrderBySortOrderAsc(produtoId))
+            .thenReturn(List.of(vinculo(grupo, true)));
+
+        assertThatThrownBy(() -> service.validarQuantidadesObrigatorias(produtoId, Map.of(grupo.getId(), 2)))
+            .isInstanceOf(RegraNegocioException.class)
+            .hasMessage("Quantidade maxima de complementos excedida.");
+    }
+
     private OpcaoComplemento opcao(boolean opcaoAtiva, boolean grupoAtivo) {
-        var grupo = GrupoComplemento.builder()
-            .id(UUID.randomUUID())
-            .name("Molhos")
-            .active(grupoAtivo)
-            .build();
+        var grupo = grupo(0, 1, grupoAtivo);
         return OpcaoComplemento.builder()
             .id(UUID.randomUUID())
             .grupoComplemento(grupo)
             .name("Maionese")
             .additionalPrice(BigDecimal.ONE)
             .active(opcaoAtiva)
+            .build();
+    }
+
+    private GrupoComplemento grupo(Integer minimo, Integer maximo, boolean ativo) {
+        return GrupoComplemento.builder()
+            .id(UUID.randomUUID())
+            .name("Molhos")
+            .minQuantity(minimo)
+            .maxQuantity(maximo)
+            .active(ativo)
+            .build();
+    }
+
+    private ProdutoGrupoComplemento vinculo(GrupoComplemento grupo, boolean ativo) {
+        return ProdutoGrupoComplemento.builder()
+            .grupoComplemento(grupo)
+            .active(ativo)
             .build();
     }
 }

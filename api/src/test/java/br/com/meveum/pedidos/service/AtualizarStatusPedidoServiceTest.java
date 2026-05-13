@@ -41,6 +41,7 @@ class AtualizarStatusPedidoServiceTest {
         var pedidoId = UUID.randomUUID();
         var request = new AtualizarStatusPedidoRequest(StatusPedido.PREPARING);
         var pedido = new Pedido();
+        pedido.setStatus(StatusPedido.NEW);
         var response = AtualizarStatusPedidoResponse.builder().id(pedidoId).status(StatusPedido.PREPARING).build();
         when(validarPedidoExisteService.validar(pedidoId)).thenReturn(pedido);
         when(montarMensagemPedidoWhatsappService.montarStatusAtualizado(pedido)).thenReturn("Status atualizado");
@@ -52,6 +53,6 @@ class AtualizarStatusPedidoServiceTest {
         assertThat(resultado).isEqualTo(response);
         assertThat(pedido.getStatus()).isEqualTo(StatusPedido.PREPARING);
         assertThat(pedido.getWhatsappMessage()).isEqualTo("Status atualizado");
-        verify(pedidoValidator).validarAtualizacaoStatus(request);
+        verify(pedidoValidator).validarTransicaoStatus(StatusPedido.NEW, StatusPedido.PREPARING);
     }
 }
