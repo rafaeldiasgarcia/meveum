@@ -5,9 +5,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Eye, EyeOff, Sparkles, Shield, ArrowLeft } from "lucide-react";
+import { Eye, EyeOff, Sparkles, ShieldCheck, ArrowRight, Utensils } from "lucide-react";
 import { toast } from "sonner";
-import { Logo } from "@/components/shared/Logo";
 import { AuthCarousel } from "@/features/auth/components/AuthCarousel";
 import { cadastroSchema, type CadastroFormData } from "@/lib/validations/auth.schema";
 import { cadastrar } from "@/lib/api/auth.api";
@@ -68,23 +67,27 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="flex min-h-screen">
-      {/* ── Lado esquerdo — formulário ──────────────────────────────────── */}
-      <div className="flex w-full flex-col bg-[#FBF7F4] lg:w-1/2">
-        {/* Header */}
-        <header className="flex items-center justify-between px-4 py-5 sm:px-5 lg:pl-[max(1.25rem,calc((100vw-80rem)/2+1.25rem))] lg:pr-10">
-          <Logo size="md" />
+    <div className="mx-auto grid min-h-screen w-full max-w-[1400px] grid-cols-1 lg:grid-cols-2">
+      {/* ── Left panel — form ──────────────────────────────────────────────── */}
+      <div className="relative flex flex-col bg-[#FBF7F4] px-6 py-8 sm:px-10 lg:px-16 lg:py-12">
+        {/* Logo + back link */}
+        <div className="flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2">
+            <div className="grid h-8 w-8 place-items-center rounded-xl bg-[#EA580C]">
+              <Utensils className="h-4 w-4 text-white" />
+            </div>
+            <span className="font-display text-base font-bold text-[#1C1917]">MeVêUm</span>
+          </Link>
           <Link
             href="/"
-            className="flex items-center gap-1.5 text-sm text-[#78716C] transition-colors hover:text-[#1C1917]"
+            className="text-sm text-[#1C1917]/45 transition-colors hover:text-[#1C1917]"
           >
-            <ArrowLeft className="h-3.5 w-3.5" />
-            Voltar ao site
+            ← Voltar ao site
           </Link>
-        </header>
+        </div>
 
-        {/* Content */}
-        <div className="flex flex-1 flex-col justify-center overflow-y-auto px-4 py-10 sm:px-5 lg:pl-[max(1.25rem,calc((100vw-80rem)/2+1.25rem))] lg:pr-10">
+        {/* Form content */}
+        <div className="flex flex-1 flex-col justify-center overflow-y-auto py-10">
           <div className="w-full max-w-sm">
             {/* Badge */}
             <div className="mb-6 inline-flex items-center gap-1.5 rounded-full border border-[#E8E0D6] bg-white px-3 py-1.5 shadow-soft">
@@ -112,7 +115,7 @@ export default function RegisterPage() {
                   key={label}
                   type="button"
                   onClick={() => toast.info(`Cadastro com ${label} em breve`)}
-                  className="flex h-11 items-center justify-center gap-2 rounded-lg border border-[#E8E0D6] bg-white text-sm font-medium text-[#1C1917] transition-colors hover:bg-[#F5F0EA]"
+                  className="flex items-center justify-center gap-2 rounded-md border border-[#E8E0D6] bg-white py-2.5 text-sm font-medium text-[#1C1917] shadow-soft transition-colors hover:border-[#1C1917]/20 hover:bg-[#F5F0EA]"
                 >
                   {icon}
                   <span>{label}</span>
@@ -126,7 +129,7 @@ export default function RegisterPage() {
                 <div className="w-full border-t border-[#E8E0D6]" />
               </div>
               <div className="relative flex justify-center">
-                <span className="bg-[#FBF7F4] px-3 text-xs font-medium tracking-widest text-[#A8A29E]">
+                <span className="bg-[#FBF7F4] px-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#1C1917]/45">
                   OU COM E-MAIL
                 </span>
               </div>
@@ -285,9 +288,12 @@ export default function RegisterPage() {
                 type="submit"
                 disabled={isSubmitting || !termsAccepted}
                 data-testid="submit-register-button"
-                className="mt-2 flex h-12 w-full items-center justify-center gap-2 rounded-lg bg-[#EA580C] font-semibold tracking-wide text-white transition-colors hover:bg-[#C2410C] disabled:opacity-50"
+                className="group mt-2 inline-flex w-full items-center justify-center gap-2 rounded-md bg-[#EA580C] py-3 text-sm font-bold uppercase tracking-wider text-white shadow-ember transition hover:bg-[#C2410C] disabled:cursor-not-allowed disabled:opacity-50"
               >
-                {isSubmitting ? "Criando conta..." : "CRIAR CONTA GRÁTIS →"}
+                {isSubmitting ? "Criando conta..." : "Criar conta grátis"}
+                {!isSubmitting && (
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                )}
               </button>
             </form>
 
@@ -299,23 +305,21 @@ export default function RegisterPage() {
             </p>
 
             {/* Security note */}
-            <div className="mt-6 flex items-center justify-center gap-1.5 text-xs text-[#A8A29E]">
-              <Shield className="h-3.5 w-3.5" />
+            <div className="mt-6 flex items-center justify-center gap-1.5 text-xs text-[#1C1917]/45">
+              <ShieldCheck className="h-3.5 w-3.5" />
               Conexão segura · seus dados são criptografados
             </div>
           </div>
         </div>
 
         {/* Footer */}
-        <footer className="px-4 py-4 text-xs text-[#A8A29E] sm:px-5 lg:pl-[max(1.25rem,calc((100vw-80rem)/2+1.25rem))]">
+        <footer className="text-xs text-[#1C1917]/35">
           © 2026 MeVêUm · Sistema para restaurantes brasileiros
         </footer>
       </div>
 
-      {/* ── Lado direito — carrossel ─────────────────────────────────────── */}
-      <div className="hidden lg:flex lg:w-1/2">
-        <AuthCarousel />
-      </div>
+      {/* ── Right panel — carousel ─────────────────────────────────────────── */}
+      <AuthCarousel />
     </div>
   );
 }
