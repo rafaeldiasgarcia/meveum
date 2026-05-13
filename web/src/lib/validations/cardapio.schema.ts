@@ -9,4 +9,5 @@ export const produtoSchema = z.object({
   destaque: z.boolean().default(false),
 });
 
-export type ProdutoFormData = z.infer<typeof produtoSchema>;
+export type ProdutoFormInput = z.input<typeof produtoSchema>;
+export type ProdutoFormData = z.output<typeof produtoSchema>;
