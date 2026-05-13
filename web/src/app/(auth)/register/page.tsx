@@ -72,7 +72,7 @@ export default function RegisterPage() {
       {/* ── Lado esquerdo — formulário ──────────────────────────────────── */}
       <div className="flex w-full flex-col bg-[#FBF7F4] lg:w-1/2">
         {/* Header */}
-        <header className="flex items-center justify-between px-4 py-5 sm:px-6">
+        <header className="flex items-center justify-between px-4 py-5 sm:px-5 lg:pl-[max(1.25rem,calc((100vw-80rem)/2+1.25rem))] lg:pr-10">
           <Image
             src="/logo.png"
             alt="MeVêUm"
@@ -91,8 +91,8 @@ export default function RegisterPage() {
         </header>
 
         {/* Content */}
-        <div className="flex flex-1 flex-col justify-center overflow-y-auto px-4 py-10 sm:px-6">
-          <div className="mx-auto w-full max-w-sm">
+        <div className="flex flex-1 flex-col justify-center overflow-y-auto px-4 py-10 sm:px-5 lg:pl-[max(1.25rem,calc((100vw-80rem)/2+1.25rem))] lg:pr-10">
+          <div className="w-full max-w-sm">
             {/* Badge */}
             <div className="mb-6 inline-flex items-center gap-1.5 rounded-full border border-[#E8E0D6] bg-white px-3 py-1.5 shadow-soft">
               <Sparkles className="h-3 w-3 text-[#EA580C]" />
@@ -314,7 +314,7 @@ export default function RegisterPage() {
         </div>
 
         {/* Footer */}
-        <footer className="px-4 py-4 text-xs text-[#A8A29E] sm:px-6">
+        <footer className="px-4 py-4 text-xs text-[#A8A29E] sm:px-5 lg:pl-[max(1.25rem,calc((100vw-80rem)/2+1.25rem))]">
           © 2026 MeVêUm · Sistema para restaurantes brasileiros
         </footer>
       </div>
