@@ -78,16 +78,16 @@ export function DrawerCarrinho({ lojaId, loja }: Props) {
                             ? removerItem(item.uid)
                             : alterarQuantidade(item.uid, item.quantidade - 1)
                         }
-                        className="w-7 h-7 rounded-full border border-gray-200 flex items-center justify-center hover:bg-gray-50"
+                        className="w-8 h-8 rounded-full border-2 border-gray-300 flex items-center justify-center hover:border-orange-400 hover:bg-orange-50 transition-colors"
                       >
-                        <Minus className="w-3 h-3" />
+                        <Minus className="w-3.5 h-3.5 text-gray-700" />
                       </button>
-                      <span className="text-sm font-medium w-4 text-center">{item.quantidade}</span>
+                      <span className="text-sm font-bold text-gray-900 w-5 text-center">{item.quantidade}</span>
                       <button
                         onClick={() => alterarQuantidade(item.uid, item.quantidade + 1)}
-                        className="w-7 h-7 rounded-full border border-gray-200 flex items-center justify-center hover:bg-gray-50"
+                        className="w-8 h-8 rounded-full border-2 border-gray-300 flex items-center justify-center hover:border-orange-400 hover:bg-orange-50 transition-colors"
                       >
-                        <Plus className="w-3 h-3" />
+                        <Plus className="w-3.5 h-3.5 text-gray-700" />
                       </button>
                     </div>
                   </div>

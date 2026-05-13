@@ -190,30 +190,32 @@ export function CheckoutDrawer({ lojaId, onFechar, onVoltarCarrinho }: Props) {
           {etapa === "tipo" && (
             <div className="space-y-3">
               {(["DELIVERY", "PICKUP"] as const).map((t) => (
-                <label
+                <button
                   key={t}
-                  className={`flex items-center gap-4 p-4 rounded-2xl border-2 cursor-pointer transition-colors ${
+                  type="button"
+                  onClick={() => set("tipo", t)}
+                  className={`w-full flex items-center gap-4 p-4 rounded-2xl border-2 cursor-pointer transition-all text-left ${
                     dados.tipo === t
                       ? "border-orange-500 bg-orange-50"
-                      : "border-gray-200 bg-white hover:border-orange-200"
+                      : "border-gray-200 bg-white hover:border-orange-300 hover:bg-orange-50/40"
                   }`}
                 >
-                  <input
-                    type="radio"
-                    name="tipo-recebimento"
-                    checked={dados.tipo === t}
-                    onChange={() => set("tipo", t)}
-                    className="accent-orange-500 w-4 h-4"
-                  />
+                  <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${
+                    dados.tipo === t ? "border-orange-500" : "border-gray-400"
+                  }`}>
+                    {dados.tipo === t && (
+                      <div className="w-2.5 h-2.5 rounded-full bg-orange-500" />
+                    )}
+                  </div>
                   <div>
                     <div className="font-semibold text-gray-900 text-sm">
                       {t === "DELIVERY" ? "Delivery" : "Retirada"}
                     </div>
-                    <div className="text-xs text-gray-400 mt-0.5">
+                    <div className="text-xs text-gray-500 mt-0.5">
                       {t === "DELIVERY" ? "Entregamos na sua casa" : "Busque no balcão"}
                     </div>
                   </div>
-                </label>
+                </button>
               ))}
             </div>
           )}
