@@ -9,18 +9,18 @@ function DashboardShellContent({ children }: { children: React.ReactNode }) {
 
   if (carregando && !usuario) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[var(--color-background)]">
-        <div className="h-6 w-6 animate-spin rounded-full border-2 border-[var(--color-orange)] border-t-transparent" />
+      <div className="flex h-screen items-center justify-center bg-[#FBF7F4]">
+        <div className="h-6 w-6 animate-spin rounded-full border-2 border-[#EA580C] border-t-transparent" />
       </div>
     );
   }
 
   return (
-    <div className="flex h-screen bg-[var(--color-background)]">
+    <div className="flex h-screen bg-[#FBF7F4] text-[#1C1917]">
       <Sidebar />
-      <div className="flex flex-1 flex-col overflow-hidden">
+      <div className="min-w-0 flex-1 flex flex-col overflow-hidden">
         <Topbar />
-        <main className="flex-1 overflow-y-auto p-4 md:p-6">
+        <main className="flex-1 overflow-y-auto">
           {children}
         </main>
       </div>

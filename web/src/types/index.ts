@@ -86,7 +86,13 @@ export type CriarProdutoRequest = {
 export type AtualizarProdutoRequest = Partial<CriarProdutoRequest>;
 
 // ─── Pedidos ──────────────────────────────────────────────────────────────────
-export type StatusPedido = "recebido" | "em_preparo" | "pronto" | "saiu_entrega" | "finalizado" | "cancelado";
+export type StatusPedido =
+  | "recebido"
+  | "em_preparo"
+  | "pronto"
+  | "saiu_entrega"
+  | "finalizado"
+  | "cancelado";
 
 export type ItemPedido = {
   id: string;
@@ -105,7 +111,8 @@ export type Pedido = {
   nomeCliente: string;
   telefoneCliente: string;
   status: StatusPedido;
-  tipo: "delivery" | "retirada";
+  tipo: "delivery" | "retirada" | "mesa";
+  mesa?: string;
   itens: ItemPedido[];
   total: number;
   enderecoEntrega?: string;
@@ -136,14 +143,54 @@ export type MetricasDashboard = {
   pedidosHoje: number;
   faturamentoHoje: number;
   ticketMedio: number;
+  tempoMedioCozinhaMin: number;
   pedidosEmPreparo: number;
   novosClientesHoje: number;
   taxaRecompra: number;
-  variacaoPedidos: number;
-  variacaoFaturamento: number;
+  variacaoPedidosPercent: number;
+  variacaoFaturamentoPercent: number;
+  variacaoTicketMedio: number;
+  variacaoTempoMedioCozinha: number;
+  faturamento7Dias: number;
+  variacaoFaturamento7Dias: number;
 };
 
 export type DadoGrafico = {
   label: string;
   valor: number;
+};
+
+export type KDSItem = {
+  id: string;
+  numero: number;
+  nomeProduto: string;
+  minutosEmPreparo: number;
+};
+
+export type TopProduto = {
+  posicao: number;
+  nome: string;
+  unidades: number;
+  faturamento: number;
+};
+
+export type ClienteRecorrente = {
+  id: string;
+  nome: string;
+  iniciais: string;
+  totalPedidos: number;
+  totalGasto: number;
+  badge: "VIP" | "RECORRENTE";
+};
+
+export type PedidoResumo = {
+  id: string;
+  numero: number;
+  descricao: string;
+  nomeCliente: string;
+  local: string;
+  status: StatusPedido;
+  tempoStr: string;
+  total: number;
+  formaPagamento?: "pix" | "cartao_credito" | "cartao_debito" | "dinheiro";
 };

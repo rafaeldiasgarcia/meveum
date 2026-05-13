@@ -55,11 +55,11 @@ function ProdutoForm({
       <div className="space-y-1.5">
         <Label>Nome do produto</Label>
         <Input placeholder="Ex: Smash Clássico" data-testid="produto-nome-input" {...register("nome")} error={errors.nome?.message} />
-        {errors.nome && <p className="text-xs text-red-400" data-testid="produto-nome-error">{errors.nome.message}</p>}
+        {errors.nome && <p className="text-xs text-red-500" data-testid="produto-nome-error">{errors.nome.message}</p>}
       </div>
 
       <div className="space-y-1.5">
-        <Label>Descrição <span className="text-[var(--color-muted)]">(opcional)</span></Label>
+        <Label>Descrição <span className="text-[#78716C]">(opcional)</span></Label>
         <Input placeholder="Ingredientes, preparo..." {...register("descricao")} />
       </div>
 
@@ -67,7 +67,7 @@ function ProdutoForm({
         <div className="space-y-1.5">
           <Label>Preço (R$)</Label>
           <Input type="number" step="0.01" min="0" placeholder="0,00" data-testid="produto-preco-input" {...register("preco")} error={errors.preco?.message} />
-          {errors.preco && <p className="text-xs text-red-400">{errors.preco.message}</p>}
+          {errors.preco && <p className="text-xs text-red-500">{errors.preco.message}</p>}
         </div>
         <div className="space-y-1.5">
           <Label>Categoria</Label>
@@ -81,7 +81,7 @@ function ProdutoForm({
               ))}
             </SelectContent>
           </Select>
-          {errors.categoriaId && <p className="text-xs text-red-400">{errors.categoriaId.message}</p>}
+          {errors.categoriaId && <p className="text-xs text-red-500">{errors.categoriaId.message}</p>}
         </div>
       </div>
 
@@ -152,11 +152,11 @@ export default function CardapioPage() {
   }
 
   return (
-    <div className="space-y-5">
+    <div className="p-6 space-y-5">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-bold text-[var(--color-foreground)]">Cardápio</h1>
-          <p className="text-sm text-[var(--color-muted)]">{produtos.length} produtos cadastrados</p>
+          <h1 className="text-xl font-bold text-[#1C1917]">Cardápio</h1>
+          <p className="text-sm text-[#78716C]">{produtos.length} produtos cadastrados</p>
         </div>
         <Button
           onClick={() => { setProdutoEditando(null); setModalAberto(true); }}
@@ -172,8 +172,8 @@ export default function CardapioPage() {
           onClick={() => setFiltroCategoria("todas")}
           className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
             filtroCategoria === "todas"
-              ? "bg-[var(--color-orange)] text-white"
-              : "border border-[var(--color-border)] text-[var(--color-muted)] hover:text-[var(--color-foreground)]"
+              ? "bg-[#EA580C] text-white"
+              : "border border-[#E8E0D6] text-[#78716C] hover:text-[#1C1917]"
           }`}
           data-testid="filtro-todas"
         >
@@ -185,8 +185,8 @@ export default function CardapioPage() {
             onClick={() => setFiltroCategoria(c.id)}
             className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
               filtroCategoria === c.id
-                ? "bg-[var(--color-orange)] text-white"
-                : "border border-[var(--color-border)] text-[var(--color-muted)] hover:text-[var(--color-foreground)]"
+                ? "bg-[#EA580C] text-white"
+                : "border border-[#E8E0D6] text-[#78716C] hover:text-[#1C1917]"
             }`}
             data-testid={`filtro-categoria-${c.id}`}
           >
@@ -197,7 +197,7 @@ export default function CardapioPage() {
 
       {loading ? (
         <div className="flex justify-center py-16" data-testid="cardapio-loading">
-          <div className="h-6 w-6 animate-spin rounded-full border-2 border-[var(--color-orange)] border-t-transparent" />
+          <div className="h-6 w-6 animate-spin rounded-full border-2 border-[#EA580C] border-t-transparent" />
         </div>
       ) : produtosFiltrados.length === 0 ? (
         <EmptyState
@@ -219,10 +219,10 @@ export default function CardapioPage() {
                 <div className="flex items-start justify-between mb-2">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-1.5">
-                      <h3 className="font-semibold text-[var(--color-foreground)] truncate text-sm">{produto.nome}</h3>
-                      {produto.destaque && <Star className="h-3.5 w-3.5 text-[var(--color-amber)] shrink-0 fill-current" />}
+                      <h3 className="font-semibold text-[#1C1917] truncate text-sm">{produto.nome}</h3>
+                      {produto.destaque && <Star className="h-3.5 w-3.5 text-[#F59E0B] shrink-0 fill-current" />}
                     </div>
-                    <p className="text-xs text-[var(--color-muted)] mt-0.5 line-clamp-2">{produto.descricao}</p>
+                    <p className="text-xs text-[#78716C] mt-0.5 line-clamp-2">{produto.descricao}</p>
                   </div>
                   <Badge variant={produto.disponivel ? "success" : "secondary"} className="shrink-0 ml-2">
                     {produto.disponivel ? "Disponível" : "Indisponível"}
@@ -230,18 +230,18 @@ export default function CardapioPage() {
                 </div>
 
                 <div className="flex items-center justify-between">
-                  <span className="text-base font-bold text-[var(--color-orange)]">{formatCurrency(produto.preco)}</span>
-                  <span className="text-xs text-[var(--color-muted)]">{produto.categoria?.nome}</span>
+                  <span className="text-base font-bold text-[#EA580C]">{formatCurrency(produto.preco)}</span>
+                  <span className="text-xs text-[#78716C]">{produto.categoria?.nome}</span>
                 </div>
 
-                <div className="mt-3 flex items-center justify-between border-t border-[var(--color-border)] pt-3">
+                <div className="mt-3 flex items-center justify-between border-t border-[#E8E0D6] pt-3">
                   <div className="flex items-center gap-1.5">
                     <Switch
                       checked={produto.disponivel}
                       onCheckedChange={() => handleToggle(produto.id)}
                       data-testid={`produto-disponivel-toggle-${produto.id}`}
                     />
-                    <span className="text-xs text-[var(--color-muted)]">
+                    <span className="text-xs text-[#78716C]">
                       {produto.disponivel ? <Eye className="h-3.5 w-3.5" /> : <EyeOff className="h-3.5 w-3.5" />}
                     </span>
                   </div>
@@ -291,8 +291,8 @@ export default function CardapioPage() {
           <DialogHeader>
             <DialogTitle>Remover produto</DialogTitle>
           </DialogHeader>
-          <p className="text-sm text-[var(--color-muted)]">
-            Tem certeza que deseja remover <strong className="text-[var(--color-foreground)]">{modalExcluir?.nome}</strong> do cardápio? Esta ação não pode ser desfeita.
+          <p className="text-sm text-[#78716C]">
+            Tem certeza que deseja remover <strong className="text-[#1C1917]">{modalExcluir?.nome}</strong> do cardápio? Esta ação não pode ser desfeita.
           </p>
           <div className="flex justify-end gap-2 mt-4">
             <Button variant="ghost" onClick={() => setModalExcluir(null)} data-testid="produto-excluir-cancelar-button">Cancelar</Button>

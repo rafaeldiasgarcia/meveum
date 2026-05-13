@@ -2,19 +2,19 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  LayoutDashboard, UtensilsCrossed, ClipboardList,
-  Users, Settings, ChevronRight, Zap,
-} from "lucide-react";
-import { Logo } from "@/components/shared/Logo";
 import { cn } from "@/lib/utils/cn";
 
 const NAV_ITEMS = [
-  { href: "/dashboard", label: "Início", icon: LayoutDashboard },
-  { href: "/dashboard/pedidos", label: "Pedidos", icon: ClipboardList, badge: 4 },
-  { href: "/dashboard/cardapio", label: "Cardápio", icon: UtensilsCrossed },
-  { href: "/dashboard/clientes", label: "Clientes", icon: Users },
-  { href: "/dashboard/configuracoes", label: "Configurações", icon: Settings },
+  { href: "/dashboard", label: "Operação", exact: true },
+  { href: "/dashboard/pedidos", label: "Pedidos" },
+  { href: "/dashboard/cozinha", label: "Cozinha (KDS)" },
+  { href: "/dashboard/cardapio", label: "Cardápio" },
+  { href: "/dashboard/mesas", label: "Mesas / QR" },
+  { href: "/dashboard/clientes", label: "Clientes" },
+  { href: "/dashboard/cupons", label: "Cupons" },
+  { href: "/dashboard/whatsapp", label: "WhatsApp" },
+  { href: "/dashboard/financeiro", label: "Financeiro" },
+  { href: "/dashboard/relatorios", label: "Relatórios" },
 ];
 
 export function Sidebar() {
@@ -22,56 +22,59 @@ export function Sidebar() {
 
   return (
     <aside
-      className="hidden md:flex w-60 flex-col border-r border-[var(--color-border)] bg-[var(--color-surface)] h-screen sticky top-0"
+      className="hidden w-60 shrink-0 flex-col border-r border-white/10 bg-[#1C1917] text-[#FBF7F4] md:flex"
       data-testid="sidebar"
     >
-      <div className="p-5 border-b border-[var(--color-border)]">
-        <Logo size="sm" showTag />
+      {/* Logo */}
+      <div className="flex items-center gap-2 border-b border-[#FBF7F4]/10 px-5 py-4">
+        <span className="grid h-8 w-8 place-items-center rounded-md bg-[#EA580C] text-sm font-bold text-white">
+          M
+        </span>
+        <span className="text-lg font-semibold">MeVêUm</span>
       </div>
 
-      <nav className="flex-1 overflow-y-auto p-3 flex flex-col gap-0.5">
-        {NAV_ITEMS.map(({ href, label, icon: Icon, badge }) => {
-          const active = pathname === href || (href !== "/dashboard" && pathname.startsWith(href));
+      {/* Restaurant info */}
+      <div className="px-5 py-4">
+        <p className="text-[10px] uppercase tracking-wider text-[#FBF7F4]/40">Burger do Bairro</p>
+        <p className="text-sm font-semibold">Av. Paulista · Aberto</p>
+      </div>
+
+      {/* Nav */}
+      <nav className="flex-1 overflow-y-auto px-3 text-sm" aria-label="Navegação principal">
+        {NAV_ITEMS.map(({ href, label, exact }) => {
+          const active = exact
+            ? pathname === href
+            : pathname === href || pathname.startsWith(href + "/");
+
           return (
             <Link
               key={href}
               href={href}
-              data-testid={`nav-${label.toLowerCase().replace(/\s/g, "-")}`}
+              data-testid={`nav-${label.toLowerCase().replace(/[\s/()]/g, "-")}`}
               className={cn(
-                "group flex items-center justify-between rounded-[var(--radius-md)] px-3 py-2.5 text-sm font-medium transition-all",
+                "mb-1 flex items-center gap-2 rounded-md px-3 py-2 transition-colors",
                 active
-                  ? "bg-[var(--color-orange-dim)] text-[var(--color-orange)]"
-                  : "text-[var(--color-muted)] hover:text-[var(--color-foreground)] hover:bg-[var(--color-surface-2)]"
+                  ? "bg-[#EA580C]/15 text-[#EA580C] font-semibold"
+                  : "text-[#FBF7F4]/70 hover:bg-[#FBF7F4]/5",
               )}
             >
-              <div className="flex items-center gap-3">
-                <Icon className="h-4 w-4 shrink-0" />
-                {label}
-              </div>
-              <div className="flex items-center gap-1">
-                {badge && (
-                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[var(--color-orange)] text-[10px] font-bold text-white">
-                    {badge}
-                  </span>
+              <span
+                className={cn(
+                  "h-1.5 w-1.5 shrink-0 rounded-full",
+                  active ? "bg-[#EA580C]" : "bg-[#FBF7F4]/30",
                 )}
-                {active && <ChevronRight className="h-3 w-3 opacity-60" />}
-              </div>
+              />
+              {label}
             </Link>
           );
         })}
       </nav>
 
-      <div className="p-3 border-t border-[var(--color-border)]">
-        <div className="rounded-[var(--radius-md)] bg-[var(--color-orange-dim)] border border-[var(--color-orange)]/20 p-3">
-          <div className="flex items-center gap-2 mb-1">
-            <Zap className="h-4 w-4 text-[var(--color-orange)]" />
-            <span className="text-xs font-semibold text-[var(--color-orange)]">Plano Gratuito</span>
-          </div>
-          <p className="text-xs text-[var(--color-muted)]">50 pedidos/mês. Faça upgrade para ilimitado.</p>
-          <button className="mt-2 w-full rounded text-xs font-semibold bg-[var(--color-orange)] text-white py-1.5 hover:bg-[var(--color-orange-hover)] transition-colors">
-            Fazer upgrade
-          </button>
-        </div>
+      {/* Footer */}
+      <div className="border-t border-[#FBF7F4]/10 p-4">
+        <Link href="/" className="text-xs text-[#FBF7F4]/60 hover:text-[#FBF7F4] transition-colors">
+          ← voltar para o site
+        </Link>
       </div>
     </aside>
   );
