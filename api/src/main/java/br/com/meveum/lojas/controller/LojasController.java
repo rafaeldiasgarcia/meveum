@@ -1,5 +1,6 @@
 package br.com.meveum.lojas.controller;
 
+import br.com.meveum.lojas.dto.AtualizarHorariosFuncionamentoRequest;
 import br.com.meveum.lojas.dto.AtualizarLojaRequest;
 import br.com.meveum.lojas.dto.AtualizarLojaResponse;
 import br.com.meveum.lojas.dto.AtualizarPausaManualLojaRequest;
@@ -7,12 +8,16 @@ import br.com.meveum.lojas.dto.AtualizarPausaManualLojaResponse;
 import br.com.meveum.lojas.dto.AtualizarStatusLojaRequest;
 import br.com.meveum.lojas.dto.AtualizarStatusLojaResponse;
 import br.com.meveum.lojas.dto.DetalharLojaResponse;
+import br.com.meveum.lojas.dto.HorarioFuncionamentoResponse;
+import br.com.meveum.lojas.service.AtualizarHorariosFuncionamentoService;
 import br.com.meveum.lojas.service.AtualizarLojaService;
 import br.com.meveum.lojas.service.AtualizarPausaManualLojaService;
 import br.com.meveum.lojas.service.AtualizarStatusLojaService;
 import br.com.meveum.lojas.service.DetalharLojaPorSlugService;
 import br.com.meveum.lojas.service.DetalharLojaService;
+import br.com.meveum.lojas.service.ListarHorariosFuncionamentoService;
 import jakarta.validation.Valid;
+import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -35,6 +40,8 @@ public class LojasController {
     private final AtualizarLojaService atualizarLojaService;
     private final AtualizarPausaManualLojaService atualizarPausaManualLojaService;
     private final AtualizarStatusLojaService atualizarStatusLojaService;
+    private final ListarHorariosFuncionamentoService listarHorariosFuncionamentoService;
+    private final AtualizarHorariosFuncionamentoService atualizarHorariosFuncionamentoService;
 
     @GetMapping("/{lojaId}")
     @ResponseStatus(HttpStatus.OK)
@@ -73,5 +80,20 @@ public class LojasController {
         @Valid @RequestBody AtualizarStatusLojaRequest request
     ) {
         return atualizarStatusLojaService.atualizar(lojaId, request);
+    }
+
+    @GetMapping("/{lojaId}/horarios")
+    @ResponseStatus(HttpStatus.OK)
+    public List<HorarioFuncionamentoResponse> listarHorarios(@PathVariable UUID lojaId) {
+        return listarHorariosFuncionamentoService.listar(lojaId);
+    }
+
+    @PutMapping("/{lojaId}/horarios")
+    @ResponseStatus(HttpStatus.OK)
+    public List<HorarioFuncionamentoResponse> atualizarHorarios(
+        @PathVariable UUID lojaId,
+        @Valid @RequestBody AtualizarHorariosFuncionamentoRequest request
+    ) {
+        return atualizarHorariosFuncionamentoService.atualizar(lojaId, request);
     }
 }

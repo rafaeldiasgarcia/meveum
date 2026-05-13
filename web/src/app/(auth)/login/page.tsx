@@ -10,7 +10,7 @@ import { toast } from "sonner";
 import { Logo } from "@/components/shared/Logo";
 import { AuthCarousel } from "@/features/auth/components/AuthCarousel";
 import { loginSchema, type LoginFormData } from "@/lib/validations/auth.schema";
-import { login } from "@/lib/api/auth.api";
+import { login, obterUrlOAuth, type ObterUrlOAuthResponse } from "@/lib/api/auth.api";
 
 function GoogleIcon() {
   return (
@@ -62,6 +62,15 @@ export default function LoginPage() {
     }
   }
 
+  async function iniciarOAuth(provedor: ObterUrlOAuthResponse["provedor"]) {
+    try {
+      const response = await obterUrlOAuth(provedor);
+      window.location.href = response.authorizationUrl;
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Nao foi possivel iniciar o login social.");
+    }
+  }
+
   return (
     <div className="flex min-h-screen">
       {/* ── Lado esquerdo — formulário ──────────────────────────────────── */}
@@ -99,14 +108,15 @@ export default function LoginPage() {
             {/* Social buttons */}
             <div className="mb-6 grid grid-cols-3 gap-3">
               {[
-                { label: "Google", icon: <GoogleIcon /> },
-                { label: "Microsoft", icon: <MicrosoftIcon /> },
-                { label: "Apple", icon: <AppleIcon /> },
-              ].map(({ label, icon }) => (
+                { label: "Google", provedor: "google" as const, icon: <GoogleIcon /> },
+                { label: "Microsoft", provedor: "microsoft" as const, icon: <MicrosoftIcon /> },
+                { label: "Apple", provedor: "apple" as const, icon: <AppleIcon /> },
+              ].map(({ label, provedor, icon }) => (
                 <button
                   key={label}
                   type="button"
-                  onClick={() => toast.info(`Login com ${label} em breve`)}
+                  onClick={() => iniciarOAuth(provedor)}
+                  data-testid={`social-login-${provedor}`}
                   className="flex h-11 items-center justify-center gap-2 rounded-lg border border-[#E8E0D6] bg-white text-sm font-medium text-[#1C1917] transition-colors hover:bg-[#F5F0EA]"
                 >
                   {icon}
@@ -159,9 +169,9 @@ export default function LoginPage() {
                   <label htmlFor="senha" className="text-sm font-medium text-[#1C1917]">
                     Senha
                   </label>
-                  <a href="#" className="text-xs font-medium text-[#EA580C] hover:underline">
+                  <Link href="/esqueci-senha" className="text-xs font-medium text-[#EA580C] hover:underline">
                     Esqueci a senha
-                  </a>
+                  </Link>
                 </div>
                 <div className="relative">
                   <input

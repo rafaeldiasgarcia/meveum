@@ -5,6 +5,7 @@ import br.com.meveum.cardapio.repository.OpcaoComplementoRepository;
 import br.com.meveum.cardapio.repository.ProdutoGrupoComplementoRepository;
 import br.com.meveum.shared.exception.RecursoNaoEncontradoException;
 import br.com.meveum.shared.exception.RegraNegocioException;
+import java.util.Map;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,5 +29,26 @@ public class ValidarComplementoPedidoService {
             .orElseThrow(() -> new RegraNegocioException("Complemento nao pertence ao produto informado."));
 
         return opcao;
+    }
+
+    public void validarQuantidadesObrigatorias(UUID produtoId, Map<UUID, Integer> quantidadePorGrupo) {
+        var vinculos = produtoGrupoComplementoRepository.findByProdutoIdOrderBySortOrderAsc(produtoId)
+            .stream()
+            .filter(vinculo -> Boolean.TRUE.equals(vinculo.getActive()))
+            .filter(vinculo -> Boolean.TRUE.equals(vinculo.getGrupoComplemento().getActive()))
+            .toList();
+
+        for (var vinculo : vinculos) {
+            var grupo = vinculo.getGrupoComplemento();
+            var quantidade = quantidadePorGrupo.getOrDefault(grupo.getId(), 0);
+
+            if (quantidade < grupo.getMinQuantity()) {
+                throw new RegraNegocioException("Quantidade minima de complementos nao atingida.");
+            }
+
+            if (quantidade > grupo.getMaxQuantity()) {
+                throw new RegraNegocioException("Quantidade maxima de complementos excedida.");
+            }
+        }
     }
 }

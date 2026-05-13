@@ -157,9 +157,9 @@ function LeadForm() {
           />
           <span>
             Declaro que li e aceito a{" "}
-            <a href="#" className="text-ember underline underline-offset-2">
+            <Link href="/politica-de-privacidade" className="text-ember underline underline-offset-2">
               Política de Privacidade
-            </a>
+            </Link>
             .
           </span>
         </label>
@@ -1036,7 +1036,7 @@ function Footer() {
             <ul className="mt-3 space-y-2 text-sm">
               {col.links.map((link) => (
                 <li key={link}>
-                  <a href="#" className="hover:text-cream transition-colors">{link}</a>
+                  <a href="#funcionalidades" className="hover:text-cream transition-colors">{link}</a>
                 </li>
               ))}
             </ul>
@@ -1047,8 +1047,8 @@ function Footer() {
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-5 py-5 text-xs text-cream/50">
           <p>© 2026 MeVêUm Tecnologia · Todos os direitos reservados.</p>
           <div className="flex gap-4">
-            <a href="#">Termos de uso</a>
-            <a href="#">Política de privacidade</a>
+            <Link href="/termos-de-uso">Termos de uso</Link>
+            <Link href="/politica-de-privacidade">Política de privacidade</Link>
           </div>
         </div>
       </div>

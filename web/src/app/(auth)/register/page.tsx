@@ -10,7 +10,7 @@ import { toast } from "sonner";
 import { Logo } from "@/components/shared/Logo";
 import { AuthCarousel } from "@/features/auth/components/AuthCarousel";
 import { cadastroSchema, type CadastroFormData } from "@/lib/validations/auth.schema";
-import { cadastrar } from "@/lib/api/auth.api";
+import { cadastrar, obterUrlOAuth, type ObterUrlOAuthResponse } from "@/lib/api/auth.api";
 
 function GoogleIcon() {
   return (
@@ -67,6 +67,15 @@ export default function RegisterPage() {
     }
   }
 
+  async function iniciarOAuth(provedor: ObterUrlOAuthResponse["provedor"]) {
+    try {
+      const response = await obterUrlOAuth(provedor);
+      window.location.href = response.authorizationUrl;
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Nao foi possivel iniciar o cadastro social.");
+    }
+  }
+
   return (
     <div className="flex min-h-screen">
       {/* ── Lado esquerdo — formulário ──────────────────────────────────── */}
@@ -104,14 +113,15 @@ export default function RegisterPage() {
             {/* Social buttons */}
             <div className="mb-6 grid grid-cols-3 gap-3">
               {[
-                { label: "Google", icon: <GoogleIcon /> },
-                { label: "Microsoft", icon: <MicrosoftIcon /> },
-                { label: "Apple", icon: <AppleIcon /> },
-              ].map(({ label, icon }) => (
+                { label: "Google", provedor: "google" as const, icon: <GoogleIcon /> },
+                { label: "Microsoft", provedor: "microsoft" as const, icon: <MicrosoftIcon /> },
+                { label: "Apple", provedor: "apple" as const, icon: <AppleIcon /> },
+              ].map(({ label, provedor, icon }) => (
                 <button
                   key={label}
                   type="button"
-                  onClick={() => toast.info(`Cadastro com ${label} em breve`)}
+                  onClick={() => iniciarOAuth(provedor)}
+                  data-testid={`social-register-${provedor}`}
                   className="flex h-11 items-center justify-center gap-2 rounded-lg border border-[#E8E0D6] bg-white text-sm font-medium text-[#1C1917] transition-colors hover:bg-[#F5F0EA]"
                 >
                   {icon}
@@ -270,13 +280,13 @@ export default function RegisterPage() {
                 />
                 <span className="text-sm text-[#78716C]">
                   Aceito os{" "}
-                  <a href="#" className="font-medium text-[#EA580C] hover:underline">
+                  <Link href="/termos-de-uso" className="font-medium text-[#EA580C] hover:underline">
                     Termos de Uso
-                  </a>{" "}
+                  </Link>{" "}
                   e a{" "}
-                  <a href="#" className="font-medium text-[#EA580C] hover:underline">
+                  <Link href="/politica-de-privacidade" className="font-medium text-[#EA580C] hover:underline">
                     Política de Privacidade
-                  </a>
+                  </Link>
                   .
                 </span>
               </label>

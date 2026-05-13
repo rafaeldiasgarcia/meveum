@@ -7,7 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { StatusPedidoBadge } from "@/components/shared/StatusPedidoBadge";
 import { EmptyState } from "@/components/shared/EmptyState";
-import { listarPedidos, atualizarStatusPedido } from "@/lib/api/pedidos.api";
+import { listarPedidos, atualizarStatusPedido, buscarPedido } from "@/lib/api/pedidos.api";
 import { formatCurrency, formatDateTime } from "@/lib/utils/format";
 import type { Pedido, StatusPedido } from "@/types";
 
@@ -23,7 +23,7 @@ const TODOS_STATUS: { value: StatusPedido | "todos"; label: string }[] = [
 
 const PROXIMOS_STATUS: Record<StatusPedido, StatusPedido | null> = {
   recebido: "em_preparo",
-  em_preparo: "pronto",
+  em_preparo: "saiu_entrega",
   pronto: "saiu_entrega",
   saiu_entrega: "finalizado",
   finalizado: null,
@@ -32,7 +32,7 @@ const PROXIMOS_STATUS: Record<StatusPedido, StatusPedido | null> = {
 
 const LABEL_PROXIMO: Partial<Record<StatusPedido, string>> = {
   recebido: "Aceitar e iniciar preparo",
-  em_preparo: "Marcar como pronto",
+  em_preparo: "Saiu para entrega",
   pronto: "Saiu para entrega",
   saiu_entrega: "Finalizar pedido",
 };
@@ -45,16 +45,24 @@ export default function PedidosPage() {
 
   async function carregar() {
     setLoading(true);
-    const data = await listarPedidos();
+    const data = await listarPedidos(filtroStatus);
     setPedidos(data);
     setLoading(false);
   }
 
-  useEffect(() => { carregar(); }, []);
+  useEffect(() => { carregar(); }, [filtroStatus]);
 
-  const pedidosFiltrados = filtroStatus === "todos"
-    ? pedidos
-    : pedidos.filter((p) => p.status === filtroStatus);
+  const pedidosFiltrados = pedidos;
+
+  async function alternarDetalhe(pedido: Pedido) {
+    if (detalhe?.id === pedido.id) {
+      setDetalhe(null);
+      return;
+    }
+
+    const detalhado = await buscarPedido(pedido.id);
+    setDetalhe(detalhado ?? pedido);
+  }
 
   async function avancarStatus(pedido: Pedido) {
     const proximo = PROXIMOS_STATUS[pedido.status];
@@ -113,7 +121,7 @@ export default function PedidosPage() {
               {pedidosFiltrados.map((pedido) => (
                 <button
                   key={pedido.id}
-                  onClick={() => setDetalhe(detalhe?.id === pedido.id ? null : pedido)}
+                  onClick={() => alternarDetalhe(pedido)}
                   className={`w-full text-left rounded-[var(--radius-lg)] border transition-colors p-4 ${
                     detalhe?.id === pedido.id
                       ? "border-[var(--color-orange)]/40 bg-[var(--color-orange-dim)]"

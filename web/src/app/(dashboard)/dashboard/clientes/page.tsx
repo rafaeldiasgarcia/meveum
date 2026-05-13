@@ -23,13 +23,9 @@ export default function ClientesPage() {
   const [selecionado, setSelecionado] = useState<Cliente | null>(null);
 
   useEffect(() => {
-    listarClientes().then(setClientes).finally(() => setLoading(false));
-  }, []);
-
-  const clientesFiltrados = clientes.filter((c) =>
-    c.nome.toLowerCase().includes(busca.toLowerCase()) ||
-    c.telefone.includes(busca)
-  );
+    setLoading(true);
+    listarClientes(busca).then(setClientes).finally(() => setLoading(false));
+  }, [busca]);
 
   return (
     <div className="space-y-5">
@@ -55,7 +51,7 @@ export default function ClientesPage() {
             <div className="flex justify-center py-16" data-testid="clientes-loading">
               <div className="h-6 w-6 animate-spin rounded-full border-2 border-[var(--color-orange)] border-t-transparent" />
             </div>
-          ) : clientesFiltrados.length === 0 ? (
+          ) : clientes.length === 0 ? (
             <EmptyState
               icon={Users}
               titulo="Nenhum cliente encontrado"
@@ -64,7 +60,7 @@ export default function ClientesPage() {
             />
           ) : (
             <div className="space-y-2" data-testid="clientes-list">
-              {clientesFiltrados.map((cliente) => (
+              {clientes.map((cliente) => (
                 <button
                   key={cliente.id}
                   onClick={() => setSelecionado(selecionado?.id === cliente.id ? null : cliente)}

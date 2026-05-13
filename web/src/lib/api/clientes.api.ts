@@ -1,14 +1,34 @@
 import type { Cliente } from "@/types";
-import { mockClientes } from "@/lib/mocks/clientes.mock";
+import { obterLojaId, requestAutenticada } from "@/lib/api/client";
 
-const delay = (ms = 400) => new Promise((r) => setTimeout(r, ms));
+type ClienteApi = {
+  id: string;
+  lojaId: string;
+  nome: string;
+  telefone: string;
+  criadoEm?: string;
+};
 
-export async function listarClientes(): Promise<Cliente[]> {
-  await delay();
-  return [...mockClientes].sort((a, b) => b.totalGasto - a.totalGasto);
+function toCliente(cliente: ClienteApi): Cliente {
+  return {
+    id: cliente.id,
+    nome: cliente.nome,
+    telefone: cliente.telefone,
+    totalPedidos: 0,
+    totalGasto: 0,
+    ultimoPedido: cliente.criadoEm ?? new Date().toISOString(),
+    criadoEm: cliente.criadoEm ?? new Date().toISOString(),
+  };
+}
+
+export async function listarClientes(search?: string): Promise<Cliente[]> {
+  const lojaId = obterLojaId();
+  const termo = search?.trim() ? `&search=${encodeURIComponent(search.trim())}` : "";
+  const clientes = await requestAutenticada<ClienteApi[]>(`/clientes?lojaId=${lojaId}${termo}`, { method: "GET" });
+  return clientes.map(toCliente);
 }
 
 export async function buscarCliente(id: string): Promise<Cliente | undefined> {
-  await delay(200);
-  return mockClientes.find((c) => c.id === id);
+  const cliente = await requestAutenticada<ClienteApi>(`/clientes/${id}`, { method: "GET" });
+  return toCliente(cliente);
 }

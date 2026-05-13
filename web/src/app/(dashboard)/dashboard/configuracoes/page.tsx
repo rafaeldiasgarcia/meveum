@@ -9,7 +9,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
-import { buscarLoja, atualizarLoja, toggleAberta, atualizarHorarios } from "@/lib/api/configuracoes.api";
+import {
+  buscarLoja,
+  atualizarLoja,
+  toggleAberta,
+  atualizarHorarios,
+  criarTaxaEntrega,
+  removerTaxaEntrega,
+} from "@/lib/api/configuracoes.api";
 import type { Loja, HorarioFuncionamento } from "@/types";
 
 const DIA_LABELS: Record<string, string> = {
@@ -55,6 +62,26 @@ export default function ConfiguracoesPage() {
     const atualizada = await toggleAberta();
     setLoja(atualizada);
     toast.success(atualizada.aberta ? "Loja aberta!" : "Loja fechada.");
+  }
+
+  async function adicionarTaxa() {
+    setSalvando(true);
+    try {
+      const atualizada = await criarTaxaEntrega();
+      setLoja(atualizada);
+      toast.success("Taxa de entrega adicionada.");
+    } catch { toast.error("Erro ao adicionar taxa."); }
+    finally { setSalvando(false); }
+  }
+
+  async function removerTaxa(id: string) {
+    setSalvando(true);
+    try {
+      const atualizada = await removerTaxaEntrega(id);
+      setLoja(atualizada);
+      toast.success("Taxa de entrega removida.");
+    } catch { toast.error("Erro ao remover taxa."); }
+    finally { setSalvando(false); }
   }
 
   if (loading) {
@@ -232,7 +259,7 @@ export default function ConfiguracoesPage() {
               <MapPin className="h-4 w-4 text-[var(--color-muted)]" />
               Taxas de entrega
             </CardTitle>
-            <Button variant="ghost" size="sm" data-testid="adicionar-taxa-button">
+            <Button variant="ghost" size="sm" onClick={adicionarTaxa} loading={salvando} data-testid="adicionar-taxa-button">
               <Plus className="h-3.5 w-3.5" /> Adicionar
             </Button>
           </div>
@@ -249,7 +276,7 @@ export default function ConfiguracoesPage() {
                   <span className="text-sm font-semibold text-[var(--color-foreground)]">
                     {taxa.taxa === 0 ? "Grátis" : `R$ ${taxa.taxa.toFixed(2)}`}
                   </span>
-                  <Button variant="ghost" size="icon" data-testid={`taxa-remover-${taxa.id}`}>
+                  <Button variant="ghost" size="icon" onClick={() => removerTaxa(taxa.id)} data-testid={`taxa-remover-${taxa.id}`}>
                     <Trash2 className="h-3.5 w-3.5 text-red-400" />
                   </Button>
                 </div>

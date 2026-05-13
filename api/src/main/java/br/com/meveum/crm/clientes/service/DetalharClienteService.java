@@ -1,5 +1,6 @@
 package br.com.meveum.crm.clientes.service;
 
+import br.com.meveum.auth.validator.service.ValidarAcessoLojaService;
 import br.com.meveum.crm.clientes.dto.DetalharClienteResponse;
 import br.com.meveum.crm.clientes.mapper.ClienteMapper;
 import br.com.meveum.crm.clientes.validator.service.ValidarClienteExisteService;
@@ -12,10 +13,12 @@ import org.springframework.stereotype.Service;
 public class DetalharClienteService {
 
     private final ValidarClienteExisteService validarClienteExisteService;
+    private final ValidarAcessoLojaService validarAcessoLojaService;
     private final ClienteMapper clienteMapper;
 
     public DetalharClienteResponse detalhar(UUID clienteId) {
         var cliente = validarClienteExisteService.validar(clienteId);
+        validarAcessoLojaService.validar(cliente.getLoja().getId());
         return clienteMapper.toDetalharClienteResponse(cliente);
     }
 }

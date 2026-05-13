@@ -57,6 +57,18 @@ class PedidoValidatorTest {
     }
 
     @Test
+    void deveValidarTransicaoStatusPermitida() {
+        assertThatCode(() -> pedidoValidator.validarTransicaoStatus(StatusPedido.NEW, StatusPedido.PREPARING)).doesNotThrowAnyException();
+    }
+
+    @Test
+    void deveLancarErroQuandoTransicaoStatusNaoPermitida() {
+        assertThatThrownBy(() -> pedidoValidator.validarTransicaoStatus(StatusPedido.DONE, StatusPedido.PREPARING))
+            .isInstanceOf(RegraNegocioException.class)
+            .hasMessage("Transicao de status do pedido nao permitida.");
+    }
+
+    @Test
     void deveLancarErroQuandoStatusNaoInformado() {
         assertThatThrownBy(() -> pedidoValidator.validarAtualizacaoStatus(new AtualizarStatusPedidoRequest(null)))
             .isInstanceOf(RegraNegocioException.class)
