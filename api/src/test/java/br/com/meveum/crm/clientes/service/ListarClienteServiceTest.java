@@ -7,8 +7,8 @@ import static org.mockito.Mockito.when;
 import br.com.meveum.auth.validator.service.ValidarAcessoLojaService;
 import br.com.meveum.crm.clientes.dto.ListarClienteResponse;
 import br.com.meveum.crm.clientes.mapper.ClienteMapper;
-import br.com.meveum.crm.entity.Cliente;
 import br.com.meveum.crm.repository.ClienteRepository;
+import br.com.meveum.crm.repository.projection.ClienteEstatisticaProjection;
 import br.com.meveum.lojas.validator.service.ValidarLojaExisteService;
 import java.util.List;
 import java.util.UUID;
@@ -35,9 +35,9 @@ class ListarClienteServiceTest {
     @Test
     void deveListarClientesDaLoja() {
         var lojaId = UUID.randomUUID();
-        var cliente = new Cliente();
+        var cliente = org.mockito.Mockito.mock(ClienteEstatisticaProjection.class);
         var response = ListarClienteResponse.builder().id(UUID.randomUUID()).build();
-        when(clienteRepository.findByLojaIdOrderByNameAsc(lojaId)).thenReturn(List.of(cliente));
+        when(clienteRepository.listarComEstatisticas(lojaId, null)).thenReturn(List.of(cliente));
         when(clienteMapper.toListarClienteResponse(cliente)).thenReturn(response);
 
         var resultado = service.listar(lojaId, null);
@@ -50,9 +50,9 @@ class ListarClienteServiceTest {
     @Test
     void deveBuscarClientesPorTermo() {
         var lojaId = UUID.randomUUID();
-        var cliente = new Cliente();
+        var cliente = org.mockito.Mockito.mock(ClienteEstatisticaProjection.class);
         var response = ListarClienteResponse.builder().id(UUID.randomUUID()).build();
-        when(clienteRepository.buscarPorLojaETermo(lojaId, "rafa")).thenReturn(List.of(cliente));
+        when(clienteRepository.listarComEstatisticas(lojaId, "rafa")).thenReturn(List.of(cliente));
         when(clienteMapper.toListarClienteResponse(cliente)).thenReturn(response);
 
         var resultado = service.listar(lojaId, " rafa ");

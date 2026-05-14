@@ -14,6 +14,8 @@ import br.com.meveum.crm.clientes.dto.ListarClienteResponse;
 import br.com.meveum.crm.clientes.dto.ListarEnderecoClienteResponse;
 import br.com.meveum.crm.entity.Cliente;
 import br.com.meveum.crm.entity.EnderecoCliente;
+import br.com.meveum.crm.repository.projection.ClienteEstatisticaProjection;
+import java.math.BigDecimal;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -43,6 +45,23 @@ public class ClienteMapper {
             .lojaId(cliente.getLoja().getId())
             .nome(cliente.getName())
             .telefone(cliente.getPhone())
+            .totalPedidos(0L)
+            .totalGasto(BigDecimal.ZERO)
+            .ultimoPedido(null)
+            .criadoEm(cliente.getCreatedAt())
+            .build();
+    }
+
+    public ListarClienteResponse toListarClienteResponse(ClienteEstatisticaProjection projection) {
+        return ListarClienteResponse.builder()
+            .id(projection.getId())
+            .lojaId(projection.getLojaId())
+            .nome(projection.getNome())
+            .telefone(projection.getTelefone())
+            .totalPedidos(projection.getTotalPedidos())
+            .totalGasto(projection.getTotalGasto())
+            .ultimoPedido(projection.getUltimoPedido())
+            .criadoEm(projection.getCriadoEm())
             .build();
     }
 

@@ -22,9 +22,8 @@ public class ListarClienteService {
     public List<ListarClienteResponse> listar(UUID lojaId, String termo) {
         validarLojaExisteService.validar(lojaId);
         validarAcessoLojaService.validar(lojaId);
-        var clientes = termo == null || termo.isBlank()
-            ? clienteRepository.findByLojaIdOrderByNameAsc(lojaId)
-            : clienteRepository.buscarPorLojaETermo(lojaId, termo.trim());
+        var termoBusca = termo == null ? null : termo.trim();
+        var clientes = clienteRepository.listarComEstatisticas(lojaId, termoBusca);
 
         return clientes
             .stream()
