@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class DashboardValidator {
 
-    private static final int LIMITE_MAXIMO_PRODUTOS = 50;
+    private static final int LIMITE_MAXIMO_DASHBOARD = 50;
 
     public void validarPeriodo(OffsetDateTime inicio, OffsetDateTime fim) {
         if (inicio == null) {
@@ -25,15 +25,15 @@ public class DashboardValidator {
 
     public void validarLimite(Integer limite) {
         if (limite == null) {
-            throw new RegraNegocioException("Limite de produtos do dashboard e obrigatorio.");
+            throw new RegraNegocioException("Limite do dashboard e obrigatorio.");
         }
 
         if (limite <= 0) {
-            throw new RegraNegocioException("Limite de produtos do dashboard deve ser maior que zero.");
+            throw new RegraNegocioException("Limite do dashboard deve ser maior que zero.");
         }
 
-        if (limite > LIMITE_MAXIMO_PRODUTOS) {
-            throw new RegraNegocioException("Limite de produtos do dashboard deve ser menor ou igual a 50.");
+        if (limite > LIMITE_MAXIMO_DASHBOARD) {
+            throw new RegraNegocioException("Limite do dashboard deve ser menor ou igual a 50.");
         }
     }
 }

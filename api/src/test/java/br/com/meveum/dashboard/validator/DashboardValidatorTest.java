@@ -52,13 +52,13 @@ class DashboardValidatorTest {
     void deveLancarErroQuandoLimiteNaoInformado() {
         assertThatThrownBy(() -> dashboardValidator.validarLimite(null))
             .isInstanceOf(RegraNegocioException.class)
-            .hasMessage("Limite de produtos do dashboard e obrigatorio.");
+            .hasMessage("Limite do dashboard e obrigatorio.");
     }
 
     @Test
     void deveLancarErroQuandoLimiteMaiorQueMaximo() {
         assertThatThrownBy(() -> dashboardValidator.validarLimite(51))
             .isInstanceOf(RegraNegocioException.class)
-            .hasMessage("Limite de produtos do dashboard deve ser menor ou igual a 50.");
+            .hasMessage("Limite do dashboard deve ser menor ou igual a 50.");
     }
 }

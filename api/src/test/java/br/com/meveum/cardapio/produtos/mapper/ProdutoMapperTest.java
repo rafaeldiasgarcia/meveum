@@ -31,6 +31,7 @@ class ProdutoMapperTest {
         assertThat(produto.getImageUrl()).isEqualTo("img");
         assertThat(produto.getSortOrder()).isEqualTo(2);
         assertThat(produto.getActive()).isTrue();
+        assertThat(produto.getAvailable()).isTrue();
     }
 
     @Test
@@ -96,7 +97,7 @@ class ProdutoMapperTest {
         assertThat(response.categoriaId()).isEqualTo(produto.getCategoria().getId());
         assertThat(response.nome()).isEqualTo(produto.getName());
         assertThat(response.ativo()).isEqualTo(produto.getActive());
-        assertThat(response.disponivel()).isEqualTo(produto.getActive());
+        assertThat(response.disponivel()).isEqualTo(produto.getAvailable());
     }
 
     @Test
@@ -130,6 +131,7 @@ class ProdutoMapperTest {
         produto.setImageUrl("img");
         produto.setSortOrder(2);
         produto.setActive(true);
+        produto.setAvailable(true);
         produto.setCreatedAt(OffsetDateTime.now().minusDays(1));
         produto.setUpdatedAt(OffsetDateTime.now());
         return produto;

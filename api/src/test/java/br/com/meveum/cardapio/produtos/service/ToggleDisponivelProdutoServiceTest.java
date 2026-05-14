@@ -1,6 +1,8 @@
 package br.com.meveum.cardapio.produtos.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -11,6 +13,7 @@ import br.com.meveum.cardapio.produtos.mapper.ProdutoMapper;
 import br.com.meveum.cardapio.produtos.validator.service.ValidarProdutoExisteService;
 import br.com.meveum.cardapio.repository.ProdutoRepository;
 import br.com.meveum.lojas.entity.Loja;
+import br.com.meveum.shared.exception.RegraNegocioException;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,9 +44,10 @@ class ToggleDisponivelProdutoServiceTest {
         var produto = new Produto();
         produto.setLoja(loja);
         produto.setActive(true);
+        produto.setAvailable(true);
         var response = DetalharProdutoResponse.builder()
             .id(produtoId)
-            .ativo(false)
+            .ativo(true)
             .disponivel(false)
             .build();
 
@@ -54,7 +58,29 @@ class ToggleDisponivelProdutoServiceTest {
         var resultado = service.toggle(produtoId);
 
         assertThat(resultado).isEqualTo(response);
-        assertThat(produto.getActive()).isFalse();
+        assertThat(produto.getActive()).isTrue();
+        assertThat(produto.getAvailable()).isFalse();
         verify(validarAcessoLojaService).validar(lojaId);
+    }
+
+    @Test
+    void deveFalharAoAlternarProdutoInativo() {
+        var produtoId = UUID.randomUUID();
+        var lojaId = UUID.randomUUID();
+        var loja = new Loja();
+        loja.setId(lojaId);
+        var produto = new Produto();
+        produto.setLoja(loja);
+        produto.setActive(false);
+        produto.setAvailable(true);
+
+        when(validarProdutoExisteService.validar(produtoId)).thenReturn(produto);
+
+        assertThatThrownBy(() -> service.toggle(produtoId))
+            .isInstanceOf(RegraNegocioException.class)
+            .hasMessage("Produto inativo nao pode ter disponibilidade alterada.");
+
+        verify(validarAcessoLojaService).validar(lojaId);
+        verify(produtoRepository, never()).save(produto);
     }
 }
