@@ -53,6 +53,24 @@ pasta quando houver codigo real para ela.
 Siga esta ordem preferencial para evoluir o backend. A ordem existe para que
 cada etapa desbloqueie testes manuais e funcionalidades reais do sistema.
 
+## Roadmap da revisao atual
+
+Use este bloco para retomar a revisao backend/contratos iniciada em 2026-05-14.
+O escopo desta rodada permite alterar `api/` e `automations/`, mas nao alterar
+o frontend. Qualquer lacuna de frontend deve virar issue bem descrita.
+
+- [ ] Inventariar tabelas, migrations e entidades persistidas.
+- [ ] Inventariar todos os controllers/endpoints existentes no backend.
+- [ ] Comparar endpoints do backend com chamadas existentes no frontend, sem
+      alterar `web/`.
+- [ ] Abrir issues para lacunas de pagina, chamada ou implementacao no front.
+- [ ] Revisar autenticacao, ignorando OAuth social por enquanto.
+- [ ] Completar cobertura unitaria de `AuthValidator`.
+- [ ] Corrigir o primeiro teste do Bruno/Postman e cobrir novas features de
+      autenticacao na collection.
+- [ ] Rodar testes backend e registrar resultado.
+- [ ] Revisar CI/CD relacionado a backend e automacoes.
+
 1. `cardapio/categorias`
    - Status: concluido.
    - Manter CRUD, validators, mapper e testes unitarios como referencia para

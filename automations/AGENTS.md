@@ -159,6 +159,27 @@ Exemplos:
 
 ## Roadmap
 
+### Revisao atual - 2026-05-14
+
+Use este bloco para retomar a revisao completa das automacoes. O escopo desta
+rodada permite alterar `automations/` e `api/`, mas nao alterar `web/`.
+
+- [ ] Inventariar projetos, fixtures, presets, services, pages e specs.
+- [ ] Verificar se todas as specs usam fixtures locais e tags no segundo
+      argumento do `test`.
+- [ ] Remover logica, payloads e constantes indevidas de specs, mantendo apenas
+      orquestracao e `for` com `test.step()` quando necessario.
+- [ ] Conferir presets de usuario autenticado, segundo usuario, catalogo,
+      clientes, pedidos e dashboard.
+- [ ] Cobrir novas features de autenticacao nos testes de API, ignorando OAuth
+      social por enquanto.
+- [ ] Verificar se existe automacao para todos os fluxos atuais e previstos da
+      aplicacao sem criar E2E completo.
+- [ ] Abrir issues para lacunas que dependem de frontend ou comportamento ainda
+      nao implementado.
+- [ ] Rodar automacoes relevantes localmente e registrar resultado.
+- [ ] Revisar CI/CD e decidir se deve rodar suite completa ou apenas smoke.
+
 ### Fase 1 - Fundacao das automacoes
 
 - [x] Criar estrutura inicial de `pages`, `services`, `fixtures`, `tests` e
