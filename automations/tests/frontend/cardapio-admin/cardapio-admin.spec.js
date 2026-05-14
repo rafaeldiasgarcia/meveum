@@ -1,7 +1,7 @@
 import { test } from '../../../fixtures/frontend.fixture.js';
 
 test.describe('gestao visual de cardapio', () => {
-  test.beforeEach(async ({ cardapioAdminPage, sessaoUsuarioLogadoNoBrowser }) => {
+  test.beforeEach(async ({ cardapioAdminPage, catalogoCompleto, sessaoUsuarioLogadoNoBrowser }) => {
     await cardapioAdminPage.abrir();
   });
 

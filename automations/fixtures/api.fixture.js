@@ -20,6 +20,12 @@ import {
   criarUsuarioLogadoPreset,
   periodoDashboard as periodoDashboardPreset,
 } from '../presets/api.presets.js';
+import {
+  criarRedefinicaoSenha,
+  criarSolicitacaoRecuperacaoSenha,
+  redefinicaoSenhaTokenInvalido,
+  solicitacaoRecuperacaoSenhaInvalida,
+} from '../data/auth.data.js';
 import { criarCategoriaPayload } from '../data/catalogo.data.js';
 
 const API_BASE_URL = process.env.API_BASE_URL ?? 'http://127.0.0.1:8080';
@@ -98,6 +104,19 @@ export const test = base.extend({
         usuarioLogado.token
       )
     );
+  },
+  recuperacaoSenhaValida: async ({ authService, usuarioLogado }, use) => {
+    const recuperacao = await authService.validarSolicitacaoRecuperacaoSenha(
+      criarSolicitacaoRecuperacaoSenha(usuarioLogado.cadastro.email)
+    );
+
+    await use(criarRedefinicaoSenha(recuperacao.token));
+  },
+  solicitacaoRecuperacaoSenhaInvalida: async ({}, use) => {
+    await use(solicitacaoRecuperacaoSenhaInvalida);
+  },
+  redefinicaoSenhaTokenInvalido: async ({}, use) => {
+    await use(redefinicaoSenhaTokenInvalido);
   },
   clienteComEndereco: async ({ clientesService, usuarioLogado }, use) => {
     await use(await criarClienteComEnderecoPreset(clientesService, usuarioLogado));
