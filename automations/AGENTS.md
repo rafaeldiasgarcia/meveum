@@ -164,21 +164,27 @@ Exemplos:
 Use este bloco para retomar a revisao completa das automacoes. O escopo desta
 rodada permite alterar `automations/` e `api/`, mas nao alterar `web/`.
 
-- [ ] Inventariar projetos, fixtures, presets, services, pages e specs.
-- [ ] Verificar se todas as specs usam fixtures locais e tags no segundo
+- [x] Inventariar projetos, fixtures, presets, services, pages e specs.
+- [x] Verificar se todas as specs usam fixtures locais e tags no segundo
       argumento do `test`.
-- [ ] Remover logica, payloads e constantes indevidas de specs, mantendo apenas
+- [x] Remover logica, payloads e constantes indevidas de specs, mantendo apenas
       orquestracao e `for` com `test.step()` quando necessario.
-- [ ] Conferir presets de usuario autenticado, segundo usuario, catalogo,
+- [x] Conferir presets de usuario autenticado, segundo usuario, catalogo,
       clientes, pedidos e dashboard.
-- [ ] Cobrir novas features de autenticacao nos testes de API, ignorando OAuth
+- [x] Cobrir novas features de autenticacao nos testes de API, ignorando OAuth
       social por enquanto.
-- [ ] Verificar se existe automacao para todos os fluxos atuais e previstos da
+- [x] Verificar se existe automacao para todos os fluxos atuais e previstos da
       aplicacao sem criar E2E completo.
-- [ ] Abrir issues para lacunas que dependem de frontend ou comportamento ainda
+- [x] Abrir issues para lacunas que dependem de frontend ou comportamento ainda
       nao implementado.
-- [ ] Rodar automacoes relevantes localmente e registrar resultado.
-- [ ] Revisar CI/CD e decidir se deve rodar suite completa ou apenas smoke.
+- [x] Rodar automacoes relevantes localmente e registrar resultado.
+      - `npm.cmd test -- --project=rest`: 41 testes passando.
+      - `npm.cmd test -- --project=chrome`: 24 testes passando, com falhas
+        esperadas vinculadas a `#26` e `#27`.
+      - `npm.cmd test`: 65 testes passando.
+- [x] Revisar CI/CD e decidir se deve rodar suite completa ou apenas smoke.
+      - Manter suite completa no workflow de automacoes. O tempo local ficou
+        baixo e o ganho de contrato compensa mais do que rodar apenas smoke.
 
 ### Fase 1 - Fundacao das automacoes
 
@@ -234,21 +240,24 @@ rodada permite alterar `automations/` e `api/`, mas nao alterar `web/`.
 
 ## Proximo foco
 
-- Acompanhar e corrigir as issues abertas pelas falhas atuais da suite.
-- Reexecutar as integracoes depois que API e frontend forem ajustados.
-- Somente depois planejar os primeiros fluxos E2E realmente criticos.
+- Acompanhar as issues de frontend abertas para lacunas de tela/contrato.
+- Quando `#26` e `#27` forem corrigidas, remover os `test.fail` dos specs de
+  autenticacao.
+- Evoluir cobertura conforme novas telas administrativas forem implementadas,
+  ainda sem criar E2E completo.
 
 ## Bugs atualmente cobertos por issues
 
-- `#22` cadastro incompleto responde `401` em vez de `422`.
-- `#23` endereco invalido responde `401` em vez de `422`.
-- `#24` API permite acesso cruzado entre lojas de usuarios diferentes.
-- `#25` respostas `401` sem JWT chegam sem contrato de erro.
-- `#26` login e cadastro validos nao concluem a navegacao ao dashboard.
-- `#27` validacoes obrigatorias de auth nao ficam visiveis.
-- `#28` shell autenticado e rotas administrativas nao renderizam com
-  consistencia.
-- `#29` cardapio publico dinamico nao renderiza os dados da loja criada.
+- `#26` cadastro valido ainda depende de aceite de termos sem `data-testid`
+  estavel; o teste esta marcado como falha esperada.
+- `#27` validacoes obrigatorias do cadastro nao expõem todos os erros com
+  seletores estaveis; o teste esta marcado como falha esperada.
+- `#54` cardapio administrativo precisa gerenciar categorias e complementos.
+- `#55` configuracoes precisa CRUD real de areas de entrega e pagamentos.
+- `#56` clientes precisa CRUD, enderecos e estatisticas reais.
+- `#57` dashboard precisa consumir agregados reais da API.
+- `#58` cardapio publico quebra quando produto usa imagem externa em host nao
+  configurado no Next.
 
 ## Regras de manutencao
 

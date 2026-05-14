@@ -64,14 +64,17 @@ o frontend. Qualquer lacuna de frontend deve virar issue bem descrita.
 - [x] Comparar endpoints do backend com chamadas existentes no frontend, sem
       alterar `web/`.
 - [x] Abrir issues para lacunas de pagina, chamada ou implementacao no front:
-      `#54`, `#55`, `#56`, `#57`; detalhes adicionais em `#27`.
+      `#54`, `#55`, `#56`, `#57`, `#58`; detalhes adicionais em `#27`.
 - [x] Revisar autenticacao, ignorando OAuth social por enquanto.
 - [x] Completar cobertura unitaria de `AuthValidator`.
 - [x] Corrigir o primeiro teste do Bruno/Postman e cobrir novas features de
       autenticacao na collection: pasta Auth validada com Newman.
 - [x] Rodar testes backend e registrar resultado: `./mvnw.cmd test` com 325
       testes passando.
-- [ ] Revisar CI/CD relacionado a backend e automacoes.
+- [x] Revisar CI/CD relacionado a backend e automacoes.
+      - `ci.yml`: mantem unitarios/build de API e web.
+      - `automations.yml`: mantem suite completa de Playwright, pois a suite
+        atual roda rapido e cobre contratos de API + frontend integrado.
 
 1. `cardapio/categorias`
    - Status: concluido.
@@ -136,10 +139,11 @@ o frontend. Qualquer lacuna de frontend deve virar issue bem descrita.
 11. `auth`
     - Status: concluido parcialmente.
     - Login e cadastro inicial com JWT implementados para usuarios de loja.
+    - Recuperacao e redefinicao de senha implementadas e cobertas em unitario,
+      Postman/Newman e Playwright.
     - Proteger rotas administrativas e manter endpoints publicos do cardapio
       liberados para clientes.
-    - Depois evoluir para refresh token, recuperacao de senha e permissoes por
-      perfil.
+    - Depois evoluir para refresh token e permissoes por perfil.
 
 12. `painel autenticado`
     - Status: proximo.
