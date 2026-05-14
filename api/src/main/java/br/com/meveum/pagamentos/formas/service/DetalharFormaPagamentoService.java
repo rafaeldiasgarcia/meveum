@@ -1,5 +1,6 @@
 package br.com.meveum.pagamentos.formas.service;
 
+import br.com.meveum.auth.validator.service.ValidarAcessoLojaService;
 import br.com.meveum.pagamentos.formas.dto.DetalharFormaPagamentoResponse;
 import br.com.meveum.pagamentos.formas.mapper.FormaPagamentoMapper;
 import br.com.meveum.pagamentos.formas.validator.service.ValidarFormaPagamentoExisteService;
@@ -12,10 +13,12 @@ import org.springframework.stereotype.Service;
 public class DetalharFormaPagamentoService {
 
     private final ValidarFormaPagamentoExisteService validarFormaPagamentoExisteService;
+    private final ValidarAcessoLojaService validarAcessoLojaService;
     private final FormaPagamentoMapper formaPagamentoMapper;
 
     public DetalharFormaPagamentoResponse detalhar(UUID formaPagamentoId) {
         var formaPagamento = validarFormaPagamentoExisteService.validar(formaPagamentoId);
+        validarAcessoLojaService.validar(formaPagamento.getLoja().getId());
         return formaPagamentoMapper.toDetalharFormaPagamentoResponse(formaPagamento);
     }
 }

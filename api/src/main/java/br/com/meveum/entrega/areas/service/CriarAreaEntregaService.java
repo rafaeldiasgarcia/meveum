@@ -1,5 +1,6 @@
 package br.com.meveum.entrega.areas.service;
 
+import br.com.meveum.auth.validator.service.ValidarAcessoLojaService;
 import br.com.meveum.entrega.areas.dto.CriarAreaEntregaRequest;
 import br.com.meveum.entrega.areas.dto.CriarAreaEntregaResponse;
 import br.com.meveum.entrega.areas.mapper.AreaEntregaMapper;
@@ -15,12 +16,14 @@ public class CriarAreaEntregaService {
 
     private final AreaEntregaValidator areaEntregaValidator;
     private final ValidarLojaExisteService validarLojaExisteService;
+    private final ValidarAcessoLojaService validarAcessoLojaService;
     private final AreaEntregaLojaRepository areaEntregaLojaRepository;
     private final AreaEntregaMapper areaEntregaMapper;
 
     public CriarAreaEntregaResponse criar(CriarAreaEntregaRequest request) {
         areaEntregaValidator.validarCriacao(request);
         var loja = validarLojaExisteService.validar(request.lojaId());
+        validarAcessoLojaService.validar(loja.getId());
         var areaEntrega = areaEntregaMapper.toEntity(request);
         areaEntrega.setLoja(loja);
         var areaEntregaSalva = areaEntregaLojaRepository.save(areaEntrega);

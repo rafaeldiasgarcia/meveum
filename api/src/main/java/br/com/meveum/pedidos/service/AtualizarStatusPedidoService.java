@@ -1,5 +1,6 @@
 package br.com.meveum.pedidos.service;
 
+import br.com.meveum.auth.validator.service.ValidarAcessoLojaService;
 import br.com.meveum.integracao_whatsapp.service.MontarMensagemPedidoWhatsappService;
 import br.com.meveum.pedidos.dto.AtualizarStatusPedidoRequest;
 import br.com.meveum.pedidos.dto.AtualizarStatusPedidoResponse;
@@ -17,12 +18,14 @@ public class AtualizarStatusPedidoService {
 
     private final PedidoValidator pedidoValidator;
     private final ValidarPedidoExisteService validarPedidoExisteService;
+    private final ValidarAcessoLojaService validarAcessoLojaService;
     private final PedidoRepository pedidoRepository;
     private final PedidoMapper pedidoMapper;
     private final MontarMensagemPedidoWhatsappService montarMensagemPedidoWhatsappService;
 
     public AtualizarStatusPedidoResponse atualizar(UUID pedidoId, AtualizarStatusPedidoRequest request) {
         var pedido = validarPedidoExisteService.validar(pedidoId);
+        validarAcessoLojaService.validar(pedido.getLoja().getId());
         pedidoValidator.validarTransicaoStatus(pedido.getStatus(), request.status());
         pedido.setStatus(request.status());
         pedido.setWhatsappMessage(montarMensagemPedidoWhatsappService.montarStatusAtualizado(pedido));

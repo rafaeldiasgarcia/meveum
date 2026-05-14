@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import br.com.meveum.auth.validator.service.ValidarAcessoLojaService;
 import br.com.meveum.entrega.areas.dto.AtualizarAreaEntregaRequest;
 import br.com.meveum.entrega.areas.dto.AtualizarAreaEntregaResponse;
 import br.com.meveum.entrega.areas.mapper.AreaEntregaMapper;
@@ -12,6 +13,7 @@ import br.com.meveum.entrega.areas.validator.service.ValidarAreaEntregaExisteSer
 import br.com.meveum.entrega.entity.AreaEntregaLoja;
 import br.com.meveum.entrega.entity.enums.TipoAreaEntrega;
 import br.com.meveum.entrega.repository.AreaEntregaLojaRepository;
+import br.com.meveum.lojas.entity.Loja;
 import java.math.BigDecimal;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
@@ -31,6 +33,9 @@ class AtualizarAreaEntregaServiceTest {
     private AreaEntregaLojaRepository areaEntregaLojaRepository;
     @Mock
     private AreaEntregaMapper areaEntregaMapper;
+    @Mock
+    private ValidarAcessoLojaService validarAcessoLojaService;
+
     @InjectMocks
     private AtualizarAreaEntregaService service;
 
@@ -38,7 +43,10 @@ class AtualizarAreaEntregaServiceTest {
     void deveAtualizarAreaEntrega() {
         var areaId = UUID.randomUUID();
         var request = new AtualizarAreaEntregaRequest("Centro", TipoAreaEntrega.NEIGHBORHOOD, "Centro", null, null, null, BigDecimal.TEN, null, 30, true);
+        var loja = new Loja();
+        loja.setId(UUID.randomUUID());
         var area = new AreaEntregaLoja();
+        area.setLoja(loja);
         var response = AtualizarAreaEntregaResponse.builder().id(areaId).build();
         when(validarAreaEntregaExisteService.validar(areaId)).thenReturn(area);
         when(areaEntregaLojaRepository.save(area)).thenReturn(area);

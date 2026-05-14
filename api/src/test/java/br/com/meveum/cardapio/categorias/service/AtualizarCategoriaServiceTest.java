@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import br.com.meveum.auth.validator.service.ValidarAcessoLojaService;
 import br.com.meveum.cardapio.categorias.dto.AtualizarCategoriaRequest;
 import br.com.meveum.cardapio.categorias.dto.AtualizarCategoriaResponse;
 import br.com.meveum.cardapio.entity.Categoria;
@@ -37,6 +38,9 @@ class AtualizarCategoriaServiceTest {
 
     @Mock
     private CategoriaMapper categoriaMapper;
+
+    @Mock
+    private ValidarAcessoLojaService validarAcessoLojaService;
 
     @InjectMocks
     private AtualizarCategoriaService atualizarCategoriaService;

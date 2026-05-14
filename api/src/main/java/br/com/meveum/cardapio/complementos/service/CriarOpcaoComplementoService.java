@@ -1,5 +1,6 @@
 package br.com.meveum.cardapio.complementos.service;
 
+import br.com.meveum.auth.validator.service.ValidarAcessoLojaService;
 import br.com.meveum.cardapio.complementos.dto.CriarOpcaoComplementoRequest;
 import br.com.meveum.cardapio.complementos.dto.CriarOpcaoComplementoResponse;
 import br.com.meveum.cardapio.complementos.mapper.ComplementoMapper;
@@ -19,12 +20,14 @@ public class CriarOpcaoComplementoService {
     private final ValidarLojaComplementoExisteService validarLojaComplementoExisteService;
     private final ValidarGrupoComplementoExisteService validarGrupoComplementoExisteService;
     private final ValidarNomeOpcaoComplementoDisponivelService validarNomeOpcaoComplementoDisponivelService;
+    private final ValidarAcessoLojaService validarAcessoLojaService;
     private final OpcaoComplementoRepository opcaoComplementoRepository;
     private final ComplementoMapper complementoMapper;
 
     public CriarOpcaoComplementoResponse criar(CriarOpcaoComplementoRequest request) {
         complementoValidator.validarCriacaoOpcao(request);
         var loja = validarLojaComplementoExisteService.validar(request.lojaId());
+        validarAcessoLojaService.validar(loja.getId());
         var grupoComplemento = validarGrupoComplementoExisteService.validarAtivo(
             request.grupoComplementoId(),
             request.lojaId()

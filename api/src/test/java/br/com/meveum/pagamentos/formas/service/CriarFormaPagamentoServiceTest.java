@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import br.com.meveum.auth.validator.service.ValidarAcessoLojaService;
 import br.com.meveum.lojas.entity.Loja;
 import br.com.meveum.lojas.validator.service.ValidarLojaExisteService;
 import br.com.meveum.pagamentos.entity.FormaPagamentoLoja;
@@ -34,6 +35,9 @@ class CriarFormaPagamentoServiceTest {
     private FormaPagamentoLojaRepository formaPagamentoLojaRepository;
     @Mock
     private FormaPagamentoMapper formaPagamentoMapper;
+    @Mock
+    private ValidarAcessoLojaService validarAcessoLojaService;
+
     @InjectMocks
     private CriarFormaPagamentoService service;
 
@@ -42,6 +46,7 @@ class CriarFormaPagamentoServiceTest {
         var lojaId = UUID.randomUUID();
         var request = new CriarFormaPagamentoRequest(lojaId, FormaPagamento.PIX);
         var loja = new Loja();
+        loja.setId(lojaId);
         var formaPagamento = new FormaPagamentoLoja();
         var response = CriarFormaPagamentoResponse.builder().id(UUID.randomUUID()).lojaId(lojaId).build();
         when(validarLojaExisteService.validar(lojaId)).thenReturn(loja);

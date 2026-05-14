@@ -4,7 +4,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import br.com.meveum.auth.validator.service.ValidarAcessoLojaService;
 import br.com.meveum.integracao_whatsapp.service.MontarMensagemPedidoWhatsappService;
+import br.com.meveum.lojas.entity.Loja;
 import br.com.meveum.pedidos.dto.AtualizarStatusPedidoRequest;
 import br.com.meveum.pedidos.dto.AtualizarStatusPedidoResponse;
 import br.com.meveum.pedidos.entity.Pedido;
@@ -33,6 +35,9 @@ class AtualizarStatusPedidoServiceTest {
     private PedidoMapper pedidoMapper;
     @Mock
     private MontarMensagemPedidoWhatsappService montarMensagemPedidoWhatsappService;
+    @Mock
+    private ValidarAcessoLojaService validarAcessoLojaService;
+
     @InjectMocks
     private AtualizarStatusPedidoService service;
 
@@ -40,7 +45,10 @@ class AtualizarStatusPedidoServiceTest {
     void deveAtualizarStatusPedido() {
         var pedidoId = UUID.randomUUID();
         var request = new AtualizarStatusPedidoRequest(StatusPedido.PREPARING);
+        var loja = new Loja();
+        loja.setId(UUID.randomUUID());
         var pedido = new Pedido();
+        pedido.setLoja(loja);
         pedido.setStatus(StatusPedido.NEW);
         var response = AtualizarStatusPedidoResponse.builder().id(pedidoId).status(StatusPedido.PREPARING).build();
         when(validarPedidoExisteService.validar(pedidoId)).thenReturn(pedido);

@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import br.com.meveum.auth.validator.service.ValidarAcessoLojaService;
 import br.com.meveum.cardapio.complementos.dto.VincularGrupoComplementoProdutoRequest;
 import br.com.meveum.cardapio.complementos.dto.VincularGrupoComplementoProdutoResponse;
 import br.com.meveum.cardapio.complementos.mapper.ComplementoMapper;
@@ -39,6 +40,9 @@ class VincularGrupoComplementoProdutoServiceTest {
     private ProdutoGrupoComplementoRepository produtoGrupoComplementoRepository;
     @Mock
     private ComplementoMapper complementoMapper;
+    @Mock
+    private ValidarAcessoLojaService validarAcessoLojaService;
+
     @InjectMocks
     private VincularGrupoComplementoProdutoService service;
 

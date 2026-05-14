@@ -1,5 +1,6 @@
 package br.com.meveum.cardapio.categorias.service;
 
+import br.com.meveum.auth.validator.service.ValidarAcessoLojaService;
 import br.com.meveum.cardapio.categorias.dto.AtualizarCategoriaRequest;
 import br.com.meveum.cardapio.categorias.dto.AtualizarCategoriaResponse;
 import br.com.meveum.cardapio.categorias.mapper.CategoriaMapper;
@@ -18,12 +19,14 @@ public class AtualizarCategoriaService {
     private final CategoriaValidator categoriaValidator;
     private final ValidarCategoriaExisteService validarCategoriaExisteService;
     private final ValidarNomeCategoriaDisponivelService validarNomeCategoriaDisponivelService;
+    private final ValidarAcessoLojaService validarAcessoLojaService;
     private final CategoriaRepository categoriaRepository;
     private final CategoriaMapper categoriaMapper;
 
     public AtualizarCategoriaResponse atualizar(UUID categoriaId, AtualizarCategoriaRequest request) {
         categoriaValidator.validarAtualizacao(request);
         var categoria = validarCategoriaExisteService.validar(categoriaId);
+        validarAcessoLojaService.validar(categoria.getLoja().getId());
         validarNomeCategoriaDisponivelService.validarAtualizacao(
             categoria.getLoja().getId(),
             categoriaId,

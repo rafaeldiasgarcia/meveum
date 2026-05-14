@@ -1,5 +1,6 @@
 package br.com.meveum.lojas.service;
 
+import br.com.meveum.auth.validator.service.ValidarAcessoLojaService;
 import br.com.meveum.lojas.dto.AtualizarPausaManualLojaRequest;
 import br.com.meveum.lojas.dto.AtualizarPausaManualLojaResponse;
 import br.com.meveum.lojas.mapper.LojaMapper;
@@ -16,12 +17,14 @@ public class AtualizarPausaManualLojaService {
 
     private final LojaValidator lojaValidator;
     private final ValidarLojaExisteService validarLojaExisteService;
+    private final ValidarAcessoLojaService validarAcessoLojaService;
     private final LojaRepository lojaRepository;
     private final LojaMapper lojaMapper;
 
     public AtualizarPausaManualLojaResponse atualizar(UUID lojaId, AtualizarPausaManualLojaRequest request) {
         lojaValidator.validarPausaManual(request);
         var loja = validarLojaExisteService.validar(lojaId);
+        validarAcessoLojaService.validar(loja.getId());
         loja.setManuallyPaused(request.pausadaManualmente());
         var lojaSalva = lojaRepository.save(loja);
         return lojaMapper.toAtualizarPausaManualLojaResponse(lojaSalva);

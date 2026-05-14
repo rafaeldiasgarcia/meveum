@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import br.com.meveum.auth.validator.service.ValidarAcessoLojaService;
 import br.com.meveum.lojas.dto.AtualizarPausaManualLojaRequest;
 import br.com.meveum.lojas.dto.AtualizarPausaManualLojaResponse;
 import br.com.meveum.lojas.entity.Loja;
@@ -29,6 +30,9 @@ class AtualizarPausaManualLojaServiceTest {
     private LojaRepository lojaRepository;
     @Mock
     private LojaMapper lojaMapper;
+    @Mock
+    private ValidarAcessoLojaService validarAcessoLojaService;
+
     @InjectMocks
     private AtualizarPausaManualLojaService service;
 

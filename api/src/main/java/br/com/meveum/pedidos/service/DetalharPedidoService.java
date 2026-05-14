@@ -1,5 +1,6 @@
 package br.com.meveum.pedidos.service;
 
+import br.com.meveum.auth.validator.service.ValidarAcessoLojaService;
 import br.com.meveum.pedidos.dto.DetalharPedidoResponse;
 import br.com.meveum.pedidos.entity.ComplementoItemPedido;
 import br.com.meveum.pedidos.entity.ItemPedido;
@@ -18,12 +19,14 @@ import org.springframework.stereotype.Service;
 public class DetalharPedidoService {
 
     private final ValidarPedidoExisteService validarPedidoExisteService;
+    private final ValidarAcessoLojaService validarAcessoLojaService;
     private final ItemPedidoRepository itemPedidoRepository;
     private final ComplementoItemPedidoRepository complementoItemPedidoRepository;
     private final PedidoMapper pedidoMapper;
 
     public DetalharPedidoResponse detalhar(UUID pedidoId) {
         var pedido = validarPedidoExisteService.validar(pedidoId);
+        validarAcessoLojaService.validar(pedido.getLoja().getId());
         var itens = itemPedidoRepository.findByPedidoId(pedidoId);
         var complementosPorItem = new HashMap<ItemPedido, List<ComplementoItemPedido>>();
         for (var item : itens) {
