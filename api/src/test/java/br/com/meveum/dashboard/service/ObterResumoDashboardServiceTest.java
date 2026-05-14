@@ -40,10 +40,15 @@ class ObterResumoDashboardServiceTest {
     void deveObterResumoDashboard() {
         var lojaId = UUID.randomUUID();
         var inicio = OffsetDateTime.now().minusDays(1);
-        var fim = OffsetDateTime.now();
+        var fim = inicio.plusDays(1);
+        var inicioAnterior = inicio.minusDays(1);
         var response = ObterResumoDashboardResponse.builder().lojaId(lojaId).build();
         when(pedidoRepository.somarFaturamentoPorLojaEPeriodo(lojaId, inicio, fim)).thenReturn(BigDecimal.valueOf(100));
         when(pedidoRepository.contarPedidosValidosPorLojaEPeriodo(lojaId, inicio, fim)).thenReturn(2L);
+        when(pedidoRepository.calcularTempoMedioCozinhaMinutos(lojaId, inicio, fim)).thenReturn(10D);
+        when(pedidoRepository.somarFaturamentoPorLojaEPeriodo(lojaId, inicioAnterior, inicio)).thenReturn(BigDecimal.valueOf(50));
+        when(pedidoRepository.contarPedidosValidosPorLojaEPeriodo(lojaId, inicioAnterior, inicio)).thenReturn(1L);
+        when(pedidoRepository.calcularTempoMedioCozinhaMinutos(lojaId, inicioAnterior, inicio)).thenReturn(5D);
         when(pedidoRepository.countByLojaIdAndStatusAndCreatedAtBetween(lojaId, StatusPedido.NEW, inicio, fim)).thenReturn(1L);
         when(pedidoRepository.countByLojaIdAndStatusAndCreatedAtBetween(lojaId, StatusPedido.PREPARING, inicio, fim)).thenReturn(2L);
         when(pedidoRepository.countByLojaIdAndStatusAndCreatedAtBetween(lojaId, StatusPedido.OUT_FOR_DELIVERY, inicio, fim)).thenReturn(3L);
@@ -54,6 +59,11 @@ class ObterResumoDashboardServiceTest {
             BigDecimal.valueOf(100),
             2L,
             BigDecimal.valueOf(50).setScale(2),
+            10D,
+            100D,
+            100D,
+            0D,
+            100D,
             1L,
             2L,
             3L,
@@ -73,15 +83,25 @@ class ObterResumoDashboardServiceTest {
     void deveRetornarTicketMedioZeroQuandoNaoHouverPedidoValido() {
         var lojaId = UUID.randomUUID();
         var inicio = OffsetDateTime.now().minusDays(1);
-        var fim = OffsetDateTime.now();
+        var fim = inicio.plusDays(1);
+        var inicioAnterior = inicio.minusDays(1);
         var response = ObterResumoDashboardResponse.builder().lojaId(lojaId).ticketMedio(BigDecimal.ZERO).build();
         when(pedidoRepository.somarFaturamentoPorLojaEPeriodo(lojaId, inicio, fim)).thenReturn(BigDecimal.ZERO);
         when(pedidoRepository.contarPedidosValidosPorLojaEPeriodo(lojaId, inicio, fim)).thenReturn(0L);
+        when(pedidoRepository.calcularTempoMedioCozinhaMinutos(lojaId, inicio, fim)).thenReturn(0D);
+        when(pedidoRepository.somarFaturamentoPorLojaEPeriodo(lojaId, inicioAnterior, inicio)).thenReturn(BigDecimal.ZERO);
+        when(pedidoRepository.contarPedidosValidosPorLojaEPeriodo(lojaId, inicioAnterior, inicio)).thenReturn(0L);
+        when(pedidoRepository.calcularTempoMedioCozinhaMinutos(lojaId, inicioAnterior, inicio)).thenReturn(0D);
         when(dashboardMapper.toObterResumoDashboardResponse(
             lojaId,
             BigDecimal.ZERO,
             0L,
             BigDecimal.ZERO,
+            0D,
+            0D,
+            0D,
+            0D,
+            0D,
             0L,
             0L,
             0L,

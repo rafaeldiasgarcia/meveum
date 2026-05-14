@@ -13,6 +13,8 @@ public interface ItemPedidoRepository extends JpaRepository<ItemPedido, UUID> {
 
     List<ItemPedido> findByPedidoId(UUID pedidoId);
 
+    List<ItemPedido> findByPedidoIdIn(List<UUID> pedidoIds);
+
     @Query(value = """
         select
             cast(i.product_id as varchar) as produtoId,
