@@ -1,5 +1,6 @@
 package br.com.meveum.cardapio.complementos.service;
 
+import br.com.meveum.auth.validator.service.ValidarAcessoLojaService;
 import br.com.meveum.cardapio.complementos.dto.ListarGrupoComplementoResponse;
 import br.com.meveum.cardapio.complementos.mapper.ComplementoMapper;
 import br.com.meveum.cardapio.complementos.validator.service.ValidarLojaComplementoExisteService;
@@ -14,11 +15,13 @@ import org.springframework.stereotype.Service;
 public class ListarGrupoComplementoService {
 
     private final ValidarLojaComplementoExisteService validarLojaComplementoExisteService;
+    private final ValidarAcessoLojaService validarAcessoLojaService;
     private final GrupoComplementoRepository grupoComplementoRepository;
     private final ComplementoMapper complementoMapper;
 
     public List<ListarGrupoComplementoResponse> listar(UUID lojaId) {
         validarLojaComplementoExisteService.validar(lojaId);
+        validarAcessoLojaService.validar(lojaId);
 
         return grupoComplementoRepository.findByLojaIdOrderBySortOrderAsc(lojaId)
             .stream()

@@ -33,7 +33,7 @@ export function criarProdutoPayload(lojaId, categoriaId) {
     nome: `Produto ${id}`,
     descricao: `Produto criado pela automacao ${id}`,
     preco: 29.9,
-    imagemUrl: `https://images.example.test/${id}.png`,
+    imagemUrl: null,
     ordem: 1,
   };
 }

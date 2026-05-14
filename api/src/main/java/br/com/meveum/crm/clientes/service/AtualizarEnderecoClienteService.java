@@ -1,5 +1,6 @@
 package br.com.meveum.crm.clientes.service;
 
+import br.com.meveum.auth.validator.service.ValidarAcessoLojaService;
 import br.com.meveum.crm.clientes.dto.AtualizarEnderecoClienteRequest;
 import br.com.meveum.crm.clientes.dto.AtualizarEnderecoClienteResponse;
 import br.com.meveum.crm.clientes.mapper.ClienteMapper;
@@ -16,12 +17,14 @@ public class AtualizarEnderecoClienteService {
 
     private final ClienteValidator clienteValidator;
     private final ValidarEnderecoClienteExisteService validarEnderecoClienteExisteService;
+    private final ValidarAcessoLojaService validarAcessoLojaService;
     private final EnderecoClienteRepository enderecoClienteRepository;
     private final ClienteMapper clienteMapper;
 
     public AtualizarEnderecoClienteResponse atualizar(UUID clienteId, UUID enderecoId, AtualizarEnderecoClienteRequest request) {
         clienteValidator.validarAtualizacaoEndereco(request);
         var endereco = validarEnderecoClienteExisteService.validar(clienteId, enderecoId);
+        validarAcessoLojaService.validar(endereco.getCliente().getLoja().getId());
         clienteMapper.toEntity(request, endereco);
         var enderecoSalvo = enderecoClienteRepository.save(endereco);
         return clienteMapper.toAtualizarEnderecoClienteResponse(enderecoSalvo);

@@ -1,7 +1,7 @@
 import { test } from '../../../fixtures/frontend.fixture.js';
 
 test.describe('gestao visual de pedidos', () => {
-  test.beforeEach(async ({ pedidosPage, sessaoUsuarioLogadoNoBrowser }) => {
+  test.beforeEach(async ({ pedidoPickup, pedidosPage, sessaoUsuarioLogadoNoBrowser }) => {
     await pedidosPage.abrir();
   });
 

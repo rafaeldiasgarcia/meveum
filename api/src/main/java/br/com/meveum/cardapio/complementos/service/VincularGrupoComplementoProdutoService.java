@@ -1,5 +1,6 @@
 package br.com.meveum.cardapio.complementos.service;
 
+import br.com.meveum.auth.validator.service.ValidarAcessoLojaService;
 import br.com.meveum.cardapio.complementos.dto.VincularGrupoComplementoProdutoRequest;
 import br.com.meveum.cardapio.complementos.dto.VincularGrupoComplementoProdutoResponse;
 import br.com.meveum.cardapio.complementos.mapper.ComplementoMapper;
@@ -20,6 +21,7 @@ public class VincularGrupoComplementoProdutoService {
     private final ValidarProdutoExisteService validarProdutoExisteService;
     private final ValidarGrupoComplementoExisteService validarGrupoComplementoExisteService;
     private final ValidarVinculoProdutoGrupoComplementoService validarVinculoProdutoGrupoComplementoService;
+    private final ValidarAcessoLojaService validarAcessoLojaService;
     private final ProdutoGrupoComplementoRepository produtoGrupoComplementoRepository;
     private final ComplementoMapper complementoMapper;
 
@@ -30,6 +32,7 @@ public class VincularGrupoComplementoProdutoService {
         complementoValidator.validarVinculoProdutoGrupo(request);
         var produto = validarProdutoExisteService.validar(produtoId);
         var lojaId = produto.getLoja().getId();
+        validarAcessoLojaService.validar(lojaId);
         var grupoComplemento = validarGrupoComplementoExisteService.validarAtivo(request.grupoComplementoId(), lojaId);
         validarVinculoProdutoGrupoComplementoService.validarDisponivelParaCriacao(produtoId, request.grupoComplementoId());
 

@@ -1,5 +1,6 @@
 package br.com.meveum.pagamentos.formas.service;
 
+import br.com.meveum.auth.validator.service.ValidarAcessoLojaService;
 import br.com.meveum.pagamentos.formas.dto.AtualizarFormaPagamentoRequest;
 import br.com.meveum.pagamentos.formas.dto.AtualizarFormaPagamentoResponse;
 import br.com.meveum.pagamentos.formas.mapper.FormaPagamentoMapper;
@@ -18,6 +19,7 @@ public class AtualizarFormaPagamentoService {
     private final FormaPagamentoValidator formaPagamentoValidator;
     private final ValidarFormaPagamentoExisteService validarFormaPagamentoExisteService;
     private final ValidarFormaPagamentoDisponivelService validarFormaPagamentoDisponivelService;
+    private final ValidarAcessoLojaService validarAcessoLojaService;
     private final FormaPagamentoLojaRepository formaPagamentoLojaRepository;
     private final FormaPagamentoMapper formaPagamentoMapper;
 
@@ -25,6 +27,7 @@ public class AtualizarFormaPagamentoService {
         formaPagamentoValidator.validarAtualizacao(request);
         var formaPagamento = validarFormaPagamentoExisteService.validar(formaPagamentoId);
         var lojaId = formaPagamento.getLoja().getId();
+        validarAcessoLojaService.validar(lojaId);
         validarFormaPagamentoDisponivelService.validarAtualizacao(lojaId, formaPagamentoId, request.formaPagamento());
         formaPagamentoMapper.toEntity(request, formaPagamento);
         var formaPagamentoSalva = formaPagamentoLojaRepository.save(formaPagamento);

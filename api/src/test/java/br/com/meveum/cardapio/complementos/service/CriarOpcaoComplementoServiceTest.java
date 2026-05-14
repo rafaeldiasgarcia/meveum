@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import br.com.meveum.auth.validator.service.ValidarAcessoLojaService;
 import br.com.meveum.cardapio.complementos.dto.CriarOpcaoComplementoRequest;
 import br.com.meveum.cardapio.complementos.dto.CriarOpcaoComplementoResponse;
 import br.com.meveum.cardapio.complementos.mapper.ComplementoMapper;
@@ -38,6 +39,9 @@ class CriarOpcaoComplementoServiceTest {
     private OpcaoComplementoRepository opcaoComplementoRepository;
     @Mock
     private ComplementoMapper complementoMapper;
+    @Mock
+    private ValidarAcessoLojaService validarAcessoLojaService;
+
     @InjectMocks
     private CriarOpcaoComplementoService service;
 

@@ -1,7 +1,7 @@
 import { test } from '../../../fixtures/frontend.fixture.js';
 
 test.describe('gestao visual de clientes', () => {
-  test.beforeEach(async ({ clientesPage, sessaoUsuarioLogadoNoBrowser }) => {
+  test.beforeEach(async ({ clientesPage, clienteComEndereco, sessaoUsuarioLogadoNoBrowser }) => {
     await clientesPage.abrir();
   });
 

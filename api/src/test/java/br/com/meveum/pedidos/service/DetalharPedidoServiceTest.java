@@ -5,6 +5,8 @@ import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyMap;
 import static org.mockito.Mockito.when;
 
+import br.com.meveum.auth.validator.service.ValidarAcessoLojaService;
+import br.com.meveum.lojas.entity.Loja;
 import br.com.meveum.pedidos.dto.DetalharPedidoResponse;
 import br.com.meveum.pedidos.entity.ItemPedido;
 import br.com.meveum.pedidos.entity.Pedido;
@@ -31,13 +33,19 @@ class DetalharPedidoServiceTest {
     private ComplementoItemPedidoRepository complementoItemPedidoRepository;
     @Mock
     private PedidoMapper pedidoMapper;
+    @Mock
+    private ValidarAcessoLojaService validarAcessoLojaService;
+
     @InjectMocks
     private DetalharPedidoService service;
 
     @Test
     void deveDetalharPedidoComItens() {
         var pedidoId = UUID.randomUUID();
+        var loja = new Loja();
+        loja.setId(UUID.randomUUID());
         var pedido = new Pedido();
+        pedido.setLoja(loja);
         var item = new ItemPedido();
         item.setId(UUID.randomUUID());
         var response = DetalharPedidoResponse.builder().id(pedidoId).build();

@@ -4,9 +4,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import br.com.meveum.auth.validator.service.ValidarAcessoLojaService;
 import br.com.meveum.cardapio.entity.Categoria;
 import br.com.meveum.cardapio.repository.CategoriaRepository;
 import br.com.meveum.cardapio.categorias.validator.service.ValidarCategoriaExisteService;
+import br.com.meveum.lojas.entity.Loja;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,13 +25,19 @@ class ExcluirCategoriaServiceTest {
     @Mock
     private CategoriaRepository categoriaRepository;
 
+    @Mock
+    private ValidarAcessoLojaService validarAcessoLojaService;
+
     @InjectMocks
     private ExcluirCategoriaService excluirCategoriaService;
 
     @Test
     void deveInativarCategoria() {
         var categoriaId = UUID.randomUUID();
+        var loja = new Loja();
+        loja.setId(UUID.randomUUID());
         var categoria = new Categoria();
+        categoria.setLoja(loja);
         categoria.setActive(true);
         when(validarCategoriaExisteService.validar(categoriaId)).thenReturn(categoria);
 

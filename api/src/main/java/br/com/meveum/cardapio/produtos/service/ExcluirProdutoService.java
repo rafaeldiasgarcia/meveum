@@ -1,5 +1,6 @@
 package br.com.meveum.cardapio.produtos.service;
 
+import br.com.meveum.auth.validator.service.ValidarAcessoLojaService;
 import br.com.meveum.cardapio.produtos.validator.service.ValidarProdutoExisteService;
 import br.com.meveum.cardapio.repository.ProdutoRepository;
 import java.util.UUID;
@@ -11,10 +12,12 @@ import org.springframework.stereotype.Service;
 public class ExcluirProdutoService {
 
     private final ValidarProdutoExisteService validarProdutoExisteService;
+    private final ValidarAcessoLojaService validarAcessoLojaService;
     private final ProdutoRepository produtoRepository;
 
     public void excluir(UUID produtoId) {
         var produto = validarProdutoExisteService.validar(produtoId);
+        validarAcessoLojaService.validar(produto.getLoja().getId());
         produto.setActive(false);
         produtoRepository.save(produto);
     }

@@ -5,7 +5,11 @@ test('cria lista detalha e atualiza cliente da loja', { tag: ['@api', '@smoke', 
   clienteComEndereco,
   usuarioLogado,
 }) => {
-  await clientesService.validarListagem(usuarioLogado.lojaId, clienteComEndereco.cliente);
+  await clientesService.validarListagem(
+    usuarioLogado.lojaId,
+    clienteComEndereco.cliente,
+    usuarioLogado.token
+  );
   await clientesService.validarDetalhe(
     clienteComEndereco.cliente.id,
     clienteComEndereco.cliente,

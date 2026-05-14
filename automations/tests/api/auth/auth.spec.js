@@ -33,3 +33,24 @@ test('bloqueia consulta do usuario autenticado sem jwt', { tag: ['@api', '@negat
 }) => {
   await authService.validarBloqueioSemToken();
 });
+
+test('solicita recuperacao e redefine senha por token', { tag: ['@api', '@smoke', '@contrato'] }, async ({
+  authService,
+  recuperacaoSenhaValida,
+}) => {
+  await authService.validarRedefinicaoSenha(recuperacaoSenhaValida);
+});
+
+test('rejeita solicitacao de recuperacao sem email', { tag: ['@api', '@negativo', '@contrato'] }, async ({
+  authService,
+  solicitacaoRecuperacaoSenhaInvalida,
+}) => {
+  await authService.validarSolicitacaoRecuperacaoSenhaInvalida(solicitacaoRecuperacaoSenhaInvalida);
+});
+
+test('rejeita redefinicao com token invalido', { tag: ['@api', '@negativo', '@regressao'] }, async ({
+  authService,
+  redefinicaoSenhaTokenInvalido,
+}) => {
+  await authService.validarRedefinicaoSenhaInvalida(redefinicaoSenhaTokenInvalido);
+});

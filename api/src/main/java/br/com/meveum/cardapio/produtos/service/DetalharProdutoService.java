@@ -1,5 +1,6 @@
 package br.com.meveum.cardapio.produtos.service;
 
+import br.com.meveum.auth.validator.service.ValidarAcessoLojaService;
 import br.com.meveum.cardapio.produtos.dto.DetalharProdutoResponse;
 import br.com.meveum.cardapio.produtos.mapper.ProdutoMapper;
 import br.com.meveum.cardapio.produtos.validator.service.ValidarProdutoExisteService;
@@ -12,10 +13,12 @@ import org.springframework.stereotype.Service;
 public class DetalharProdutoService {
 
     private final ValidarProdutoExisteService validarProdutoExisteService;
+    private final ValidarAcessoLojaService validarAcessoLojaService;
     private final ProdutoMapper produtoMapper;
 
     public DetalharProdutoResponse detalhar(UUID produtoId) {
         var produto = validarProdutoExisteService.validar(produtoId);
+        validarAcessoLojaService.validar(produto.getLoja().getId());
         return produtoMapper.toDetalharProdutoResponse(produto);
     }
 }

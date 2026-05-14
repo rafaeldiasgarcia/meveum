@@ -18,6 +18,7 @@ test('cadastra usuario novo pelo formulario', { tag: ['@frontend', '@regressao',
   novoCadastroFrontend,
   registerPage,
 }) => {
+  test.fail(true, 'Issue #26: cadastro valido exige aceite de termos sem data-testid estavel.');
   await registerPage.abrir();
   await registerPage.cadastrar(novoCadastroFrontend);
   await dashboardPage.validarUsuarioExibido(novoCadastroFrontend.nome);
@@ -35,7 +36,26 @@ test('mostra validacoes obrigatorias no login', { tag: ['@frontend', '@negativo'
 test('mostra validacoes obrigatorias no cadastro', { tag: ['@frontend', '@negativo', '@regressao'] }, async ({
   registerPage,
 }) => {
+  test.fail(true, 'Issue #27: cadastro nao exibe todos os erros obrigatorios com seletores estaveis.');
   await registerPage.abrir();
   await registerPage.enviarSemPreencher();
   await registerPage.validarErrosObrigatorios();
+});
+
+test('solicita recuperacao de senha e exibe token de desenvolvimento', { tag: ['@frontend', '@regressao', '@contrato'] }, async ({
+  forgotPasswordPage,
+  usuarioLogado,
+}) => {
+  await forgotPasswordPage.abrir();
+  await forgotPasswordPage.solicitar(usuarioLogado.cadastro.email);
+  await forgotPasswordPage.validarTokenExibido();
+});
+
+test('redefine senha usando token de recuperacao', { tag: ['@frontend', '@regressao', '@contrato'] }, async ({
+  resetPasswordPage,
+  redefinicaoSenhaFrontend,
+}) => {
+  await resetPasswordPage.abrirComToken(redefinicaoSenhaFrontend.token);
+  await resetPasswordPage.redefinir(redefinicaoSenhaFrontend);
+  await resetPasswordPage.validarFormularioVisivel();
 });

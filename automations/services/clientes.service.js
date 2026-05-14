@@ -15,8 +15,12 @@ export class ClientesService {
     return this.request.post('/clientes', { data: payload });
   }
 
-  async listar(lojaId) {
-    return this.request.get(`/clientes?lojaId=${lojaId}`);
+  async listar(lojaId, token) {
+    return this.request.get(`/clientes?lojaId=${lojaId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
   }
 
   async detalhar(clienteId, token) {
@@ -83,8 +87,8 @@ export class ClientesService {
     return body;
   }
 
-  async validarListagem(lojaId, cliente) {
-    const body = await esperarStatusEJson(await this.listar(lojaId), 200);
+  async validarListagem(lojaId, cliente, token) {
+    const body = await esperarStatusEJson(await this.listar(lojaId, token), 200);
     esperarListaComItem(body, (item) => item.id === cliente.id);
     return body;
   }

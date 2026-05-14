@@ -1,5 +1,6 @@
 package br.com.meveum.cardapio.produtos.service;
 
+import br.com.meveum.auth.validator.service.ValidarAcessoLojaService;
 import br.com.meveum.cardapio.produtos.dto.AtualizarProdutoRequest;
 import br.com.meveum.cardapio.produtos.dto.AtualizarProdutoResponse;
 import br.com.meveum.cardapio.produtos.mapper.ProdutoMapper;
@@ -20,6 +21,7 @@ public class AtualizarProdutoService {
     private final ValidarProdutoExisteService validarProdutoExisteService;
     private final ValidarCategoriaProdutoExisteService validarCategoriaProdutoExisteService;
     private final ValidarNomeProdutoDisponivelService validarNomeProdutoDisponivelService;
+    private final ValidarAcessoLojaService validarAcessoLojaService;
     private final ProdutoRepository produtoRepository;
     private final ProdutoMapper produtoMapper;
 
@@ -27,6 +29,7 @@ public class AtualizarProdutoService {
         produtoValidator.validarAtualizacao(request);
         var produto = validarProdutoExisteService.validar(produtoId);
         var lojaId = produto.getLoja().getId();
+        validarAcessoLojaService.validar(lojaId);
         var categoria = validarCategoriaProdutoExisteService.validar(request.categoriaId(), lojaId);
         validarNomeProdutoDisponivelService.validarAtualizacao(lojaId, produtoId, request.nome());
         produtoMapper.toEntity(request, produto);

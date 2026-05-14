@@ -27,6 +27,14 @@ export class AuthService {
     });
   }
 
+  async solicitarRecuperacaoSenha(payload) {
+    return this.request.post('/auth/esqueci-senha', { data: payload });
+  }
+
+  async redefinirSenha(payload) {
+    return this.request.post('/auth/redefinir-senha', { data: payload });
+  }
+
   async validarRegistro(payload) {
     const body = await esperarStatusEJson(await this.registrar(payload), 201);
     esperarCamposPresentes(body, ['token', 'usuario']);
@@ -90,5 +98,28 @@ export class AuthService {
 
   async validarBloqueioSemToken() {
     return esperarErro(await this.request.get('/auth/me'), 401);
+  }
+
+  async validarSolicitacaoRecuperacaoSenha(payload) {
+    const body = await esperarStatusEJson(await this.solicitarRecuperacaoSenha(payload), 200);
+    esperarCamposPresentes(body, ['mensagem', 'token', 'expiraEm']);
+    expect(body.token.length).toBeGreaterThan(0);
+    return body;
+  }
+
+  async validarSolicitacaoRecuperacaoSenhaInvalida(payload) {
+    return esperarErro(await this.solicitarRecuperacaoSenha(payload), 422);
+  }
+
+  async validarRedefinicaoSenha(payload) {
+    const body = await esperarStatusEJson(await this.redefinirSenha(payload), 200);
+    esperarCampos(body, {
+      mensagem: 'Senha redefinida com sucesso.',
+    });
+    return body;
+  }
+
+  async validarRedefinicaoSenhaInvalida(payload) {
+    return esperarErro(await this.redefinirSenha(payload), 422);
   }
 }

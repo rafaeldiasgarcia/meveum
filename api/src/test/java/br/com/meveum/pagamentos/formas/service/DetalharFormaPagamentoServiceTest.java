@@ -3,6 +3,8 @@ package br.com.meveum.pagamentos.formas.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
+import br.com.meveum.auth.validator.service.ValidarAcessoLojaService;
+import br.com.meveum.lojas.entity.Loja;
 import br.com.meveum.pagamentos.entity.FormaPagamentoLoja;
 import br.com.meveum.pagamentos.formas.dto.DetalharFormaPagamentoResponse;
 import br.com.meveum.pagamentos.formas.mapper.FormaPagamentoMapper;
@@ -21,13 +23,19 @@ class DetalharFormaPagamentoServiceTest {
     private ValidarFormaPagamentoExisteService validarFormaPagamentoExisteService;
     @Mock
     private FormaPagamentoMapper formaPagamentoMapper;
+    @Mock
+    private ValidarAcessoLojaService validarAcessoLojaService;
+
     @InjectMocks
     private DetalharFormaPagamentoService service;
 
     @Test
     void deveDetalharFormaPagamento() {
         var formaPagamentoId = UUID.randomUUID();
+        var loja = new Loja();
+        loja.setId(UUID.randomUUID());
         var formaPagamento = new FormaPagamentoLoja();
+        formaPagamento.setLoja(loja);
         var response = DetalharFormaPagamentoResponse.builder().id(formaPagamentoId).build();
         when(validarFormaPagamentoExisteService.validar(formaPagamentoId)).thenReturn(formaPagamento);
         when(formaPagamentoMapper.toDetalharFormaPagamentoResponse(formaPagamento)).thenReturn(response);

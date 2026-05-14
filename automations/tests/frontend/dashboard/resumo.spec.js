@@ -1,7 +1,7 @@
 import { test } from '../../../fixtures/frontend.fixture.js';
 
 test.describe('dashboard autenticado', () => {
-  test.beforeEach(async ({ dashboardResumoPage, sessaoUsuarioLogadoNoBrowser }) => {
+  test.beforeEach(async ({ dashboardComMovimento, dashboardResumoPage, sessaoUsuarioLogadoNoBrowser }) => {
     await dashboardResumoPage.abrir();
   });
 

@@ -24,6 +24,20 @@ export function criarCredenciaisInvalidas(email) {
   };
 }
 
+export function criarSolicitacaoRecuperacaoSenha(email) {
+  return {
+    email,
+  };
+}
+
+export function criarRedefinicaoSenha(token, senha = 'meveum123') {
+  return {
+    token,
+    senha,
+    confirmarSenha: senha,
+  };
+}
+
 export function criarCadastroDuplicado(cadastro) {
   return {
     ...cadastro,
@@ -39,4 +53,14 @@ export const cadastroInvalido = Object.freeze({
   email: '',
   senha: '',
   confirmarSenha: '',
+});
+
+export const solicitacaoRecuperacaoSenhaInvalida = Object.freeze({
+  email: '',
+});
+
+export const redefinicaoSenhaTokenInvalido = Object.freeze({
+  token: 'token-invalido',
+  senha: 'meveum123',
+  confirmarSenha: 'meveum123',
 });

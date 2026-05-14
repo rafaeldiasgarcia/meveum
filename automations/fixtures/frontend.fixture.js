@@ -1,6 +1,8 @@
 import { test as apiTest } from './api.fixture.js';
 import { LoginPage } from '../pages/login.page.js';
 import { RegisterPage } from '../pages/register.page.js';
+import { ForgotPasswordPage } from '../pages/forgot-password.page.js';
+import { ResetPasswordPage } from '../pages/reset-password.page.js';
 import { DashboardPage } from '../pages/dashboard.page.js';
 import { LandingPage } from '../pages/landing.page.js';
 import { DashboardResumoPage } from '../pages/dashboard-resumo.page.js';
@@ -10,7 +12,11 @@ import { CardapioAdminPage } from '../pages/cardapio-admin.page.js';
 import { ConfiguracoesPage } from '../pages/configuracoes.page.js';
 import { CardapioPublicoPage } from '../pages/cardapio-publico.page.js';
 import { SessaoBrowserService } from '../services/sessao-browser.service.js';
-import { criarCadastroUsuario } from '../data/auth.data.js';
+import {
+  criarCadastroUsuario,
+  criarRedefinicaoSenha,
+  criarSolicitacaoRecuperacaoSenha,
+} from '../data/auth.data.js';
 import { buscaClienteSemResultado, buscaSemResultado } from '../data/frontend.data.js';
 
 export const test = apiTest.extend({
@@ -19,6 +25,12 @@ export const test = apiTest.extend({
   },
   registerPage: async ({ page }, use) => {
     await use(new RegisterPage(page));
+  },
+  forgotPasswordPage: async ({ page }, use) => {
+    await use(new ForgotPasswordPage(page));
+  },
+  resetPasswordPage: async ({ page }, use) => {
+    await use(new ResetPasswordPage(page));
   },
   dashboardPage: async ({ page }, use) => {
     await use(new DashboardPage(page));
@@ -49,6 +61,13 @@ export const test = apiTest.extend({
   },
   novoCadastroFrontend: async ({}, use) => {
     await use(criarCadastroUsuario('Cadastro Frontend'));
+  },
+  redefinicaoSenhaFrontend: async ({ authService, usuarioLogado }, use) => {
+    const recuperacao = await authService.validarSolicitacaoRecuperacaoSenha(
+      criarSolicitacaoRecuperacaoSenha(usuarioLogado.cadastro.email)
+    );
+
+    await use(criarRedefinicaoSenha(recuperacao.token));
   },
   sessaoUsuarioLogadoNoBrowser: async ({ sessaoBrowserService, usuarioLogado }, use) => {
     await sessaoBrowserService.definirSessao({

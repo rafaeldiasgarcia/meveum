@@ -61,6 +61,22 @@
     {
       "key": "authToken",
       "value": ""
+    },
+    {
+      "key": "passwordResetToken",
+      "value": ""
+    },
+    {
+      "key": "registroEmail",
+      "value": ""
+    },
+    {
+      "key": "registroLoja",
+      "value": ""
+    },
+    {
+      "key": "registroTelefone",
+      "value": ""
     }
   ],
   "item": [
@@ -74,8 +90,16 @@
               "listen": "test",
               "script": {
                 "exec": [
+                  "pm.test(\"status 200\", () => pm.response.to.have.status(200));",
                   "const body = pm.response.json();",
-                  "pm.collectionVariables.set(\"authToken\", body.token);"
+                  "pm.test(\"retorna token e usuario\", () => {",
+                  "  pm.expect(body.token).to.be.a(\"string\").and.not.empty;",
+                  "  pm.expect(body.usuario).to.be.an(\"object\");",
+                  "  pm.expect(body.usuario.email).to.eql(\"admin@meveum.com\");",
+                  "  pm.expect(body.usuario.lojaId).to.be.a(\"string\").and.not.empty;",
+                  "});",
+                  "pm.collectionVariables.set(\"authToken\", body.token);",
+                  "pm.collectionVariables.set(\"lojaId\", body.usuario.lojaId);"
                 ],
                 "type": "text/javascript"
               }
@@ -122,7 +146,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"nome\": \"Usuario Teste\",\n  \"nomeLoja\": \"Loja Postman Nova\",\n  \"telefone\": \"11999999999\",\n  \"email\": \"usuario.postman@meveum.com\",\n  \"senha\": \"meveum123\",\n  \"confirmarSenha\": \"meveum123\"\n}",
+              "raw": "{\n  \"nome\": \"Usuario Teste\",\n  \"nomeLoja\": \"{{registroLoja}}\",\n  \"telefone\": \"{{registroTelefone}}\",\n  \"email\": \"{{registroEmail}}\",\n  \"senha\": \"meveum123\",\n  \"confirmarSenha\": \"meveum123\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -139,7 +163,36 @@
                 "registrar"
               ]
             }
-          }
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "const timestamp = Date.now();",
+                  "pm.collectionVariables.set(\"registroEmail\", `usuario.postman.${timestamp}@meveum.com`);",
+                  "pm.collectionVariables.set(\"registroLoja\", `Loja Postman ${timestamp}`);",
+                  "pm.collectionVariables.set(\"registroTelefone\", `119${String(timestamp).slice(-8)}`);"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status 201\", () => pm.response.to.have.status(201));",
+                  "const body = pm.response.json();",
+                  "pm.test(\"retorna token e usuario criado\", () => {",
+                  "  pm.expect(body.token).to.be.a(\"string\").and.not.empty;",
+                  "  pm.expect(body.usuario.email).to.eql(pm.collectionVariables.get(\"registroEmail\"));",
+                  "  pm.expect(body.usuario.lojaId).to.be.a(\"string\").and.not.empty;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
         },
         {
           "name": "Obter Usuario Autenticado",
@@ -165,6 +218,162 @@
                 "auth",
                 "me"
               ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status 200\", () => pm.response.to.have.status(200));",
+                  "const body = pm.response.json();",
+                  "pm.test(\"retorna usuario autenticado\", () => {",
+                  "  pm.expect(body.email).to.eql(\"admin@meveum.com\");",
+                  "  pm.expect(body.lojaId).to.eql(pm.collectionVariables.get(\"lojaId\"));",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Solicitar Recuperacao de Senha",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status 200\", () => pm.response.to.have.status(200));",
+                  "const body = pm.response.json();",
+                  "pm.test(\"retorna mensagem padrao e token de teste\", () => {",
+                  "  pm.expect(body.mensagem).to.be.a(\"string\").and.not.empty;",
+                  "  pm.expect(body.token).to.be.a(\"string\").and.not.empty;",
+                  "});",
+                  "pm.collectionVariables.set(\"passwordResetToken\", body.token);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/esqueci-senha",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "esqueci-senha"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@meveum.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Redefinir Senha com Token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status 200\", () => pm.response.to.have.status(200));",
+                  "const body = pm.response.json();",
+                  "pm.test(\"confirma redefinicao\", () => {",
+                  "  pm.expect(body.mensagem).to.eql(\"Senha redefinida com sucesso.\");",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/redefinir-senha",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "redefinir-senha"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"token\": \"{{passwordResetToken}}\",\n  \"senha\": \"meveum123\",\n  \"confirmarSenha\": \"meveum123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Rejeitar Redefinicao com Token Invalido",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status 422\", () => pm.response.to.have.status(422));",
+                  "const body = pm.response.json();",
+                  "pm.test(\"retorna erro de token invalido\", () => {",
+                  "  pm.expect(body.message || body.mensagem || body.erro).to.exist;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/redefinir-senha",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "redefinir-senha"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"token\": \"token-invalido\",\n  \"senha\": \"meveum123\",\n  \"confirmarSenha\": \"meveum123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             }
           }
         }

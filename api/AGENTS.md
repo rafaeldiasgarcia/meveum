@@ -53,6 +53,29 @@ pasta quando houver codigo real para ela.
 Siga esta ordem preferencial para evoluir o backend. A ordem existe para que
 cada etapa desbloqueie testes manuais e funcionalidades reais do sistema.
 
+## Roadmap da revisao atual
+
+Use este bloco para retomar a revisao backend/contratos iniciada em 2026-05-14.
+O escopo desta rodada permite alterar `api/` e `automations/`, mas nao alterar
+o frontend. Qualquer lacuna de frontend deve virar issue bem descrita.
+
+- [x] Inventariar tabelas, migrations e entidades persistidas.
+- [x] Inventariar todos os controllers/endpoints existentes no backend.
+- [x] Comparar endpoints do backend com chamadas existentes no frontend, sem
+      alterar `web/`.
+- [x] Abrir issues para lacunas de pagina, chamada ou implementacao no front:
+      `#54`, `#55`, `#56`, `#57`, `#58`; detalhes adicionais em `#27`.
+- [x] Revisar autenticacao, ignorando OAuth social por enquanto.
+- [x] Completar cobertura unitaria de `AuthValidator`.
+- [x] Corrigir o primeiro teste do Bruno/Postman e cobrir novas features de
+      autenticacao na collection: pasta Auth validada com Newman.
+- [x] Rodar testes backend e registrar resultado: `./mvnw.cmd test` com 325
+      testes passando.
+- [x] Revisar CI/CD relacionado a backend e automacoes.
+      - `ci.yml`: mantem unitarios/build de API e web.
+      - `automations.yml`: mantem suite completa de Playwright, pois a suite
+        atual roda rapido e cobre contratos de API + frontend integrado.
+
 1. `cardapio/categorias`
    - Status: concluido.
    - Manter CRUD, validators, mapper e testes unitarios como referencia para
@@ -116,10 +139,11 @@ cada etapa desbloqueie testes manuais e funcionalidades reais do sistema.
 11. `auth`
     - Status: concluido parcialmente.
     - Login e cadastro inicial com JWT implementados para usuarios de loja.
+    - Recuperacao e redefinicao de senha implementadas e cobertas em unitario,
+      Postman/Newman e Playwright.
     - Proteger rotas administrativas e manter endpoints publicos do cardapio
       liberados para clientes.
-    - Depois evoluir para refresh token, recuperacao de senha e permissoes por
-      perfil.
+    - Depois evoluir para refresh token e permissoes por perfil.
 
 12. `painel autenticado`
     - Status: proximo.
