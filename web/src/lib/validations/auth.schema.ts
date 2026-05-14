@@ -11,7 +11,7 @@ export const cadastroSchema = z.object({
   telefone: z.string().min(10, "Telefone inválido").max(15),
   email: z.string().min(1, "E-mail obrigatório").email("E-mail inválido"),
   senha: z.string().min(6, "Senha deve ter no mínimo 6 caracteres"),
-  confirmarSenha: z.string(),
+  confirmarSenha: z.string().min(1, "Confirmacao de senha obrigatoria"),
 }).refine((d) => d.senha === d.confirmarSenha, {
   message: "As senhas não conferem",
   path: ["confirmarSenha"],

@@ -162,7 +162,9 @@ export default function RegisterPage() {
                   {...register("nomeLoja")}
                 />
                 {errors.nomeLoja && (
-                  <p className="mt-1 text-xs text-red-500">{errors.nomeLoja.message}</p>
+                  <p className="mt-1 text-xs text-red-500" data-testid="nome-loja-error">
+                    {errors.nomeLoja.message}
+                  </p>
                 )}
               </div>
 
@@ -180,7 +182,9 @@ export default function RegisterPage() {
                     {...register("nome")}
                   />
                   {errors.nome && (
-                    <p className="mt-1 text-xs text-red-500">{errors.nome.message}</p>
+                    <p className="mt-1 text-xs text-red-500" data-testid="nome-error">
+                      {errors.nome.message}
+                    </p>
                   )}
                 </div>
                 <div>
@@ -196,7 +200,9 @@ export default function RegisterPage() {
                     {...register("telefone")}
                   />
                   {errors.telefone && (
-                    <p className="mt-1 text-xs text-red-500">{errors.telefone.message}</p>
+                    <p className="mt-1 text-xs text-red-500" data-testid="telefone-error">
+                      {errors.telefone.message}
+                    </p>
                   )}
                 </div>
               </div>
@@ -247,7 +253,9 @@ export default function RegisterPage() {
                     </button>
                   </div>
                   {errors.senha && (
-                    <p className="mt-1 text-xs text-red-500">{errors.senha.message}</p>
+                    <p className="mt-1 text-xs text-red-500" data-testid="register-password-error">
+                      {errors.senha.message}
+                    </p>
                   )}
                 </div>
                 <div>
@@ -276,6 +284,7 @@ export default function RegisterPage() {
                   type="checkbox"
                   checked={termsAccepted}
                   onChange={(e) => setTermsAccepted(e.target.checked)}
+                  data-testid="terms-checkbox"
                   className="mt-0.5 h-4 w-4 flex-shrink-0 cursor-pointer accent-[#EA580C]"
                 />
                 <span className="text-sm text-[#78716C]">
@@ -293,7 +302,7 @@ export default function RegisterPage() {
 
               <button
                 type="submit"
-                disabled={isSubmitting || !termsAccepted}
+                disabled={isSubmitting}
                 data-testid="submit-register-button"
                 className="mt-2 flex h-12 w-full items-center justify-center gap-2 rounded-lg bg-[#EA580C] font-semibold tracking-wide text-white transition-colors hover:bg-[#C2410C] disabled:opacity-50"
               >

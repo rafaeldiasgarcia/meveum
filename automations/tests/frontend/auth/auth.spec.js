@@ -18,7 +18,6 @@ test('cadastra usuario novo pelo formulario', { tag: ['@frontend', '@regressao',
   novoCadastroFrontend,
   registerPage,
 }) => {
-  test.fail(true, 'Issue #26: cadastro valido exige aceite de termos sem data-testid estavel.');
   await registerPage.abrir();
   await registerPage.cadastrar(novoCadastroFrontend);
   await dashboardPage.validarUsuarioExibido(novoCadastroFrontend.nome);
@@ -36,7 +35,6 @@ test('mostra validacoes obrigatorias no login', { tag: ['@frontend', '@negativo'
 test('mostra validacoes obrigatorias no cadastro', { tag: ['@frontend', '@negativo', '@regressao'] }, async ({
   registerPage,
 }) => {
-  test.fail(true, 'Issue #27: cadastro nao exibe todos os erros obrigatorios com seletores estaveis.');
   await registerPage.abrir();
   await registerPage.enviarSemPreencher();
   await registerPage.validarErrosObrigatorios();

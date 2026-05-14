@@ -10,6 +10,7 @@ export class RegisterPage {
     this.email = page.getByTestId('register-email-input');
     this.senha = page.getByTestId('register-password-input');
     this.confirmarSenha = page.getByTestId('confirm-password-input');
+    this.aceiteTermos = page.getByTestId('terms-checkbox');
     this.botaoCadastrar = page.getByTestId('submit-register-button');
     this.erroNome = page.getByTestId('nome-error');
     this.erroEmail = page.getByTestId('register-email-error');
@@ -28,6 +29,7 @@ export class RegisterPage {
     await this.email.fill(payload.email);
     await this.senha.fill(payload.senha);
     await this.confirmarSenha.fill(payload.confirmarSenha);
+    await this.aceiteTermos.check();
     await this.botaoCadastrar.click();
     await this.page.waitForURL('**/dashboard');
   }
