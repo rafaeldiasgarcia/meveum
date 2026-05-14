@@ -175,7 +175,10 @@ export function CheckoutDrawer({ lojaId, onFechar, onVoltarCarrinho }: Props) {
   if (pedidoId) {
     return (
       <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center">
-        <div className="relative bg-white w-full sm:max-w-lg rounded-t-2xl sm:rounded-2xl p-6 flex flex-col items-center gap-4 text-center">
+        <div
+          className="relative bg-white w-full sm:max-w-lg rounded-t-2xl sm:rounded-2xl p-6 flex flex-col items-center gap-4 text-center"
+          data-testid="checkout-success"
+        >
           <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center">
             <Check className="w-8 h-8 text-green-600" />
           </div>
@@ -197,7 +200,10 @@ export function CheckoutDrawer({ lojaId, onFechar, onVoltarCarrinho }: Props) {
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center">
       <div className="absolute inset-0 bg-black/50" onClick={onFechar} />
-      <div className="relative bg-white w-full sm:max-w-lg rounded-t-3xl sm:rounded-3xl max-h-[90vh] flex flex-col overflow-hidden">
+      <div
+        className="relative bg-white w-full sm:max-w-lg rounded-t-3xl sm:rounded-3xl max-h-[90vh] flex flex-col overflow-hidden"
+        data-testid="checkout-drawer"
+      >
         <div className="w-10 h-1 bg-gray-200 rounded-full mx-auto mt-3" />
 
         <div className="flex items-center gap-3 px-4 py-3 border-b border-gray-100 mt-1">
@@ -221,6 +227,7 @@ export function CheckoutDrawer({ lojaId, onFechar, onVoltarCarrinho }: Props) {
                   key={t}
                   type="button"
                   onClick={() => set("tipo", t)}
+                  data-testid={`checkout-type-${t.toLowerCase()}`}
                   className={`w-full flex items-center gap-4 p-4 rounded-2xl border-2 cursor-pointer transition-all text-left ${
                     dados.tipo === t
                       ? "border-orange-500 bg-orange-50"
@@ -255,6 +262,7 @@ export function CheckoutDrawer({ lojaId, onFechar, onVoltarCarrinho }: Props) {
                   value={dados.nome}
                   onChange={(e) => set("nome", e.target.value)}
                   placeholder="Seu nome completo"
+                  data-testid="checkout-name-input"
                   className="w-full px-3 py-2.5 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400"
                 />
               </div>
@@ -265,6 +273,7 @@ export function CheckoutDrawer({ lojaId, onFechar, onVoltarCarrinho }: Props) {
                   onChange={(e) => set("telefone", e.target.value)}
                   placeholder="(11) 99999-9999"
                   type="tel"
+                  data-testid="checkout-phone-input"
                   className="w-full px-3 py-2.5 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400"
                 />
               </div>
@@ -275,6 +284,7 @@ export function CheckoutDrawer({ lojaId, onFechar, onVoltarCarrinho }: Props) {
                   onChange={(e) => set("observacao", e.target.value)}
                   placeholder="Ex: Tocar a campainha, cachorro bravo"
                   rows={2}
+                  data-testid="checkout-note-input"
                   className="w-full px-3 py-2.5 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400 resize-none"
                 />
               </div>
@@ -290,6 +300,7 @@ export function CheckoutDrawer({ lojaId, onFechar, onVoltarCarrinho }: Props) {
                     value={dados.rua}
                     onChange={(e) => set("rua", e.target.value)}
                     placeholder="Rua das Flores"
+                    data-testid="checkout-street-input"
                     className="w-full px-3 py-2.5 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400"
                   />
                 </div>
@@ -299,6 +310,7 @@ export function CheckoutDrawer({ lojaId, onFechar, onVoltarCarrinho }: Props) {
                     value={dados.numero}
                     onChange={(e) => set("numero", e.target.value)}
                     placeholder="123"
+                    data-testid="checkout-number-input"
                     className="w-full px-3 py-2.5 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400"
                   />
                 </div>
@@ -309,6 +321,7 @@ export function CheckoutDrawer({ lojaId, onFechar, onVoltarCarrinho }: Props) {
                   value={dados.complemento}
                   onChange={(e) => set("complemento", e.target.value)}
                   placeholder="Apto 12, Bloco B"
+                  data-testid="checkout-complement-input"
                   className="w-full px-3 py-2.5 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400"
                 />
               </div>
@@ -319,6 +332,7 @@ export function CheckoutDrawer({ lojaId, onFechar, onVoltarCarrinho }: Props) {
                     value={dados.bairro}
                     onChange={(e) => set("bairro", e.target.value)}
                     placeholder="Centro"
+                    data-testid="checkout-neighborhood-input"
                     className="w-full px-3 py-2.5 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400"
                   />
                 </div>
@@ -328,6 +342,7 @@ export function CheckoutDrawer({ lojaId, onFechar, onVoltarCarrinho }: Props) {
                     value={dados.cep}
                     onChange={(e) => set("cep", e.target.value)}
                     placeholder="00000-000"
+                    data-testid="checkout-zip-input"
                     className="w-full px-3 py-2.5 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400"
                   />
                 </div>
@@ -339,6 +354,7 @@ export function CheckoutDrawer({ lojaId, onFechar, onVoltarCarrinho }: Props) {
                     value={dados.cidade}
                     onChange={(e) => set("cidade", e.target.value)}
                     placeholder="São Paulo"
+                    data-testid="checkout-city-input"
                     className="w-full px-3 py-2.5 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400"
                   />
                 </div>
@@ -349,6 +365,7 @@ export function CheckoutDrawer({ lojaId, onFechar, onVoltarCarrinho }: Props) {
                     onChange={(e) => set("estado", e.target.value.toUpperCase().slice(0, 2))}
                     placeholder="SP"
                     maxLength={2}
+                    data-testid="checkout-state-input"
                     className="w-full px-3 py-2.5 border border-gray-300 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400"
                   />
                 </div>
@@ -362,6 +379,7 @@ export function CheckoutDrawer({ lojaId, onFechar, onVoltarCarrinho }: Props) {
                       <label
                         key={area.id}
                         className="flex items-center gap-3 p-3 rounded-xl border border-gray-300 cursor-pointer hover:bg-orange-50 hover:border-orange-400 transition-colors"
+                        data-testid={`checkout-area-${area.id}`}
                       >
                         <input
                           type="radio"
@@ -393,6 +411,7 @@ export function CheckoutDrawer({ lojaId, onFechar, onVoltarCarrinho }: Props) {
                 <label
                   key={forma.id}
                   className="flex items-center gap-3 p-3 rounded-xl border border-gray-300 cursor-pointer hover:bg-orange-50 hover:border-orange-400 transition-colors"
+                  data-testid={`checkout-payment-${forma.formaPagamento}`}
                 >
                   <input
                     type="radio"
@@ -486,7 +505,10 @@ export function CheckoutDrawer({ lojaId, onFechar, onVoltarCarrinho }: Props) {
 
         <div className="px-4 py-4 border-t border-gray-100">
           {erro && (
-            <p className="mb-3 rounded-xl bg-red-50 px-3 py-2 text-sm font-medium text-red-700">
+            <p
+              className="mb-3 rounded-xl bg-red-50 px-3 py-2 text-sm font-medium text-red-700"
+              data-testid="checkout-error"
+            >
               {erro}
             </p>
           )}
@@ -495,6 +517,7 @@ export function CheckoutDrawer({ lojaId, onFechar, onVoltarCarrinho }: Props) {
               onClick={finalizar}
               disabled={enviando}
               className="w-full py-3 rounded-xl bg-green-500 text-white font-semibold text-sm flex items-center justify-center gap-2 hover:bg-green-600 transition-colors disabled:opacity-50"
+              data-testid="checkout-confirm-button"
             >
               {enviando ? (
                 <><Loader2 className="w-4 h-4 animate-spin" /> Enviando...</>
@@ -512,6 +535,7 @@ export function CheckoutDrawer({ lojaId, onFechar, onVoltarCarrinho }: Props) {
                 (etapa === "pagamento" && !dados.formaPagamento)
               }
               className="w-full py-3.5 rounded-2xl bg-orange-500 text-white font-semibold text-sm flex items-center justify-center gap-2 hover:bg-orange-600 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              data-testid="checkout-continue-button"
             >
               Continuar <ChevronRight className="w-4 h-4" />
             </button>

@@ -20,6 +20,7 @@ type ProdutoApi = {
   imagemUrl?: string;
   ordem?: number;
   ativo: boolean;
+  disponivel: boolean;
 };
 
 function toCategoria(categoria: CategoriaApi): Categoria {
@@ -40,7 +41,7 @@ function toProduto(produto: ProdutoApi, categorias: Categoria[] = []): Produto {
     imagemUrl: produto.imagemUrl,
     categoriaId: produto.categoriaId,
     categoria: categorias.find((categoria) => categoria.id === produto.categoriaId),
-    disponivel: produto.ativo,
+    disponivel: produto.disponivel ?? produto.ativo,
     ativo: produto.ativo,
     destaque: false,
   };
@@ -90,7 +91,7 @@ export async function atualizarProduto(id: string, data: AtualizarProdutoRequest
       preco: data.preco,
       imagemUrl: data.imagemUrl,
       ordem: 0,
-      ativo: data.disponivel ?? true,
+      ativo: true,
     }),
   });
 
@@ -98,19 +99,11 @@ export async function atualizarProduto(id: string, data: AtualizarProdutoRequest
 }
 
 export async function toggleDisponibilidade(id: string): Promise<Produto> {
-  const produtoAtual = (await listarProdutos()).find((produto) => produto.id === id);
-  if (!produtoAtual) {
-    throw new Error("Produto nao encontrado.");
-  }
-
-  return atualizarProduto(id, {
-    nome: produtoAtual.nome,
-    descricao: produtoAtual.descricao,
-    preco: produtoAtual.preco,
-    categoriaId: produtoAtual.categoriaId,
-    disponivel: !produtoAtual.disponivel,
-    destaque: produtoAtual.destaque,
+  const produto = await requestAutenticada<ProdutoApi>(`/produtos/${id}/toggle-disponivel`, {
+    method: "PATCH",
   });
+
+  return toProduto(produto, await listarCategorias());
 }
 
 export async function excluirProduto(id: string): Promise<void> {
