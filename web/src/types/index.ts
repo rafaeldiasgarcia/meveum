@@ -138,6 +138,70 @@ export type Cliente = {
   criadoEm: string;
 };
 
+// ─── Categorias (admin) ───────────────────────────────────────────────────────
+export type CriarCategoriaRequest = {
+  nome: string;
+  descricao?: string;
+  ordem?: number;
+};
+
+export type AtualizarCategoriaRequest = Partial<CriarCategoriaRequest>;
+
+// ─── Complementos (admin) ─────────────────────────────────────────────────────
+export type GrupoComplementoAdmin = {
+  id: string;
+  grupoComplementoId: string;
+  nomeGrupoComplemento: string;
+  quantidadeMinima: number;
+  quantidadeMaxima: number;
+  ordem: number;
+  opcoes: OpcaoComplementoAdmin[];
+};
+
+export type OpcaoComplementoAdmin = {
+  id: string;
+  nome: string;
+  descricao?: string;
+  precoAdicional: number;
+  ordem: number;
+};
+
+export type CriarGrupoComplementoRequest = {
+  produtoId: string;
+  lojaId: string;
+  nome: string;
+  quantidadeMinima: number;
+  quantidadeMaxima: number;
+};
+
+export type AtualizarGrupoComplementoRequest = {
+  nome?: string;
+  quantidadeMinima?: number;
+  quantidadeMaxima?: number;
+};
+
+export type CriarOpcaoComplementoRequest = {
+  grupoComplementoId: string;
+  nome: string;
+  descricao?: string;
+  precoAdicional: number;
+};
+
+export type AtualizarOpcaoComplementoRequest = {
+  nome?: string;
+  descricao?: string;
+  precoAdicional?: number;
+};
+
+// ─── Formas de pagamento (admin) ──────────────────────────────────────────────
+export type TipoFormaPagamento = "PIX" | "CREDIT_CARD_DELIVERY" | "DEBIT_CARD_DELIVERY" | "CASH";
+
+export type FormaPagamento = {
+  id: string;
+  tipo: TipoFormaPagamento;
+  ativo: boolean;
+};
+
 // ─── Dashboard ────────────────────────────────────────────────────────────────
 export type MetricasDashboard = {
   pedidosHoje: number;

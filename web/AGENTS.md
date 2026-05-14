@@ -108,7 +108,7 @@ Exemplo esperado:
 
 ```ts
 export async function listarProdutos(): Promise<ListarProdutoResponse[]> {
-  return api.get('/produtos');
+  return api.get("/produtos");
 }
 ```
 
@@ -141,7 +141,7 @@ export function useProdutos() {
       const response = await listarProdutos();
       setProdutos(response);
     } catch {
-      setError('Nao foi possivel carregar os produtos.');
+      setError("Nao foi possivel carregar os produtos.");
     } finally {
       setLoading(false);
     }
@@ -182,9 +182,9 @@ Exemplo:
 
 ```ts
 export const endpoints = {
-  produtos: '/produtos',
-  categorias: '/categorias',
-  pedidos: '/pedidos',
+  produtos: "/produtos",
+  categorias: "/categorias",
+  pedidos: "/pedidos",
 };
 ```
 
@@ -364,7 +364,7 @@ Prefira testes orientados ao usuario.
 Use queries acessiveis sempre que possivel:
 
 ```ts
-screen.getByRole('button', { name: /salvar/i });
+screen.getByRole("button", { name: /salvar/i });
 screen.getByLabelText(/nome/i);
 screen.getByText(/produto criado/i);
 ```
@@ -379,7 +379,7 @@ Use `data-testid` quando:
 Exemplo:
 
 ```ts
-expect(screen.getByTestId('produtos-empty-state')).toBeInTheDocument();
+expect(screen.getByTestId("produtos-empty-state")).toBeInTheDocument();
 ```
 
 ## Organizacao dos testes
@@ -401,7 +401,7 @@ Cada teste deve ter nome claro e comportamento esperado.
 Exemplo:
 
 ```ts
-it('deve exibir mensagem de erro quando o nome do produto estiver vazio', async () => {
+it("deve exibir mensagem de erro quando o nome do produto estiver vazio", async () => {
   // teste
 });
 ```
@@ -575,11 +575,11 @@ Exemplo:
 
 ```ts
 export const routes = {
-  login: '/login',
-  cadastro: '/cadastro',
-  dashboard: '/dashboard',
-  cardapio: '/cardapio',
-  pedidos: '/pedidos',
+  login: "/login",
+  cadastro: "/cadastro",
+  dashboard: "/dashboard",
+  cardapio: "/cardapio",
+  pedidos: "/pedidos",
 };
 ```
 
@@ -649,3 +649,4 @@ Antes de criar codigo novo, confira se a implementacao respeita:
 - testes unitarios de comportamento
 - ausencia total de testes esteticos
 - codigo preparado para integracao futura com o backend
+- sempre que encontrar algum erro, crie issues no github

@@ -4,21 +4,73 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils/cn";
 
-const NAV_ITEMS = [
-  { href: "/dashboard", label: "Operação", exact: true },
-  { href: "/dashboard/pedidos", label: "Pedidos" },
-  { href: "/dashboard/cozinha", label: "Cozinha (KDS)" },
-  { href: "/dashboard/cardapio", label: "Cardápio" },
-  { href: "/dashboard/mesas", label: "Mesas / QR" },
-  { href: "/dashboard/clientes", label: "Clientes" },
-  { href: "/dashboard/cupons", label: "Cupons" },
-  { href: "/dashboard/whatsapp", label: "WhatsApp" },
-  { href: "/dashboard/financeiro", label: "Financeiro" },
-  { href: "/dashboard/relatorios", label: "Relatórios" },
+type NavItem = {
+  href: string;
+  label: string;
+  exact?: boolean;
+  indent?: boolean;
+};
+
+type NavSection = {
+  titulo: string;
+  items: NavItem[];
+};
+
+const NAV_SECTIONS: NavSection[] = [
+  {
+    titulo: "Operação",
+    items: [
+      { href: "/dashboard", label: "Visão geral", exact: true },
+      { href: "/dashboard/pedidos", label: "Pedidos" },
+      { href: "/dashboard/cozinha", label: "Cozinha (KDS)" },
+      { href: "/dashboard/mesas", label: "Mesas / QR" },
+    ],
+  },
+  {
+    titulo: "Cardápio",
+    items: [
+      { href: "/dashboard/cardapio", label: "Produtos", exact: true },
+      { href: "/dashboard/cardapio/categorias", label: "Categorias", indent: true },
+      { href: "/dashboard/cardapio/complementos", label: "Complementos", indent: true },
+    ],
+  },
+  {
+    titulo: "CRM",
+    items: [
+      { href: "/dashboard/clientes", label: "Clientes" },
+      { href: "/dashboard/cupons", label: "Cupons" },
+    ],
+  },
+  {
+    titulo: "Integrações",
+    items: [
+      { href: "/dashboard/whatsapp", label: "WhatsApp" },
+    ],
+  },
+  {
+    titulo: "Financeiro",
+    items: [
+      { href: "/dashboard/financeiro", label: "Financeiro" },
+      { href: "/dashboard/relatorios", label: "Relatórios" },
+    ],
+  },
+  {
+    titulo: "Configurações",
+    items: [
+      { href: "/dashboard/configuracoes", label: "Loja", exact: true },
+      { href: "/dashboard/configuracoes/pagamentos", label: "Pagamentos", indent: true },
+    ],
+  },
 ];
 
 export function Sidebar() {
   const pathname = usePathname();
+
+  function isActive(item: NavItem): boolean {
+    return item.exact
+      ? pathname === item.href
+      : pathname === item.href || pathname.startsWith(item.href + "/");
+  }
 
   return (
     <aside
@@ -33,41 +85,40 @@ export function Sidebar() {
         <span className="text-lg font-semibold">MeVêUm</span>
       </div>
 
-      {/* Restaurant info */}
-      <div className="px-5 py-4">
-        <p className="text-[10px] uppercase tracking-wider text-[#FBF7F4]/40">Burger do Bairro</p>
-        <p className="text-sm font-semibold">Av. Paulista · Aberto</p>
-      </div>
-
       {/* Nav */}
-      <nav className="flex-1 overflow-y-auto px-3 text-sm" aria-label="Navegação principal">
-        {NAV_ITEMS.map(({ href, label, exact }) => {
-          const active = exact
-            ? pathname === href
-            : pathname === href || pathname.startsWith(href + "/");
-
-          return (
-            <Link
-              key={href}
-              href={href}
-              data-testid={`nav-${label.toLowerCase().replace(/[\s/()]/g, "-")}`}
-              className={cn(
-                "mb-1 flex items-center gap-2 rounded-md px-3 py-2 transition-colors",
-                active
-                  ? "bg-[#EA580C]/15 text-[#EA580C] font-semibold"
-                  : "text-[#FBF7F4]/70 hover:bg-[#FBF7F4]/5",
-              )}
-            >
-              <span
-                className={cn(
-                  "h-1.5 w-1.5 shrink-0 rounded-full",
-                  active ? "bg-[#EA580C]" : "bg-[#FBF7F4]/30",
-                )}
-              />
-              {label}
-            </Link>
-          );
-        })}
+      <nav className="flex-1 overflow-y-auto px-3 py-3 text-sm" aria-label="Navegação principal">
+        {NAV_SECTIONS.map((section) => (
+          <div key={section.titulo} className="mb-4">
+            <p className="mb-1 px-3 text-[10px] font-semibold uppercase tracking-wider text-[#FBF7F4]/30">
+              {section.titulo}
+            </p>
+            {section.items.map((item) => {
+              const active = isActive(item);
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  data-testid={`nav-${item.label.toLowerCase().replace(/[\s/()áàãâéêíóôõúç]/g, (c) => ({ " ": "-", "/": "-", "(": "", ")": "", "á": "a", "à": "a", "ã": "a", "â": "a", "é": "e", "ê": "e", "í": "i", "ó": "o", "ô": "o", "õ": "o", "ú": "u", "ç": "c" }[c] ?? c))}`}
+                  className={cn(
+                    "mb-0.5 flex items-center gap-2 rounded-md py-2 transition-colors",
+                    item.indent ? "px-6" : "px-3",
+                    active
+                      ? "bg-[#EA580C]/15 text-[#EA580C] font-semibold"
+                      : "text-[#FBF7F4]/70 hover:bg-[#FBF7F4]/5",
+                  )}
+                >
+                  <span
+                    className={cn(
+                      "h-1.5 w-1.5 shrink-0 rounded-full",
+                      active ? "bg-[#EA580C]" : "bg-[#FBF7F4]/30",
+                    )}
+                  />
+                  {item.label}
+                </Link>
+              );
+            })}
+          </div>
+        ))}
       </nav>
 
       {/* Footer */}

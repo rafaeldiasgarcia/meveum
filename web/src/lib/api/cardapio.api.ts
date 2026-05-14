@@ -1,4 +1,4 @@
-import type { Categoria, Produto, CriarProdutoRequest, AtualizarProdutoRequest } from "@/types";
+import type { Categoria, Produto, CriarProdutoRequest, AtualizarProdutoRequest, CriarCategoriaRequest, AtualizarCategoriaRequest } from "@/types";
 import { obterLojaId, requestAutenticada } from "@/lib/api/client";
 
 type CategoriaApi = {
@@ -51,6 +51,33 @@ export async function listarCategorias(): Promise<Categoria[]> {
   const lojaId = obterLojaId();
   const categorias = await requestAutenticada<CategoriaApi[]>(`/categorias?lojaId=${lojaId}`, { method: "GET" });
   return categorias.map(toCategoria).filter((categoria) => categoria.ativa);
+}
+
+export async function listarTodasCategorias(): Promise<Categoria[]> {
+  const lojaId = obterLojaId();
+  const categorias = await requestAutenticada<CategoriaApi[]>(`/categorias?lojaId=${lojaId}`, { method: "GET" });
+  return categorias.map(toCategoria);
+}
+
+export async function criarCategoria(data: CriarCategoriaRequest): Promise<Categoria> {
+  const lojaId = obterLojaId();
+  const categoria = await requestAutenticada<CategoriaApi>("/categorias", {
+    method: "POST",
+    body: JSON.stringify({ lojaId, nome: data.nome, descricao: data.descricao, ordem: data.ordem ?? 0 }),
+  });
+  return toCategoria(categoria);
+}
+
+export async function atualizarCategoria(id: string, data: AtualizarCategoriaRequest): Promise<Categoria> {
+  const categoria = await requestAutenticada<CategoriaApi>(`/categorias/${id}`, {
+    method: "PUT",
+    body: JSON.stringify({ nome: data.nome, descricao: data.descricao, ordem: data.ordem }),
+  });
+  return toCategoria(categoria);
+}
+
+export async function excluirCategoria(id: string): Promise<void> {
+  await requestAutenticada<void>(`/categorias/${id}`, { method: "DELETE" });
 }
 
 export async function listarProdutos(): Promise<Produto[]> {
