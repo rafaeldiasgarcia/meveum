@@ -7,7 +7,7 @@ import { toast } from "sonner";
 function saudacao(nome: string) {
   const h = new Date().getHours();
   const prefix = h < 12 ? "Bom dia" : h < 18 ? "Boa tarde" : "Boa noite";
-  return `${prefix}, ${nome.split(" ")[0]} 👋`;
+  return `${prefix}, ${nome} 👋`;
 }
 
 export function Topbar() {
@@ -44,6 +44,14 @@ export function Topbar() {
         >
           + Novo pedido
         </button>
+
+        {/* User name */}
+        <span
+          data-testid="user-menu-name"
+          className="hidden text-sm font-medium text-[#1C1917] md:block"
+        >
+          {nome}
+        </span>
 
         {/* Logout */}
         <button

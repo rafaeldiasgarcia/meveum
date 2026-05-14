@@ -154,17 +154,8 @@ export default function DashboardPage() {
     <div className="space-y-6 p-6">
 
       {/* ── Métricas ────────────────────────────────────────────────────────── */}
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-        <div className="rounded-xl border border-[#E8E0D6] bg-white p-5 shadow-soft">
-          <p className="text-[10px] uppercase tracking-wider text-[#78716C]">Faturamento hoje</p>
-          <p className="mt-2 text-2xl font-semibold text-[#1C1917]">
-            {formatCurrency(metricas?.faturamentoHoje ?? 0)}
-          </p>
-          <p className="mt-1 text-xs font-medium text-[#EA580C]">
-            +{metricas?.variacaoFaturamentoPercent ?? 0}% vs ontem
-          </p>
-        </div>
-        <div className="rounded-xl border border-[#E8E0D6] bg-white p-5 shadow-soft">
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-6">
+        <div data-testid="metric-card-orders-today" className="rounded-xl border border-[#E8E0D6] bg-white p-5 shadow-soft">
           <p className="text-[10px] uppercase tracking-wider text-[#78716C]">Pedidos hoje</p>
           <p className="mt-2 text-2xl font-semibold text-[#1C1917]">
             {metricas?.pedidosHoje ?? 0}
@@ -173,7 +164,16 @@ export default function DashboardPage() {
             +{metricas?.variacaoPedidosPercent ?? 0}%
           </p>
         </div>
-        <div className="rounded-xl border border-[#E8E0D6] bg-white p-5 shadow-soft">
+        <div data-testid="metric-card-revenue" className="rounded-xl border border-[#E8E0D6] bg-white p-5 shadow-soft">
+          <p className="text-[10px] uppercase tracking-wider text-[#78716C]">Faturamento hoje</p>
+          <p className="mt-2 text-2xl font-semibold text-[#1C1917]">
+            {formatCurrency(metricas?.faturamentoHoje ?? 0)}
+          </p>
+          <p className="mt-1 text-xs font-medium text-[#EA580C]">
+            +{metricas?.variacaoFaturamentoPercent ?? 0}% vs ontem
+          </p>
+        </div>
+        <div data-testid="metric-card-ticket" className="rounded-xl border border-[#E8E0D6] bg-white p-5 shadow-soft">
           <p className="text-[10px] uppercase tracking-wider text-[#78716C]">Ticket médio</p>
           <p className="mt-2 text-2xl font-semibold text-[#1C1917]">
             {formatCurrency(metricas?.ticketMedio ?? 0)}
@@ -182,14 +182,26 @@ export default function DashboardPage() {
             +{formatCurrency(metricas?.variacaoTicketMedio ?? 0)}
           </p>
         </div>
-        <div className="rounded-xl border border-[#E8E0D6] bg-white p-5 shadow-soft">
-          <p className="text-[10px] uppercase tracking-wider text-[#78716C]">Tempo médio cozinha</p>
+        <div data-testid="metric-card-preparing" className="rounded-xl border border-[#E8E0D6] bg-white p-5 shadow-soft">
+          <p className="text-[10px] uppercase tracking-wider text-[#78716C]">Em preparo</p>
           <p className="mt-2 text-2xl font-semibold text-[#1C1917]">
-            {metricas?.tempoMedioCozinhaMin ?? 0} min
+            {metricas?.pedidosEmPreparo ?? 0}
           </p>
-          <p className="mt-1 text-xs font-medium text-[#25D366]">
-            {metricas?.variacaoTempoMedioCozinha ?? 0} min
+          <p className="mt-1 text-xs font-medium text-[#78716C]">pedidos</p>
+        </div>
+        <div data-testid="metric-card-new-clients" className="rounded-xl border border-[#E8E0D6] bg-white p-5 shadow-soft">
+          <p className="text-[10px] uppercase tracking-wider text-[#78716C]">Novos clientes</p>
+          <p className="mt-2 text-2xl font-semibold text-[#1C1917]">
+            {metricas?.novosClientesHoje ?? 0}
           </p>
+          <p className="mt-1 text-xs font-medium text-[#78716C]">hoje</p>
+        </div>
+        <div data-testid="metric-card-repurchase" className="rounded-xl border border-[#E8E0D6] bg-white p-5 shadow-soft">
+          <p className="text-[10px] uppercase tracking-wider text-[#78716C]">Recompra</p>
+          <p className="mt-2 text-2xl font-semibold text-[#1C1917]">
+            {metricas?.taxaRecompra ?? 0}%
+          </p>
+          <p className="mt-1 text-xs font-medium text-[#78716C]">dos clientes</p>
         </div>
       </div>
 
@@ -202,6 +214,14 @@ export default function DashboardPage() {
         >
           <header className="flex items-center justify-between border-b border-[#E8E0D6] px-5 py-3">
             <p className="font-semibold text-[#1C1917]">Pedidos recentes</p>
+            <div className="flex items-center gap-2">
+            <a
+              href="/dashboard/pedidos"
+              data-testid="ver-todos-pedidos-button"
+              className="text-xs font-medium text-[#EA580C] hover:underline"
+            >
+              Ver todos
+            </a>
             <div className="flex gap-1 text-xs">
               {TABS.map((t) => (
                 <button
@@ -217,6 +237,7 @@ export default function DashboardPage() {
                   {t.label}
                 </button>
               ))}
+            </div>
             </div>
           </header>
           <ul className="divide-y divide-[#F5F0EB]" data-testid="pedidos-recentes-list">
@@ -324,7 +345,7 @@ export default function DashboardPage() {
       <div className="grid gap-4 lg:grid-cols-3">
 
         {/* Faturamento 7 dias — 2/3 */}
-        <section className="rounded-xl border border-[#E8E0D6] bg-white p-5 shadow-soft lg:col-span-2">
+        <section data-testid="grafico-vendas" className="rounded-xl border border-[#E8E0D6] bg-white p-5 shadow-soft lg:col-span-2">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-xs uppercase tracking-wider text-[#78716C]">
