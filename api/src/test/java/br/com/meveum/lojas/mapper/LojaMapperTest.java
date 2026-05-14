@@ -63,7 +63,16 @@ class LojaMapperTest {
     @Test
     void deveAtualizarEntityComAtualizarLojaRequest() {
         var loja = loja();
-        var request = new AtualizarLojaRequest("Nova Loja", "nova-loja", "logo", "5511888888888");
+        var request = new AtualizarLojaRequest(
+            "Nova Loja",
+            "nova-loja",
+            "logo",
+            "5511888888888",
+            "5511777777777",
+            "Rua Teste, 123",
+            "Descricao da loja",
+            "pix@teste.com"
+        );
 
         lojaMapper.toEntity(request, loja);
 
@@ -71,6 +80,10 @@ class LojaMapperTest {
         assertThat(loja.getSlug()).isEqualTo("nova-loja");
         assertThat(loja.getLogoUrl()).isEqualTo("logo");
         assertThat(loja.getWhatsappNumber()).isEqualTo("5511888888888");
+        assertThat(loja.getPhone()).isEqualTo("5511777777777");
+        assertThat(loja.getAddress()).isEqualTo("Rua Teste, 123");
+        assertThat(loja.getDescription()).isEqualTo("Descricao da loja");
+        assertThat(loja.getPixKey()).isEqualTo("pix@teste.com");
     }
 
     private Loja loja() {
@@ -80,6 +93,10 @@ class LojaMapperTest {
         loja.setSlug("loja");
         loja.setLogoUrl("logo");
         loja.setWhatsappNumber("5511999999999");
+        loja.setPhone("5511888888888");
+        loja.setAddress("Rua A");
+        loja.setDescription("Loja teste");
+        loja.setPixKey("pix@loja.com");
         loja.setStatus(LojaStatus.ACTIVE);
         loja.setManuallyPaused(false);
         loja.setCreatedAt(OffsetDateTime.now().minusDays(1));

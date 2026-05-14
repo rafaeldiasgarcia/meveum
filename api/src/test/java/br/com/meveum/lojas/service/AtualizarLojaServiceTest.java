@@ -41,7 +41,7 @@ class AtualizarLojaServiceTest {
     @Test
     void deveAtualizarLoja() {
         var lojaId = UUID.randomUUID();
-        var request = new AtualizarLojaRequest("Loja", "loja", null, "5511999999999");
+        var request = new AtualizarLojaRequest("Loja", "loja", null, "5511999999999", null, null, null, null);
         var loja = new Loja();
         loja.setId(lojaId);
         var response = AtualizarLojaResponse.builder().id(lojaId).slug("loja").build();

@@ -18,14 +18,14 @@ class LojaValidatorTest {
 
     @Test
     void deveValidarAtualizacaoValida() {
-        var request = new AtualizarLojaRequest("Loja", "loja-teste", null, "5511999999999");
+        var request = new AtualizarLojaRequest("Loja", "loja-teste", null, "5511999999999", null, null, null, null);
 
         assertThatCode(() -> lojaValidator.validarAtualizacao(request)).doesNotThrowAnyException();
     }
 
     @Test
     void deveFalharQuandoNomeNaoForInformado() {
-        var request = new AtualizarLojaRequest(" ", "loja-teste", null, "5511999999999");
+        var request = new AtualizarLojaRequest(" ", "loja-teste", null, "5511999999999", null, null, null, null);
 
         assertThatThrownBy(() -> lojaValidator.validarAtualizacao(request))
             .isInstanceOf(RegraNegocioException.class)
@@ -34,7 +34,7 @@ class LojaValidatorTest {
 
     @Test
     void deveFalharQuandoSlugNaoForInformado() {
-        var request = new AtualizarLojaRequest("Loja", null, null, "5511999999999");
+        var request = new AtualizarLojaRequest("Loja", null, null, "5511999999999", null, null, null, null);
 
         assertThatThrownBy(() -> lojaValidator.validarAtualizacao(request))
             .isInstanceOf(RegraNegocioException.class)
@@ -43,7 +43,7 @@ class LojaValidatorTest {
 
     @Test
     void deveFalharQuandoSlugForInvalido() {
-        var request = new AtualizarLojaRequest("Loja", "Loja Teste", null, "5511999999999");
+        var request = new AtualizarLojaRequest("Loja", "Loja Teste", null, "5511999999999", null, null, null, null);
 
         assertThatThrownBy(() -> lojaValidator.validarAtualizacao(request))
             .isInstanceOf(RegraNegocioException.class)
@@ -52,7 +52,7 @@ class LojaValidatorTest {
 
     @Test
     void deveFalharQuandoWhatsappNaoForInformado() {
-        var request = new AtualizarLojaRequest("Loja", "loja-teste", null, " ");
+        var request = new AtualizarLojaRequest("Loja", "loja-teste", null, " ", null, null, null, null);
 
         assertThatThrownBy(() -> lojaValidator.validarAtualizacao(request))
             .isInstanceOf(RegraNegocioException.class)

@@ -40,6 +40,18 @@ public class Loja {
     @Column(name = "whatsapp_number", nullable = false, length = 20)
     private String whatsappNumber;
 
+    @Column(length = 20)
+    private String phone;
+
+    @Column(length = 255)
+    private String address;
+
+    @Column(length = 500)
+    private String description;
+
+    @Column(name = "pix_key", length = 120)
+    private String pixKey;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private LojaStatus status = LojaStatus.ACTIVE;

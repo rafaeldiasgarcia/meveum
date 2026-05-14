@@ -17,6 +17,18 @@ public record AtualizarLojaRequest(
 
     @NotBlank
     @Size(max = 20)
-    String whatsappNumber
+    String whatsappNumber,
+
+    @Size(max = 20)
+    String telefone,
+
+    @Size(max = 255)
+    String endereco,
+
+    @Size(max = 500)
+    String descricao,
+
+    @Size(max = 120)
+    String pixKey
 ) {
 }

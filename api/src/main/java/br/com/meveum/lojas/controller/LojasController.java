@@ -13,6 +13,7 @@ import br.com.meveum.lojas.service.AtualizarHorariosFuncionamentoService;
 import br.com.meveum.lojas.service.AtualizarLojaService;
 import br.com.meveum.lojas.service.AtualizarPausaManualLojaService;
 import br.com.meveum.lojas.service.AtualizarStatusLojaService;
+import br.com.meveum.lojas.service.DetalharMinhaLojaService;
 import br.com.meveum.lojas.service.DetalharLojaPorSlugService;
 import br.com.meveum.lojas.service.DetalharLojaService;
 import br.com.meveum.lojas.service.ListarHorariosFuncionamentoService;
@@ -36,12 +37,19 @@ import org.springframework.web.bind.annotation.RestController;
 public class LojasController {
 
     private final DetalharLojaService detalharLojaService;
+    private final DetalharMinhaLojaService detalharMinhaLojaService;
     private final DetalharLojaPorSlugService detalharLojaPorSlugService;
     private final AtualizarLojaService atualizarLojaService;
     private final AtualizarPausaManualLojaService atualizarPausaManualLojaService;
     private final AtualizarStatusLojaService atualizarStatusLojaService;
     private final ListarHorariosFuncionamentoService listarHorariosFuncionamentoService;
     private final AtualizarHorariosFuncionamentoService atualizarHorariosFuncionamentoService;
+
+    @GetMapping("/me")
+    @ResponseStatus(HttpStatus.OK)
+    public DetalharLojaResponse detalharMinhaLoja() {
+        return detalharMinhaLojaService.detalhar();
+    }
 
     @GetMapping("/{lojaId}")
     @ResponseStatus(HttpStatus.OK)
