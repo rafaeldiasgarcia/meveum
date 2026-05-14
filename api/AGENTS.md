@@ -61,9 +61,10 @@ o frontend. Qualquer lacuna de frontend deve virar issue bem descrita.
 
 - [x] Inventariar tabelas, migrations e entidades persistidas.
 - [x] Inventariar todos os controllers/endpoints existentes no backend.
-- [ ] Comparar endpoints do backend com chamadas existentes no frontend, sem
+- [x] Comparar endpoints do backend com chamadas existentes no frontend, sem
       alterar `web/`.
-- [ ] Abrir issues para lacunas de pagina, chamada ou implementacao no front.
+- [x] Abrir issues para lacunas de pagina, chamada ou implementacao no front:
+      `#54`, `#55`, `#56`, `#57`; detalhes adicionais em `#27`.
 - [x] Revisar autenticacao, ignorando OAuth social por enquanto.
 - [x] Completar cobertura unitaria de `AuthValidator`.
 - [x] Corrigir o primeiro teste do Bruno/Postman e cobrir novas features de
