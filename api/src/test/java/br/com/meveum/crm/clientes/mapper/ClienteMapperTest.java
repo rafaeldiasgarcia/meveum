@@ -11,6 +11,7 @@ import br.com.meveum.crm.entity.EnderecoCliente;
 import br.com.meveum.crm.repository.projection.ClienteEstatisticaProjection;
 import br.com.meveum.lojas.entity.Loja;
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
@@ -51,8 +52,8 @@ class ClienteMapperTest {
             "11999999999",
             3L,
             BigDecimal.valueOf(150),
-            ultimoPedido,
-            criadoEm
+            ultimoPedido.toInstant(),
+            criadoEm.toInstant()
         );
 
         var response = clienteMapper.toListarClienteResponse(projection);
@@ -60,7 +61,7 @@ class ClienteMapperTest {
         assertThat(response.lojaId()).isEqualTo(lojaId);
         assertThat(response.totalPedidos()).isEqualTo(3L);
         assertThat(response.totalGasto()).isEqualTo(BigDecimal.valueOf(150));
-        assertThat(response.ultimoPedido()).isEqualTo(ultimoPedido);
+        assertThat(response.ultimoPedido()).isEqualTo(ultimoPedido.toInstant().atOffset(java.time.ZoneOffset.UTC));
     }
 
     @Test
@@ -149,8 +150,8 @@ class ClienteMapperTest {
         String telefone,
         Long totalPedidos,
         BigDecimal totalGasto,
-        OffsetDateTime ultimoPedido,
-        OffsetDateTime criadoEm
+        Instant ultimoPedido,
+        Instant criadoEm
     ) implements ClienteEstatisticaProjection {
 
         @Override
@@ -184,12 +185,12 @@ class ClienteMapperTest {
         }
 
         @Override
-        public OffsetDateTime getUltimoPedido() {
+        public Instant getUltimoPedido() {
             return ultimoPedido;
         }
 
         @Override
-        public OffsetDateTime getCriadoEm() {
+        public Instant getCriadoEm() {
             return criadoEm;
         }
     }

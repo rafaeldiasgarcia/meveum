@@ -1,7 +1,7 @@
 package br.com.meveum.crm.repository.projection;
 
 import java.math.BigDecimal;
-import java.time.OffsetDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 public interface ClienteEstatisticaProjection {
@@ -18,7 +18,7 @@ public interface ClienteEstatisticaProjection {
 
     BigDecimal getTotalGasto();
 
-    OffsetDateTime getUltimoPedido();
+    Instant getUltimoPedido();
 
-    OffsetDateTime getCriadoEm();
+    Instant getCriadoEm();
 }

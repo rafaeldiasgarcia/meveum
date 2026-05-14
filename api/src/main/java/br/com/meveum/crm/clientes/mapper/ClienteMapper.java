@@ -15,6 +15,9 @@ import br.com.meveum.crm.clientes.dto.ListarEnderecoClienteResponse;
 import br.com.meveum.crm.entity.Cliente;
 import br.com.meveum.crm.entity.EnderecoCliente;
 import br.com.meveum.crm.repository.projection.ClienteEstatisticaProjection;
+import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -46,8 +49,8 @@ public class ClienteMapper {
             .telefone(projection.getTelefone())
             .totalPedidos(projection.getTotalPedidos())
             .totalGasto(projection.getTotalGasto())
-            .ultimoPedido(projection.getUltimoPedido())
-            .criadoEm(projection.getCriadoEm())
+            .ultimoPedido(toOffsetDateTime(projection.getUltimoPedido()))
+            .criadoEm(toOffsetDateTime(projection.getCriadoEm()))
             .build();
     }
 
@@ -174,5 +177,9 @@ public class ClienteMapper {
         endereco.setReference(request.referencia());
         endereco.setLatitude(request.latitude());
         endereco.setLongitude(request.longitude());
+    }
+
+    private OffsetDateTime toOffsetDateTime(Instant instant) {
+        return instant == null ? null : instant.atOffset(ZoneOffset.UTC);
     }
 }
