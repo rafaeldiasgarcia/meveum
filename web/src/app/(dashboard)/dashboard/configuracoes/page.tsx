@@ -91,7 +91,7 @@ export default function ConfiguracoesPage() {
   }
 
   return (
-    <div className="space-y-5 max-w-2xl">
+    <div className="p-6 space-y-5 max-w-2xl">
       <div>
         <h1 className="text-xl font-bold text-[var(--color-foreground)]">Configurações</h1>
         <p className="text-sm text-[var(--color-muted)]">Gerencie os dados e preferências da sua loja</p>

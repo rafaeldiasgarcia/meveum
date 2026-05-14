@@ -33,7 +33,7 @@ const SLIDES = [
     category: "Restaurantes que confiam",
     title: '"Em 30 dias dobramos os pedidos pelo WhatsApp."',
     description:
-      "Mais de 2.000 restaurantes brasileiros usam o MeVêUm para vender direto, sem comissão de marketplace.",
+      "Restaurantes brasileiros vendem direto pelo MeVêUm, sem pagar comissão de marketplace.",
     badge: "4,9 ★ avaliação média",
   },
 ];
@@ -108,26 +108,17 @@ export function AuthCarousel() {
         </div>
 
         {/* Bottom bar */}
-        <div className="flex items-center justify-between">
-          <div className="flex gap-2">
-            {SLIDES.map((_, i) => (
-              <button
-                key={i}
-                aria-label={`Ir para slide ${i + 1}`}
-                onClick={() => setActive(i)}
-                className={`h-1.5 rounded-full transition-all ${
-                  i === active ? "w-8 bg-ember" : "w-4 bg-white/25 hover:bg-white/40"
-                }`}
-              />
-            ))}
-          </div>
-
-          <div className="flex -space-x-2">
-            <div className="h-9 w-9 rounded-full border-2 border-charcoal bg-gradient-to-br from-ember to-amber-warm ring-1 ring-white/20" />
-            <div className="h-9 w-9 rounded-full border-2 border-charcoal bg-gradient-to-br from-amber-warm to-ember-deep ring-1 ring-white/20" />
-            <div className="h-9 w-9 rounded-full border-2 border-charcoal bg-gradient-to-br from-ember-deep to-ember ring-1 ring-white/20" />
-            <div className="ml-3 self-center text-xs text-white/60">+2.000 restaurantes</div>
-          </div>
+        <div className="flex items-center gap-2">
+          {SLIDES.map((_, i) => (
+            <button
+              key={i}
+              aria-label={`Ir para slide ${i + 1}`}
+              onClick={() => setActive(i)}
+              className={`h-1.5 rounded-full transition-all ${
+                i === active ? "w-8 bg-ember" : "w-4 bg-white/25 hover:bg-white/40"
+              }`}
+            />
+          ))}
         </div>
       </div>
     </aside>
