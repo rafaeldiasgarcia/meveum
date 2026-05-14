@@ -33,9 +33,9 @@ public interface ClienteRepository extends JpaRepository<Cliente, UUID> {
             c.store_id as lojaId,
             c.name as nome,
             c.phone as telefone,
-            count(o.id) as totalPedidos,
+            coalesce(sum(case when o.status <> 'CANCELED' then 1 else 0 end), 0) as totalPedidos,
             coalesce(sum(case when o.status <> 'CANCELED' then o.total else 0 end), 0) as totalGasto,
-            max(o.created_at) as ultimoPedido,
+            max(case when o.status <> 'CANCELED' then o.created_at end) as ultimoPedido,
             c.created_at as criadoEm
         from customers c
         left join orders o on o.customer_id = c.id

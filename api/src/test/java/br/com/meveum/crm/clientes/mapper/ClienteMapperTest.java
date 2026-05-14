@@ -8,8 +8,10 @@ import br.com.meveum.crm.clientes.dto.CriarClienteRequest;
 import br.com.meveum.crm.clientes.dto.CriarEnderecoClienteRequest;
 import br.com.meveum.crm.entity.Cliente;
 import br.com.meveum.crm.entity.EnderecoCliente;
+import br.com.meveum.crm.repository.projection.ClienteEstatisticaProjection;
 import br.com.meveum.lojas.entity.Loja;
 import java.math.BigDecimal;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
 
@@ -33,9 +35,32 @@ class ClienteMapperTest {
         var cliente = cliente();
 
         assertThat(clienteMapper.toCriarClienteResponse(cliente).id()).isEqualTo(cliente.getId());
-        assertThat(clienteMapper.toListarClienteResponse(cliente).lojaId()).isEqualTo(cliente.getLoja().getId());
         assertThat(clienteMapper.toDetalharClienteResponse(cliente).telefone()).isEqualTo(cliente.getPhone());
         assertThat(clienteMapper.toAtualizarClienteResponse(cliente).nome()).isEqualTo(cliente.getName());
+    }
+
+    @Test
+    void deveConverterClienteEstatisticaParaListarResponse() {
+        var lojaId = UUID.randomUUID();
+        var ultimoPedido = OffsetDateTime.now();
+        var criadoEm = ultimoPedido.minusDays(10);
+        var projection = new ClienteEstatisticaProjectionStub(
+            UUID.randomUUID(),
+            lojaId,
+            "Rafael",
+            "11999999999",
+            3L,
+            BigDecimal.valueOf(150),
+            ultimoPedido,
+            criadoEm
+        );
+
+        var response = clienteMapper.toListarClienteResponse(projection);
+
+        assertThat(response.lojaId()).isEqualTo(lojaId);
+        assertThat(response.totalPedidos()).isEqualTo(3L);
+        assertThat(response.totalGasto()).isEqualTo(BigDecimal.valueOf(150));
+        assertThat(response.ultimoPedido()).isEqualTo(ultimoPedido);
     }
 
     @Test
@@ -115,5 +140,57 @@ class ClienteMapperTest {
             .latitude(BigDecimal.valueOf(-23.55))
             .longitude(BigDecimal.valueOf(-46.63))
             .build();
+    }
+
+    private record ClienteEstatisticaProjectionStub(
+        UUID id,
+        UUID lojaId,
+        String nome,
+        String telefone,
+        Long totalPedidos,
+        BigDecimal totalGasto,
+        OffsetDateTime ultimoPedido,
+        OffsetDateTime criadoEm
+    ) implements ClienteEstatisticaProjection {
+
+        @Override
+        public UUID getId() {
+            return id;
+        }
+
+        @Override
+        public UUID getLojaId() {
+            return lojaId;
+        }
+
+        @Override
+        public String getNome() {
+            return nome;
+        }
+
+        @Override
+        public String getTelefone() {
+            return telefone;
+        }
+
+        @Override
+        public Long getTotalPedidos() {
+            return totalPedidos;
+        }
+
+        @Override
+        public BigDecimal getTotalGasto() {
+            return totalGasto;
+        }
+
+        @Override
+        public OffsetDateTime getUltimoPedido() {
+            return ultimoPedido;
+        }
+
+        @Override
+        public OffsetDateTime getCriadoEm() {
+            return criadoEm;
+        }
     }
 }
