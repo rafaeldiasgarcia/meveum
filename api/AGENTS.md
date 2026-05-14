@@ -66,8 +66,8 @@ o frontend. Qualquer lacuna de frontend deve virar issue bem descrita.
 - [ ] Abrir issues para lacunas de pagina, chamada ou implementacao no front.
 - [x] Revisar autenticacao, ignorando OAuth social por enquanto.
 - [x] Completar cobertura unitaria de `AuthValidator`.
-- [ ] Corrigir o primeiro teste do Bruno/Postman e cobrir novas features de
-      autenticacao na collection.
+- [x] Corrigir o primeiro teste do Bruno/Postman e cobrir novas features de
+      autenticacao na collection: pasta Auth validada com Newman.
 - [x] Rodar testes backend e registrar resultado: `./mvnw.cmd test` com 325
       testes passando.
 - [ ] Revisar CI/CD relacionado a backend e automacoes.
