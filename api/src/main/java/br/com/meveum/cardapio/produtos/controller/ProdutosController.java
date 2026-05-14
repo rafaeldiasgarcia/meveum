@@ -11,6 +11,7 @@ import br.com.meveum.cardapio.produtos.service.CriarProdutoService;
 import br.com.meveum.cardapio.produtos.service.DetalharProdutoService;
 import br.com.meveum.cardapio.produtos.service.ExcluirProdutoService;
 import br.com.meveum.cardapio.produtos.service.ListarProdutoService;
+import br.com.meveum.cardapio.produtos.service.ToggleDisponivelProdutoService;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
@@ -18,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -37,6 +39,7 @@ public class ProdutosController {
     private final DetalharProdutoService detalharProdutoService;
     private final AtualizarProdutoService atualizarProdutoService;
     private final ExcluirProdutoService excluirProdutoService;
+    private final ToggleDisponivelProdutoService toggleDisponivelProdutoService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -66,6 +69,12 @@ public class ProdutosController {
         @Valid @RequestBody AtualizarProdutoRequest request
     ) {
         return atualizarProdutoService.atualizar(produtoId, request);
+    }
+
+    @PatchMapping("/{produtoId}/toggle-disponivel")
+    @ResponseStatus(HttpStatus.OK)
+    public DetalharProdutoResponse toggleDisponivel(@PathVariable UUID produtoId) {
+        return toggleDisponivelProdutoService.toggle(produtoId);
     }
 
     @DeleteMapping("/{produtoId}")

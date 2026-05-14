@@ -14,6 +14,7 @@ public record ListarProdutoResponse(
     BigDecimal preco,
     String imagemUrl,
     Integer ordem,
-    Boolean ativo
+    Boolean ativo,
+    Boolean disponivel
 ) {
 }

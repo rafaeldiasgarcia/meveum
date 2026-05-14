@@ -16,6 +16,7 @@ public record CriarProdutoResponse(
     String imagemUrl,
     Integer ordem,
     Boolean ativo,
+    Boolean disponivel,
     OffsetDateTime criadoEm,
     OffsetDateTime atualizadoEm
 ) {

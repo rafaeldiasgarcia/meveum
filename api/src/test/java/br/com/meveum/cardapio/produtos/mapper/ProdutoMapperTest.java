@@ -53,6 +53,7 @@ class ProdutoMapperTest {
         assertThat(response.categoriaId()).isEqualTo(produto.getCategoria().getId());
         assertThat(response.nome()).isEqualTo(produto.getName());
         assertThat(response.preco()).isEqualTo(produto.getBasePrice());
+        assertThat(response.disponivel()).isTrue();
         assertThat(response.criadoEm()).isEqualTo(produto.getCreatedAt());
     }
 
@@ -67,6 +68,7 @@ class ProdutoMapperTest {
         assertThat(response.categoriaId()).isEqualTo(produto.getCategoria().getId());
         assertThat(response.nome()).isEqualTo(produto.getName());
         assertThat(response.preco()).isEqualTo(produto.getBasePrice());
+        assertThat(response.disponivel()).isTrue();
     }
 
     @Test
@@ -79,6 +81,7 @@ class ProdutoMapperTest {
         assertThat(response.lojaId()).isEqualTo(produto.getLoja().getId());
         assertThat(response.categoriaId()).isEqualTo(produto.getCategoria().getId());
         assertThat(response.nome()).isEqualTo(produto.getName());
+        assertThat(response.disponivel()).isTrue();
         assertThat(response.atualizadoEm()).isEqualTo(produto.getUpdatedAt());
     }
 
@@ -93,6 +96,7 @@ class ProdutoMapperTest {
         assertThat(response.categoriaId()).isEqualTo(produto.getCategoria().getId());
         assertThat(response.nome()).isEqualTo(produto.getName());
         assertThat(response.ativo()).isEqualTo(produto.getActive());
+        assertThat(response.disponivel()).isEqualTo(produto.getActive());
     }
 
     @Test

@@ -34,6 +34,7 @@ public class ProdutoMapper {
             .imagemUrl(produto.getImageUrl())
             .ordem(produto.getSortOrder())
             .ativo(produto.getActive())
+            .disponivel(produto.getActive())
             .criadoEm(produto.getCreatedAt())
             .atualizadoEm(produto.getUpdatedAt())
             .build();
@@ -50,6 +51,7 @@ public class ProdutoMapper {
             .imagemUrl(produto.getImageUrl())
             .ordem(produto.getSortOrder())
             .ativo(produto.getActive())
+            .disponivel(produto.getActive())
             .build();
     }
 
@@ -64,6 +66,7 @@ public class ProdutoMapper {
             .imagemUrl(produto.getImageUrl())
             .ordem(produto.getSortOrder())
             .ativo(produto.getActive())
+            .disponivel(produto.getActive())
             .criadoEm(produto.getCreatedAt())
             .atualizadoEm(produto.getUpdatedAt())
             .build();
@@ -80,6 +83,7 @@ public class ProdutoMapper {
             .imagemUrl(produto.getImageUrl())
             .ordem(produto.getSortOrder())
             .ativo(produto.getActive())
+            .disponivel(produto.getActive())
             .criadoEm(produto.getCreatedAt())
             .atualizadoEm(produto.getUpdatedAt())
             .build();

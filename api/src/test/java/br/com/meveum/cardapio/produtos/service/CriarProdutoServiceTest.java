@@ -64,7 +64,20 @@ class CriarProdutoServiceTest {
         var produto = new Produto();
         var produtoSalvo = new Produto();
         produtoSalvo.setId(produtoId);
-        var response = new CriarProdutoResponse(produtoId, lojaId, categoriaId, "Pizza", "Grande", BigDecimal.TEN, null, 1, true, null, null);
+        var response = new CriarProdutoResponse(
+            produtoId,
+            lojaId,
+            categoriaId,
+            "Pizza",
+            "Grande",
+            BigDecimal.TEN,
+            null,
+            1,
+            true,
+            true,
+            null,
+            null
+        );
 
         when(validarLojaProdutoExisteService.validar(lojaId)).thenReturn(loja);
         when(validarCategoriaProdutoExisteService.validar(categoriaId, lojaId)).thenReturn(categoria);
