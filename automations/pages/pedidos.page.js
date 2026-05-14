@@ -23,6 +23,11 @@ export class PedidosPage {
     await this.lista.locator('button').first().click();
   }
 
+  async abrirPedido(pedidoId) {
+    await this.page.getByTestId(`pedido-card-${pedidoId}`).click();
+    await this.validarDetalhe();
+  }
+
   async validarDetalhe() {
     await expect(this.detalhe).toBeVisible();
     await expect(this.itens).toBeVisible();
@@ -31,6 +36,14 @@ export class PedidosPage {
   async avancarStatusQuandoDisponivel() {
     await expect(this.botaoAvancar).toBeVisible();
     await this.botaoAvancar.click();
+  }
+
+  async avancarStatusPedido(pedidoId) {
+    await this.abrirPedido(pedidoId);
+    await Promise.all([
+      this.page.waitForResponse((response) => response.url().includes(`/pedidos/${pedidoId}/status`) && response.status() === 200),
+      this.avancarStatusQuandoDisponivel(),
+    ]);
   }
 
   async cancelarQuandoDisponivel() {

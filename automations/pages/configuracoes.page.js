@@ -10,6 +10,9 @@ export class ConfiguracoesPage {
     this.botaoSalvarHorarios = page.getByTestId('salvar-horarios-button');
     this.listaTaxas = page.getByTestId('taxas-list');
     this.botaoAdicionarTaxa = page.getByTestId('adicionar-taxa-button');
+    this.nome = page.getByTestId('loja-nome-input');
+    this.telefone = page.getByTestId('loja-telefone-input');
+    this.whatsapp = page.getByTestId('loja-whatsapp-input');
   }
 
   async abrir() {
@@ -24,15 +27,53 @@ export class ConfiguracoesPage {
   }
 
   async alternarLoja() {
-    await this.switchAberta.click();
+    const resposta = await Promise.all([
+      this.page.waitForResponse((response) => response.url().includes('/pausa-manual') && response.status() === 200),
+      this.switchAberta.click(),
+    ]);
+    return resposta[0].json();
+  }
+
+  async atualizarDados(configuracao) {
+    await this.nome.fill(configuracao.nome);
+    await this.telefone.fill(configuracao.telefone);
+    await this.whatsapp.fill(configuracao.whatsapp);
+    await this.salvarDados();
   }
 
   async salvarDados() {
-    await this.botaoSalvarDados.click();
+    await Promise.all([
+      this.page.waitForResponse((response) => response.url().includes('/lojas/') && response.request().method() === 'PUT' && response.status() === 200),
+      this.botaoSalvarDados.click(),
+    ]);
+  }
+
+  async atualizarHorario(configuracao) {
+    await this.page.getByTestId(`horario-${configuracao.diaSemana}-abertura`).fill(configuracao.abertura);
+    await this.page.getByTestId(`horario-${configuracao.diaSemana}-fechamento`).fill(configuracao.fechamento);
+    await this.salvarHorarios();
   }
 
   async salvarHorarios() {
-    await this.botaoSalvarHorarios.click();
+    await Promise.all([
+      this.page.waitForResponse((response) => response.url().includes('/horarios') && response.request().method() === 'PUT' && response.status() === 200),
+      this.botaoSalvarHorarios.click(),
+    ]);
+  }
+
+  async adicionarTaxa() {
+    const resposta = await Promise.all([
+      this.page.waitForResponse((response) => response.url().includes('/entrega/areas') && response.request().method() === 'POST' && response.status() === 201),
+      this.botaoAdicionarTaxa.click(),
+    ]);
+    return resposta[0].json();
+  }
+
+  async removerTaxa(taxaId) {
+    await Promise.all([
+      this.page.waitForResponse((response) => response.url().includes(`/entrega/areas/${taxaId}`) && response.request().method() === 'DELETE'),
+      this.page.getByTestId(`taxa-remover-${taxaId}`).click(),
+    ]);
   }
 
   async validarBotaoAdicionarTaxa() {
