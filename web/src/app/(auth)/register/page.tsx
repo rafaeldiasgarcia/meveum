@@ -297,7 +297,7 @@ export default function RegisterPage() {
 
                 <button
                   type="submit"
-                  disabled={isSubmitting || !termsAccepted}
+                  disabled={isSubmitting}
                   data-testid="submit-register-button"
                   className="mt-5 flex h-[56px] w-full items-center justify-center gap-3 rounded-lg bg-[#FF5C0A] text-lg font-bold tracking-[0.04em] text-white shadow-[0_22px_40px_rgba(234,88,12,0.22)] transition hover:bg-[#EA580C] disabled:cursor-not-allowed disabled:opacity-50"
                 >

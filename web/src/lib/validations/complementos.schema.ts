@@ -4,11 +4,12 @@ export const grupoComplementoSchema = z.object({
   nome: z.string().min(2, "Nome deve ter ao menos 2 caracteres"),
   quantidadeMinima: z.coerce.number().min(0, "Mínimo deve ser 0 ou maior"),
   quantidadeMaxima: z.coerce.number().min(1, "Máximo deve ser ao menos 1"),
-}).refine((d) => d.quantidadeMaxima >= d.quantidadeMinima, {
+}).refine((data) => data.quantidadeMaxima >= data.quantidadeMinima, {
   message: "Máximo deve ser maior ou igual ao mínimo",
   path: ["quantidadeMaxima"],
 });
 
+export type GrupoComplementoFormInput = z.input<typeof grupoComplementoSchema>;
 export type GrupoComplementoFormData = z.output<typeof grupoComplementoSchema>;
 
 export const opcaoComplementoSchema = z.object({
@@ -17,4 +18,5 @@ export const opcaoComplementoSchema = z.object({
   precoAdicional: z.coerce.number().min(0, "Preço não pode ser negativo"),
 });
 
+export type OpcaoComplementoFormInput = z.input<typeof opcaoComplementoSchema>;
 export type OpcaoComplementoFormData = z.output<typeof opcaoComplementoSchema>;

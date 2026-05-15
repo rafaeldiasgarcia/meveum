@@ -12,7 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { EmptyState } from "@/components/shared/EmptyState";
-import { categoriaSchema, type CategoriaFormData } from "@/lib/validations/cardapio.schema";
+import { categoriaSchema, type CategoriaFormData, type CategoriaFormInput } from "@/lib/validations/cardapio.schema";
 import {
   listarTodasCategorias,
   criarCategoria,
@@ -34,7 +34,7 @@ function CategoriaForm({
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<CategoriaFormData>({
+  } = useForm<CategoriaFormInput, unknown, CategoriaFormData>({
     resolver: zodResolver(categoriaSchema),
     defaultValues: categoria
       ? { nome: categoria.nome, ordem: categoria.ordem }

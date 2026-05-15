@@ -6,6 +6,7 @@ export const categoriaSchema = z.object({
   ordem: z.coerce.number().min(0).optional(),
 });
 
+export type CategoriaFormInput = z.input<typeof categoriaSchema>;
 export type CategoriaFormData = z.output<typeof categoriaSchema>;
 
 export const produtoSchema = z.object({

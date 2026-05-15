@@ -16,7 +16,9 @@ import {
   grupoComplementoSchema,
   opcaoComplementoSchema,
   type GrupoComplementoFormData,
+  type GrupoComplementoFormInput,
   type OpcaoComplementoFormData,
+  type OpcaoComplementoFormInput,
 } from "@/lib/validations/complementos.schema";
 import { listarProdutos } from "@/lib/api/cardapio.api";
 import {
@@ -42,7 +44,7 @@ function GrupoForm({
   onSave: () => void;
   onClose: () => void;
 }) {
-  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<GrupoComplementoFormData>({
+  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<GrupoComplementoFormInput, unknown, GrupoComplementoFormData>({
     resolver: zodResolver(grupoComplementoSchema),
     defaultValues: grupo
       ? { nome: grupo.nomeGrupoComplemento, quantidadeMinima: grupo.quantidadeMinima, quantidadeMaxima: grupo.quantidadeMaxima }
@@ -105,7 +107,7 @@ function OpcaoForm({
   onSave: () => void;
   onClose: () => void;
 }) {
-  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<OpcaoComplementoFormData>({
+  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<OpcaoComplementoFormInput, unknown, OpcaoComplementoFormData>({
     resolver: zodResolver(opcaoComplementoSchema),
     defaultValues: opcao
       ? { nome: opcao.nome, descricao: opcao.descricao ?? "", precoAdicional: opcao.precoAdicional }
