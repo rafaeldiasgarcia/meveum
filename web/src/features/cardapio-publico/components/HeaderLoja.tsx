@@ -8,27 +8,19 @@ type Props = { loja: LojaPublica };
 export function HeaderLoja({ loja }: Props) {
   return (
     <header
-      className="pt-10 pb-6 flex flex-col items-center gap-2 bg-[#FFF8F4]"
+      className="mt-8 mb-2 flex flex-col items-center gap-3 px-4 text-center md:mt-12"
       data-testid="public-store-header"
     >
       <div className="relative">
-        {loja.logoUrl ? (
-          <Image
-            src={loja.logoUrl}
-            alt={loja.nome}
-            width={88}
-            height={88}
-            className="w-[88px] h-[88px] rounded-full object-cover border-4 border-white shadow-lg"
-          />
-        ) : (
-          <div className="w-[88px] h-[88px] rounded-full bg-orange-100 flex items-center justify-center border-4 border-white shadow-lg">
-            <span className="text-orange-600 font-bold text-3xl">
-              {loja.nome.charAt(0).toUpperCase()}
-            </span>
-          </div>
-        )}
+        <Image
+          src={loja.logoUrl ?? "/cardapio-publico/store-logo.jpg"}
+          alt={loja.nome}
+          width={112}
+          height={112}
+          className="h-24 w-24 rounded-full border-4 border-[#FBF7F4] object-cover shadow-xl md:h-28 md:w-28"
+        />
         <span
-          className={`absolute -bottom-2.5 left-1/2 -translate-x-1/2 whitespace-nowrap text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-sm ${
+          className={`absolute -bottom-1 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider shadow-sm ${
             loja.operacional
               ? "bg-green-500 text-white"
               : "bg-red-500 text-white"
@@ -38,12 +30,17 @@ export function HeaderLoja({ loja }: Props) {
           {loja.operacional ? "ABERTO" : "FECHADO"}
         </span>
       </div>
-      <h1
-        className="mt-4 font-bold text-gray-900 text-2xl text-center leading-tight"
-        data-testid="public-store-name"
-      >
-        {loja.nome}
-      </h1>
+      <div className="mt-1">
+        <h1
+          className="text-center text-2xl font-extrabold leading-tight text-[#1C1917] md:text-3xl"
+          data-testid="public-store-name"
+        >
+          {loja.nome}
+        </h1>
+        <p className="mt-1 text-sm font-medium text-[#78716C] md:text-base">
+          O melhor cardápio da região
+        </p>
+      </div>
     </header>
   );
 }

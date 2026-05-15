@@ -108,7 +108,7 @@ Exemplo esperado:
 
 ```ts
 export async function listarProdutos(): Promise<ListarProdutoResponse[]> {
-  return api.get('/produtos');
+  return api.get("/produtos");
 }
 ```
 
@@ -141,7 +141,7 @@ export function useProdutos() {
       const response = await listarProdutos();
       setProdutos(response);
     } catch {
-      setError('Nao foi possivel carregar os produtos.');
+      setError("Nao foi possivel carregar os produtos.");
     } finally {
       setLoading(false);
     }
@@ -182,9 +182,9 @@ Exemplo:
 
 ```ts
 export const endpoints = {
-  produtos: '/produtos',
-  categorias: '/categorias',
-  pedidos: '/pedidos',
+  produtos: "/produtos",
+  categorias: "/categorias",
+  pedidos: "/pedidos",
 };
 ```
 
@@ -262,6 +262,29 @@ produto-card-{id}
 ## data-testid
 
 Todo elemento interativo ou container essencial para a jornada do usuario deve possuir `data-testid`.
+
+### Proibicao estrita de alterar seletores
+
+`data-testid` existente e contrato publico entre frontend, testes unitarios,
+automacoes Playwright e revisoes futuras. E estritamente proibido remover,
+renomear ou trocar o valor de um `data-testid` ja existente.
+
+Regras obrigatorias:
+
+- nunca remova `data-testid` existente em refactor, redesign ou troca de
+  componente
+- nunca renomeie `data-testid` para "melhorar padrao" sem alinhamento explicito
+  e atualizacao coordenada dos testes
+- se um elemento mudar de lugar ou componente, carregue o mesmo `data-testid`
+  junto com ele
+- se um novo seletor for necessario, adicione um novo `data-testid` mantendo o
+  antigo ate haver migracao planejada dos testes
+- se uma automacao quebrar porque um `data-testid` sumiu, a correcao padrao e
+  restaurar o `data-testid` no frontend, nao alterar o teste para um seletor
+  mais fragil
+
+Alterar `data-testid` sem pedido explicito do responsavel do fluxo e bloqueio
+de PR.
 
 Use `data-testid` em:
 
@@ -364,7 +387,7 @@ Prefira testes orientados ao usuario.
 Use queries acessiveis sempre que possivel:
 
 ```ts
-screen.getByRole('button', { name: /salvar/i });
+screen.getByRole("button", { name: /salvar/i });
 screen.getByLabelText(/nome/i);
 screen.getByText(/produto criado/i);
 ```
@@ -379,7 +402,7 @@ Use `data-testid` quando:
 Exemplo:
 
 ```ts
-expect(screen.getByTestId('produtos-empty-state')).toBeInTheDocument();
+expect(screen.getByTestId("produtos-empty-state")).toBeInTheDocument();
 ```
 
 ## Organizacao dos testes
@@ -401,7 +424,7 @@ Cada teste deve ter nome claro e comportamento esperado.
 Exemplo:
 
 ```ts
-it('deve exibir mensagem de erro quando o nome do produto estiver vazio', async () => {
+it("deve exibir mensagem de erro quando o nome do produto estiver vazio", async () => {
   // teste
 });
 ```
@@ -575,11 +598,11 @@ Exemplo:
 
 ```ts
 export const routes = {
-  login: '/login',
-  cadastro: '/cadastro',
-  dashboard: '/dashboard',
-  cardapio: '/cardapio',
-  pedidos: '/pedidos',
+  login: "/login",
+  cadastro: "/cadastro",
+  dashboard: "/dashboard",
+  cardapio: "/cardapio",
+  pedidos: "/pedidos",
 };
 ```
 
@@ -649,3 +672,4 @@ Antes de criar codigo novo, confira se a implementacao respeita:
 - testes unitarios de comportamento
 - ausencia total de testes esteticos
 - codigo preparado para integracao futura com o backend
+- sempre que encontrar algum erro, crie issues no github

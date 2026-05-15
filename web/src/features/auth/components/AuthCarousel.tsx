@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { QrCode, MessageCircle, ChartColumn, Star, Sparkles } from "lucide-react";
+import { useState } from "react";
+import { ChartColumn, MessageCircle, QrCode, Sparkles, Star } from "lucide-react";
 
 const SLIDES = [
   {
@@ -17,7 +17,7 @@ const SLIDES = [
     category: "WhatsApp organizado",
     title: "Pedidos chegam prontos no seu WhatsApp.",
     description:
-      "Mensagens estruturadas, dados do cliente e endereço — sem trocar 20 mensagens por pedido.",
+      "Mensagens estruturadas, dados do cliente e endereço, sem trocar 20 mensagens por pedido.",
     badge: "0 pedido perdido",
   },
   {
@@ -39,94 +39,85 @@ const SLIDES = [
 ];
 
 export function AuthCarousel() {
-  const [active, setActive] = useState(0);
-
-  useEffect(() => {
-    const t = setInterval(() => setActive((p) => (p + 1) % SLIDES.length), 5000);
-    return () => clearInterval(t);
-  }, []);
+  const [active, setActive] = useState(3);
 
   return (
-    <aside className="relative hidden overflow-hidden bg-charcoal text-white lg:block">
-      {/* Grain */}
-      <div className="bg-grain absolute inset-0 opacity-40" />
+    <aside className="relative hidden h-full min-h-screen overflow-hidden bg-[#1C1917] text-white lg:block">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_20%,rgba(234,88,12,0.33),transparent_32%),radial-gradient(circle_at_86%_86%,rgba(245,158,11,0.27),transparent_34%)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(234,88,12,0.08),transparent_45%)]" />
+      <div className="bg-grain absolute inset-0 opacity-15" />
 
-      {/* Glow circles */}
-      <div className="absolute -left-24 top-24 h-72 w-72 rounded-full bg-ember/30 blur-3xl" />
-      <div className="absolute -right-20 bottom-10 h-80 w-80 rounded-full bg-amber-warm/20 blur-3xl" />
-
-      <div className="relative flex h-full flex-col justify-between p-12 xl:p-16">
-        {/* Top bar */}
+      <div className="relative flex h-full min-h-screen flex-col justify-between px-12 py-10 xl:px-20 xl:py-16">
         <div className="flex items-center justify-between">
-          <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs font-medium text-white/80 backdrop-blur">
-            <span className="h-1.5 w-1.5 rounded-full bg-ember" />
+          <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-4 py-1.5 text-sm font-semibold text-white/80 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur">
+            <span className="h-2 w-2 rounded-full bg-[#FF5C0A]" />
             Por que MeVêUm
           </span>
-          <span className="text-xs text-white/50">
+          <span className="text-sm font-medium tracking-[0.18em] text-white/60">
             {String(active + 1).padStart(2, "0")} / {String(SLIDES.length).padStart(2, "0")}
           </span>
         </div>
 
-        {/* Slides */}
-        <div className="relative my-10 min-h-[360px]">
-          {SLIDES.map((s, i) => {
-            const SlideIcon = s.icon;
-            const isActive = i === active;
+        <div className="relative min-h-[420px]">
+          {SLIDES.map((slide, index) => {
+            const SlideIcon = slide.icon;
+            const isActive = index === active;
+
             return (
               <article
-                key={i}
+                key={slide.title}
                 aria-hidden={!isActive}
-                className={`absolute inset-0 transition-all duration-700 ${
-                  isActive
-                    ? "translate-y-0 opacity-100"
-                    : "pointer-events-none translate-y-4 opacity-0"
+                className={`absolute left-0 top-1/2 w-full max-w-[560px] -translate-y-1/2 transition-all duration-500 ${
+                  isActive ? "translate-x-0 opacity-100" : "pointer-events-none translate-x-6 opacity-0"
                 }`}
               >
-                <div className="inline-grid h-12 w-12 place-items-center rounded-2xl bg-ember text-white shadow-ember">
-                  <SlideIcon className="h-5 w-5" aria-hidden />
+                <div className="inline-grid h-[62px] w-[62px] place-items-center rounded-[22px] bg-[#FF5C0A] text-white shadow-[0_20px_50px_rgba(234,88,12,0.35)]">
+                  <SlideIcon className="h-7 w-7" aria-hidden />
                 </div>
 
-                <p className="mt-6 text-xs font-semibold uppercase tracking-[0.18em] text-amber-warm">
-                  {s.category}
+                <p className="mt-8 text-sm font-bold uppercase tracking-[0.32em] text-[#FACC15]">
+                  {slide.category}
                 </p>
 
-                <h2 className="mt-3 font-display text-3xl font-semibold leading-tight tracking-tight text-white xl:text-4xl">
-                  {s.title}
+                <h2 className="mt-5 font-display text-[40px] font-bold leading-[1.18] tracking-normal text-white xl:text-[44px]">
+                  {slide.title}
                 </h2>
 
-                <p className="mt-4 max-w-md text-base leading-relaxed text-white/70">
-                  {s.description}
+                <p className="mt-6 max-w-[520px] text-xl font-semibold leading-relaxed text-white/68">
+                  {slide.description}
                 </p>
 
-                <div className="mt-7 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm font-semibold text-white backdrop-blur">
-                  <Sparkles className="h-3.5 w-3.5 text-ember" aria-hidden />
-                  {s.badge}
+                <div className="mt-9 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-5 py-3 text-lg font-bold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur">
+                  <Sparkles className="h-5 w-5 text-[#FF5C0A]" aria-hidden />
+                  {slide.badge}
                 </div>
               </article>
             );
           })}
         </div>
 
-        {/* Bottom bar */}
-        <div className="flex items-center justify-between">
-          <div className="flex gap-2">
-            {SLIDES.map((_, i) => (
+        <div className="flex items-center justify-between gap-8">
+          <div className="flex items-center gap-2.5">
+            {SLIDES.map((slide, index) => (
               <button
-                key={i}
-                aria-label={`Ir para slide ${i + 1}`}
-                onClick={() => setActive(i)}
+                key={slide.title}
+                type="button"
+                aria-label={`Ir para slide ${index + 1}`}
+                onClick={() => setActive(index)}
                 className={`h-1.5 rounded-full transition-all ${
-                  i === active ? "w-8 bg-ember" : "w-4 bg-white/25 hover:bg-white/40"
+                  index === active ? "w-10 bg-[#FF5C0A]" : "w-5 bg-white/30 hover:bg-white/50"
                 }`}
               />
             ))}
           </div>
 
-          <div className="flex -space-x-2">
-            <div className="h-9 w-9 rounded-full border-2 border-charcoal bg-gradient-to-br from-ember to-amber-warm ring-1 ring-white/20" />
-            <div className="h-9 w-9 rounded-full border-2 border-charcoal bg-gradient-to-br from-amber-warm to-ember-deep ring-1 ring-white/20" />
-            <div className="h-9 w-9 rounded-full border-2 border-charcoal bg-gradient-to-br from-ember-deep to-ember ring-1 ring-white/20" />
-            <div className="ml-3 self-center text-xs text-white/60">+2.000 restaurantes</div>
+          <div className="flex items-center">
+            <div className="flex -space-x-3">
+              <span className="h-11 w-11 rounded-full border-2 border-[#1C1917] bg-[#FF9F1C] shadow-[0_0_0_1px_rgba(255,255,255,0.18)]" />
+              <span className="h-11 w-11 rounded-full border-2 border-[#1C1917] bg-[#FFB020] shadow-[0_0_0_1px_rgba(255,255,255,0.18)]" />
+              <span className="h-11 w-11 rounded-full border-2 border-[#1C1917] bg-[#FF5C0A] shadow-[0_0_0_1px_rgba(255,255,255,0.18)]" />
+            </div>
+            <span className="ml-3 text-sm font-semibold text-white/75">+2.000 restaurantes</span>
           </div>
         </div>
       </div>

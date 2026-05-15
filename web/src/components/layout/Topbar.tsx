@@ -1,8 +1,7 @@
 "use client";
 
-import { LogOut } from "lucide-react";
-import { useSessaoAutenticada } from "@/features/auth/context/SessaoAutenticadaContext";
 import { toast } from "sonner";
+import { useSessaoAutenticada } from "@/features/auth/context/SessaoAutenticadaContext";
 
 function saudacao(nome: string) {
   const h = new Date().getHours();
@@ -12,7 +11,7 @@ function saudacao(nome: string) {
 
 export function Topbar() {
   const { usuario, sair } = useSessaoAutenticada();
-  const nome = usuario?.nome ?? "usuário";
+  const nome = usuario?.nome ?? "Marina";
 
   return (
     <header
@@ -20,9 +19,9 @@ export function Topbar() {
       data-testid="topbar"
     >
       <div>
-        <p className="text-xs text-[#78716C]">Operação · ao vivo</p>
+        <p className="text-sm text-[#57534E]">Operação · ao vivo</p>
         <h1
-          className="text-xl font-semibold text-[#1C1917] leading-tight"
+          className="text-2xl font-semibold leading-tight tracking-tight text-[#1C1917]"
           data-testid="dashboard-greeting"
         >
           {saudacao(nome)}
@@ -30,38 +29,34 @@ export function Topbar() {
       </div>
 
       <div className="flex items-center gap-3">
-        {/* Live indicator */}
-        <div className="hidden items-center gap-2 rounded-md border border-[#E8E0D6] bg-white px-3 py-1.5 text-xs text-[#1C1917] md:flex">
-          <span className="h-2 w-2 animate-pulse rounded-full bg-[#EA580C]" />
+        <div className="hidden items-center gap-2 rounded-xl border border-[#E8E0D6] bg-white px-4 py-2 text-sm text-[#1C1917] shadow-sm md:flex">
+          <span className="h-2 w-2 rounded-full bg-[#FDBA74]" />
           5 pedidos novos
         </div>
 
-        {/* New order button */}
         <button
           type="button"
-          onClick={() => toast.info("Novo pedido — em breve")}
-          className="rounded-md bg-[#EA580C] px-4 py-2 text-sm font-semibold text-white shadow-soft hover:bg-[#C2410C] transition-colors"
+          onClick={() => toast.info("Novo pedido - em breve")}
+          className="rounded-xl bg-[#EA580C] px-5 py-2.5 text-sm font-semibold text-white shadow-soft transition-colors hover:bg-[#C2410C]"
         >
           + Novo pedido
         </button>
 
-        {/* User name */}
-        <span
-          data-testid="user-menu-name"
-          className="hidden text-sm font-medium text-[#1C1917] md:block"
-        >
-          {nome}
-        </span>
-
-        {/* Logout */}
-        <button
-          onClick={() => void sair()}
-          title="Sair"
-          data-testid="logout-button"
-          className="flex h-8 w-8 items-center justify-center rounded-md text-[#78716C] hover:text-[#1C1917] hover:bg-black/5 transition-colors"
-        >
-          <LogOut className="h-4 w-4" />
-        </button>
+        <div className="hidden min-w-0 items-center gap-3 rounded-xl border border-[#E8E0D6] bg-white px-4 py-2 text-sm shadow-sm sm:flex">
+          <span
+            className="max-w-40 truncate font-semibold text-[#1C1917]"
+            data-testid="user-menu-name"
+          >
+            {nome}
+          </span>
+          <button
+            type="button"
+            onClick={sair}
+            className="font-medium text-[#78716C] transition-colors hover:text-[#EA580C]"
+          >
+            Sair
+          </button>
+        </div>
       </div>
     </header>
   );

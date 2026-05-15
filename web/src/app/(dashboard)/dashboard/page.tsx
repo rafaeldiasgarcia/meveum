@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { cn } from "@/lib/utils/cn";
 import { formatCurrency } from "@/lib/utils/format";
 import { useSessaoAutenticada } from "@/features/auth/context/SessaoAutenticadaContext";
@@ -60,7 +61,7 @@ function GraficoArea({ dados }: { dados: DadoGrafico[] }) {
   if (dados.length < 2) return null;
   const W = 600;
   const H = 180;
-  const max = Math.max(...dados.map((d) => d.valor));
+  const max = Math.max(1, ...dados.map((d) => d.valor));
   const pts = dados.map((d, i) => ({
     x: (i / (dados.length - 1)) * W,
     y: H - 10 - (d.valor / max) * (H - 30),
@@ -104,9 +105,30 @@ const TABS: { id: TabFiltro; label: string }[] = [
   { id: "finalizado",   label: "Concluídos" },
 ];
 
+const metricasVazias: MetricasDashboard = {
+  pedidosHoje: 0,
+  faturamentoHoje: 0,
+  ticketMedio: 0,
+  tempoMedioCozinhaMin: 0,
+  pedidosEmPreparo: 0,
+  novosClientesHoje: 0,
+  taxaRecompra: 0,
+  variacaoPedidosPercent: 0,
+  variacaoFaturamentoPercent: 0,
+  variacaoTicketMedio: 0,
+  variacaoTempoMedioCozinha: 0,
+  faturamento7Dias: 0,
+  variacaoFaturamento7Dias: 0,
+};
+
+const graficoVazio: DadoGrafico[] = ["seg", "ter", "qua", "qui", "sex", "sab", "dom"].map((label) => ({
+  label,
+  valor: 0,
+}));
+
 // ─────────────────────────────────────────────────────────────────────────────
 export default function DashboardPage() {
-  useSessaoAutenticada();
+  const { usuario, carregando } = useSessaoAutenticada();
   const [metricas, setMetricas] = useState<MetricasDashboard | null>(null);
   const [grafico, setGrafico] = useState<DadoGrafico[]>([]);
   const [pedidos, setPedidos] = useState<PedidoResumo[]>([]);
@@ -117,6 +139,20 @@ export default function DashboardPage() {
   const [tab, setTab] = useState<TabFiltro>("todos");
 
   useEffect(() => {
+    if (carregando) return;
+
+    if (!usuario?.lojaId) {
+      setMetricas(metricasVazias);
+      setGrafico(graficoVazio);
+      setPedidos([]);
+      setKds([]);
+      setTop([]);
+      setClientes([]);
+      setLoading(false);
+      return;
+    }
+
+    setLoading(true);
     Promise.all([
       buscarMetricas(),
       buscarGraficoSemanal(),
@@ -133,8 +169,16 @@ export default function DashboardPage() {
         setTop(t);
         setClientes(c);
       })
+      .catch(() => {
+        setMetricas(metricasVazias);
+        setGrafico(graficoVazio);
+        setPedidos([]);
+        setKds([]);
+        setTop([]);
+        setClientes([]);
+      })
       .finally(() => setLoading(false));
-  }, []);
+  }, [carregando, usuario?.lojaId]);
 
   const pedidosFiltrados =
     tab === "todos" ? pedidos : pedidos.filter((p) => p.status === tab);
@@ -155,15 +199,6 @@ export default function DashboardPage() {
 
       {/* ── Métricas ────────────────────────────────────────────────────────── */}
       <div className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-6">
-        <div data-testid="metric-card-orders-today" className="rounded-xl border border-[#E8E0D6] bg-white p-5 shadow-soft">
-          <p className="text-[10px] uppercase tracking-wider text-[#78716C]">Pedidos hoje</p>
-          <p className="mt-2 text-2xl font-semibold text-[#1C1917]">
-            {metricas?.pedidosHoje ?? 0}
-          </p>
-          <p className="mt-1 text-xs font-medium text-[#EA580C]">
-            +{metricas?.variacaoPedidosPercent ?? 0}%
-          </p>
-        </div>
         <div data-testid="metric-card-revenue" className="rounded-xl border border-[#E8E0D6] bg-white p-5 shadow-soft">
           <p className="text-[10px] uppercase tracking-wider text-[#78716C]">Faturamento hoje</p>
           <p className="mt-2 text-2xl font-semibold text-[#1C1917]">
@@ -171,6 +206,15 @@ export default function DashboardPage() {
           </p>
           <p className="mt-1 text-xs font-medium text-[#EA580C]">
             +{metricas?.variacaoFaturamentoPercent ?? 0}% vs ontem
+          </p>
+        </div>
+        <div data-testid="metric-card-orders-today" className="rounded-xl border border-[#E8E0D6] bg-white p-5 shadow-soft">
+          <p className="text-[10px] uppercase tracking-wider text-[#78716C]">Pedidos hoje</p>
+          <p className="mt-2 text-2xl font-semibold text-[#1C1917]">
+            {metricas?.pedidosHoje ?? 0}
+          </p>
+          <p className="mt-1 text-xs font-medium text-[#EA580C]">
+            +{metricas?.variacaoPedidosPercent ?? 0}%
           </p>
         </div>
         <div data-testid="metric-card-ticket" className="rounded-xl border border-[#E8E0D6] bg-white p-5 shadow-soft">
@@ -182,12 +226,21 @@ export default function DashboardPage() {
             +{formatCurrency(metricas?.variacaoTicketMedio ?? 0)}
           </p>
         </div>
+        <div data-testid="metric-card-kitchen-time" className="rounded-xl border border-[#E8E0D6] bg-white p-5 shadow-soft">
+          <p className="text-[10px] uppercase tracking-wider text-[#78716C]">Tempo médio cozinha</p>
+          <p className="mt-2 text-2xl font-semibold text-[#1C1917]">
+            {metricas?.tempoMedioCozinhaMin ?? 0} min
+          </p>
+          <p className="mt-1 text-xs font-medium text-[#16A34A]">
+            {Math.abs(metricas?.variacaoTempoMedioCozinha ?? 0)} min
+          </p>
+        </div>
         <div data-testid="metric-card-preparing" className="rounded-xl border border-[#E8E0D6] bg-white p-5 shadow-soft">
           <p className="text-[10px] uppercase tracking-wider text-[#78716C]">Em preparo</p>
           <p className="mt-2 text-2xl font-semibold text-[#1C1917]">
             {metricas?.pedidosEmPreparo ?? 0}
           </p>
-          <p className="mt-1 text-xs font-medium text-[#78716C]">pedidos</p>
+          <p className="mt-1 text-xs font-medium text-[#78716C]">ativos agora</p>
         </div>
         <div data-testid="metric-card-new-clients" className="rounded-xl border border-[#E8E0D6] bg-white p-5 shadow-soft">
           <p className="text-[10px] uppercase tracking-wider text-[#78716C]">Novos clientes</p>
@@ -201,7 +254,7 @@ export default function DashboardPage() {
           <p className="mt-2 text-2xl font-semibold text-[#1C1917]">
             {metricas?.taxaRecompra ?? 0}%
           </p>
-          <p className="mt-1 text-xs font-medium text-[#78716C]">dos clientes</p>
+          <p className="mt-1 text-xs font-medium text-[#78716C]">clientes recorrentes</p>
         </div>
       </div>
 
@@ -214,30 +267,31 @@ export default function DashboardPage() {
         >
           <header className="flex items-center justify-between border-b border-[#E8E0D6] px-5 py-3">
             <p className="font-semibold text-[#1C1917]">Pedidos recentes</p>
-            <div className="flex items-center gap-2">
-            <a
-              href="/dashboard/pedidos"
-              data-testid="ver-todos-pedidos-button"
-              className="text-xs font-medium text-[#EA580C] hover:underline"
-            >
-              Ver todos
-            </a>
-            <div className="flex gap-1 text-xs">
-              {TABS.map((t) => (
-                <button
-                  key={t.id}
-                  onClick={() => setTab(t.id)}
-                  className={cn(
-                    "rounded-md px-2.5 py-1 transition-colors",
-                    tab === t.id
-                      ? "bg-[#1C1917] text-white"
-                      : "text-[#1C1917]/70 hover:bg-[#F5EFE8]",
-                  )}
-                >
-                  {t.label}
-                </button>
-              ))}
-            </div>
+            <div className="flex items-center gap-3">
+              <div className="flex gap-1 text-xs">
+                {TABS.map((t) => (
+                  <button
+                    key={t.id}
+                    type="button"
+                    onClick={() => setTab(t.id)}
+                    className={cn(
+                      "rounded-md px-2.5 py-1 transition-colors",
+                      tab === t.id
+                        ? "bg-[#1C1917] text-white"
+                        : "text-[#1C1917]/70 hover:bg-[#F5EFE8]",
+                    )}
+                  >
+                    {t.label}
+                  </button>
+                ))}
+              </div>
+              <Link
+                href="/dashboard/pedidos"
+                data-testid="ver-todos-pedidos-button"
+                className="rounded-md border border-[#E8E0D6] px-2.5 py-1 text-xs font-semibold text-[#1C1917]/70 transition-colors hover:bg-[#F5EFE8]"
+              >
+                Ver todos
+              </Link>
             </div>
           </header>
           <ul className="divide-y divide-[#F5F0EB]" data-testid="pedidos-recentes-list">
