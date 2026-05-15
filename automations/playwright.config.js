@@ -7,6 +7,9 @@ const TIMEOUTS = {
   navegacao: 30_000,
 };
 
+const WEB_BASE_URL = process.env.WEB_BASE_URL ?? 'http://localhost:3000';
+const API_BASE_URL = process.env.API_BASE_URL ?? 'http://127.0.0.1:8080';
+
 export default defineConfig({
   testDir: './tests',
 
@@ -42,7 +45,7 @@ export default defineConfig({
       testMatch: /.*frontend\/.*\.spec\.js/,
       use: {
         ...devices['Desktop Chrome'],
-        baseURL: 'http://127.0.0.1:3000',
+        baseURL: WEB_BASE_URL,
       },
     },
     {
@@ -50,14 +53,14 @@ export default defineConfig({
       testMatch: /.*e2e\/.*\.spec\.js/,
       use: {
         ...devices['Desktop Chrome'],
-        baseURL: 'http://127.0.0.1:3000',
+        baseURL: WEB_BASE_URL,
       },
     },
     {
       name: 'rest',
       testMatch: /.*api\/.*\.spec\.js/,
       use: {
-        baseURL: 'http://127.0.0.1:8080',
+        baseURL: API_BASE_URL,
       },
     },
   ],
