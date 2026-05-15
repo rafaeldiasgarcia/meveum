@@ -40,19 +40,19 @@ export function NavCategorias({ categorias }: Props) {
   return (
     <nav
       ref={navRef}
-      className="bg-[#FFF8F4] sticky top-0 z-20 overflow-x-auto scrollbar-none"
+      className="sticky top-0 z-30 overflow-x-auto bg-[#FBF7F4]/90 py-3 backdrop-blur-md md:py-4"
       data-testid="public-categories-nav"
     >
-      <div className="flex gap-2 px-4 py-3 max-w-2xl mx-auto">
+      <div className="flex gap-3 px-4 md:px-10 lg:px-14">
         {categorias.map((cat) => (
           <button
             key={cat.id}
             onClick={() => scrollParaCategoria(cat.id)}
             data-testid={`public-category-${cat.id}`}
-            className={`shrink-0 px-4 py-1.5 rounded-full text-sm font-medium transition-colors border ${
+            className={`shrink-0 rounded-full px-6 py-2.5 text-sm font-semibold transition-all ${
               ativa === cat.id
-                ? "bg-orange-500 text-white border-orange-500"
-                : "bg-white text-gray-900 border-gray-300 hover:border-orange-400"
+                ? "bg-[#EA580C] text-white shadow-lg shadow-[#EA580C]/30"
+                : "border border-[#E8E0D6]/70 bg-[#FBF7F4] text-[#1C1917] hover:bg-[#F5EFE8]"
             }`}
           >
             {cat.nome}

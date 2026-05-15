@@ -22,19 +22,17 @@ function Header() {
       className="sticky top-0 z-50 border-b border-lborder/60 backdrop-blur-md"
       style={{ backgroundColor: "rgba(251,247,244,0.85)" }}
     >
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-3 px-4 sm:px-5">
-        <Link href="/" className="flex min-w-0 items-center" aria-label="MeVêUm">
-          <Image
-            src="/logo-header.png"
-            alt="MeVêUm"
-            width={130}
-            height={52}
-            className="h-8 w-auto object-contain sm:h-10"
-            priority
-          />
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-3 px-5">
+        <Link href="/" className="flex items-center gap-2" aria-label="MeVêUm">
+          <span className="grid h-8 w-8 place-items-center rounded-md bg-charcoal text-cream">
+            <span className="font-display text-[15px] font-semibold leading-none">M</span>
+          </span>
+          <span className="font-display text-lg font-semibold tracking-tight text-charcoal">
+            MeVê<span className="text-ember">Um</span>
+          </span>
         </Link>
 
-        <nav className="hidden items-center gap-7 text-sm text-lmuted lg:flex">
+        <nav className="hidden items-center gap-7 text-sm text-charcoal/75 md:flex">
           {HEADER_LINKS.map((link) => (
             <a key={link.href} href={link.href} className="transition-colors hover:text-charcoal">
               {link.label}
@@ -45,7 +43,7 @@ function Header() {
         <div className="flex shrink-0 items-center gap-2">
           <Link
             href="/login"
-            className="hidden rounded-md px-3 py-2 text-sm font-medium text-charcoal/80 hover:text-charcoal lg:inline-flex"
+            className="hidden rounded-md px-3 py-2 text-sm font-medium text-charcoal/80 hover:text-charcoal sm:inline-flex"
           >
             Entrar
           </Link>
@@ -61,7 +59,7 @@ function Header() {
             aria-label={menuAberto ? "Fechar menu" : "Abrir menu"}
             aria-expanded={menuAberto}
             onClick={() => setMenuAberto((aberto) => !aberto)}
-            className="grid h-9 w-9 place-items-center rounded-md border border-lborder bg-white text-charcoal shadow-soft lg:hidden"
+            className="grid h-9 w-9 place-items-center rounded-md border border-lborder bg-white text-charcoal shadow-soft md:hidden"
             data-testid="landing-menu-button"
           >
             {menuAberto ? <X size={18} /> : <Menu size={18} />}
@@ -70,7 +68,7 @@ function Header() {
       </div>
       {menuAberto && (
         <nav
-          className="border-t border-lborder bg-cream px-4 py-3 shadow-soft lg:hidden"
+          className="border-t border-lborder bg-cream px-4 py-3 shadow-soft md:hidden"
           data-testid="landing-mobile-menu"
         >
           <div className="mx-auto grid max-w-7xl gap-1">
@@ -180,7 +178,7 @@ function Hero() {
   return (
     <section className="relative overflow-hidden border-b border-lborder bg-cream">
       <div className="bg-grain absolute inset-0 opacity-60" />
-      <div className="relative mx-auto grid max-w-7xl items-start gap-10 px-5 pb-16 pt-12 md:grid-cols-12 md:gap-12 md:pb-20 md:pt-16">
+      <div className="relative mx-auto grid max-w-6xl items-start gap-10 px-5 pb-16 pt-12 md:grid-cols-12 md:gap-12 md:pb-20 md:pt-16">
         <div className="md:col-span-7">
           <div className="inline-flex items-center gap-2 rounded-full border border-lborder bg-white px-3 py-1 text-xs font-medium text-lmuted">
             <span className="h-1.5 w-1.5 rounded-full bg-ember" />
@@ -196,7 +194,7 @@ function Hero() {
           </p>
           <div className="relative mt-8">
             <Image
-              src="/mock-hero.png"
+              src="/device-mockups.png"
               alt="MeVêUm exibido em notebook, celular e tablet com cardápio digital de hamburgueria"
               width={1280}
               height={896}
@@ -361,27 +359,27 @@ const CARDAPIO_MOCKUP_ITENS = [
     desc: "Dois blends 90g, cheddar, bacon crocante, molho da casa.",
     preco: "R$ 38,90",
     tag: "Mais pedido",
-    foto: "/cardapio/smash-bacon-duplo.svg",
+    foto: "/cardapio/smash-bacon-duplo.png",
   },
   {
     nome: "Pizza Calabresa Artesanal",
     desc: "Massa fermentada 48h, mussarela e calabresa premium.",
     preco: "R$ 52,00",
-    foto: "/cardapio/pizza-calabresa-artesanal.svg",
+    foto: "/cardapio/pizza-calabresa-artesanal.png",
   },
   {
     nome: "Combo Família",
     desc: "4 burgers, 2 fritas grandes e 2 refris 600ml.",
     preco: "R$ 119,90",
     tag: "Combo",
-    foto: "/cardapio/combo-familia.svg",
+    foto: "/cardapio/combo-familia.png",
   },
 ];
 
 function PhoneMockupCardapio() {
   return (
     <div className="relative mx-auto w-full max-w-[calc(100vw-2.5rem)] sm:max-w-[23rem]">
-      <div className="absolute -left-32 top-10 z-20 hidden rotate-[-8deg] rounded-2xl bg-white p-3 shadow-lift lg:block">
+      <div className="absolute -left-16 top-10 z-20 hidden rotate-[-8deg] rounded-2xl bg-white p-3 shadow-lift lg:block">
         <p className="text-[10px] font-medium uppercase text-lmuted">Pagamento</p>
         <p className="font-display text-lg font-semibold text-charcoal">PIX em 3s</p>
         <div className="mt-1 h-1 w-24 overflow-hidden rounded-full bg-lborder">
@@ -534,12 +532,12 @@ function DashboardSection() {
               na hora — sem planilha, sem achismo.
             </p>
           </div>
-          <a
+          <Link
             href="/login"
             className="rounded-md border border-cream/20 px-4 py-2 text-sm font-semibold hover:bg-cream/10"
           >
             Abrir demo do dashboard →
-          </a>
+          </Link>
         </div>
 
         <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-4">
