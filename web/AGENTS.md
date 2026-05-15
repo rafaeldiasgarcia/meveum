@@ -263,6 +263,29 @@ produto-card-{id}
 
 Todo elemento interativo ou container essencial para a jornada do usuario deve possuir `data-testid`.
 
+### Proibicao estrita de alterar seletores
+
+`data-testid` existente e contrato publico entre frontend, testes unitarios,
+automacoes Playwright e revisoes futuras. E estritamente proibido remover,
+renomear ou trocar o valor de um `data-testid` ja existente.
+
+Regras obrigatorias:
+
+- nunca remova `data-testid` existente em refactor, redesign ou troca de
+  componente
+- nunca renomeie `data-testid` para "melhorar padrao" sem alinhamento explicito
+  e atualizacao coordenada dos testes
+- se um elemento mudar de lugar ou componente, carregue o mesmo `data-testid`
+  junto com ele
+- se um novo seletor for necessario, adicione um novo `data-testid` mantendo o
+  antigo ate haver migracao planejada dos testes
+- se uma automacao quebrar porque um `data-testid` sumiu, a correcao padrao e
+  restaurar o `data-testid` no frontend, nao alterar o teste para um seletor
+  mais fragil
+
+Alterar `data-testid` sem pedido explicito do responsavel do fluxo e bloqueio
+de PR.
+
 Use `data-testid` em:
 
 - botoes

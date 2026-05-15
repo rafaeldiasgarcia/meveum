@@ -11,6 +11,16 @@ Cada dominio deve concentrar seus proprios casos de uso, DTOs, mappers,
 validators, repositories e entities quando eles pertencerem ao dominio.
 Codigo compartilhado entre dominios deve ficar em `shared`.
 
+## Contratos de testabilidade
+
+`data-testid` do frontend e contrato publico usado por automacoes e revisoes.
+Mesmo em tarefas de backend que tambem toquem `web/` ou `automations/`, e
+estritamente proibido remover, renomear ou trocar `data-testid` existente.
+
+Se uma mudanca exigir novo seletor, adicione um novo `data-testid` mantendo o
+antigo. Se uma automacao falhar porque um seletor foi removido, a correcao deve
+restaurar o `data-testid` no frontend, nao trocar o teste para seletor fragil.
+
 Estrutura base:
 
 ```text

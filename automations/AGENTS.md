@@ -76,6 +76,21 @@ automations/
 
 ## Seletores de frontend
 
+`data-testid` existente e contrato de automacao. E estritamente proibido
+remover, renomear ou trocar um `data-testid` ja usado por pages, specs,
+unitarios ou fluxos E2E.
+
+Regras obrigatorias:
+
+- se uma automacao falhar porque um `data-testid` foi removido no frontend,
+  registre o problema e restaure o seletor na tela
+- nao altere page objects ou specs para contornar remocao de `data-testid` com
+  seletor textual, CSS ou XPath
+- se um novo seletor for necessario, solicite/adiciona um novo `data-testid`
+  mantendo o antigo
+- mudanca de `data-testid` so pode acontecer com pedido explicito e migracao
+  coordenada dos testes afetados
+
 Prioridade obrigatoria:
 
 1. `data-testid`
