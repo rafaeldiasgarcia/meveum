@@ -14,7 +14,7 @@ export function DrawerCarrinho({ lojaId, loja }: Props) {
   const [aberto, setAberto] = useState(false);
   const [checkoutAberto, setCheckoutAberto] = useState(false);
 
-  if (quantidadeTotal === 0 && !aberto) return null;
+  if (quantidadeTotal === 0 && !aberto && !checkoutAberto) return null;
 
   return (
     <>
@@ -22,6 +22,7 @@ export function DrawerCarrinho({ lojaId, loja }: Props) {
         <button
           onClick={() => setAberto(true)}
           className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 bg-[#1C1917] text-white rounded-2xl px-4 py-3.5 shadow-xl flex items-center gap-3 hover:bg-[#292524] transition-colors max-w-sm w-[calc(100%-2rem)]"
+          data-testid="public-cart-open-button"
         >
           <div className="relative">
             <ShoppingBag className="w-5 h-5 text-white" />
@@ -37,7 +38,10 @@ export function DrawerCarrinho({ lojaId, loja }: Props) {
       {aberto && (
         <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center">
           <div className="absolute inset-0 bg-black/50" onClick={() => setAberto(false)} />
-          <div className="relative bg-white w-full sm:max-w-lg rounded-t-3xl sm:rounded-3xl max-h-[85vh] flex flex-col overflow-hidden">
+          <div
+            className="relative bg-white w-full sm:max-w-lg rounded-t-3xl sm:rounded-3xl max-h-[85vh] flex flex-col overflow-hidden"
+            data-testid="public-cart-drawer"
+          >
             <div className="w-10 h-1 bg-gray-200 rounded-full mx-auto mt-3" />
 
             <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 mt-1">
@@ -104,6 +108,7 @@ export function DrawerCarrinho({ lojaId, loja }: Props) {
               <button
                 onClick={() => { setAberto(false); setCheckoutAberto(true); }}
                 className="w-full py-3.5 rounded-2xl bg-orange-500 text-white font-semibold text-sm hover:bg-orange-600 transition-colors"
+                data-testid="public-cart-checkout-button"
               >
                 Fechar pedido
               </button>

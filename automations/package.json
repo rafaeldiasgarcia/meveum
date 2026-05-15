@@ -7,6 +7,7 @@
     "test": "playwright test",
     "test:frontend": "playwright test --project=chrome",
     "test:api": "playwright test --project=rest",
+    "test:e2e": "playwright test --project=e2e",
     "test:headed": "playwright test --headed",
     "test:ui": "playwright test --ui",
     "test:smoke": "playwright test --grep @smoke",
@@ -20,6 +21,7 @@
   "license": "ISC",
   "devDependencies": {
     "@playwright/test": "^1.60.0",
-    "@types/node": "^25.7.0"
+    "@types/node": "^25.7.0",
+    "pg": "^8.20.0"
   }
 }

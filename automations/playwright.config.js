@@ -46,6 +46,14 @@ export default defineConfig({
       },
     },
     {
+      name: 'e2e',
+      testMatch: /.*e2e\/.*\.spec\.js/,
+      use: {
+        ...devices['Desktop Chrome'],
+        baseURL: 'http://127.0.0.1:3000',
+      },
+    },
+    {
       name: 'rest',
       testMatch: /.*api\/.*\.spec\.js/,
       use: {

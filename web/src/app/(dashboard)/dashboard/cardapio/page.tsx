@@ -60,7 +60,7 @@ function ProdutoForm({
 
       <div className="space-y-1.5">
         <Label>Descrição <span className="text-[#78716C]">(opcional)</span></Label>
-        <Input placeholder="Ingredientes, preparo..." {...register("descricao")} />
+        <Input placeholder="Ingredientes, preparo..." data-testid="produto-descricao-input" {...register("descricao")} />
       </div>
 
       <div className="grid grid-cols-2 gap-3">

@@ -23,6 +23,17 @@ export class LoginPage {
     await this.page.waitForURL('**/dashboard');
   }
 
+  async autenticarCadastro(cadastro) {
+    await this.autenticar({
+      email: cadastro.email,
+      senha: cadastro.senha,
+    });
+  }
+
+  async autenticarComSenha(email, senha) {
+    await this.autenticar({ email, senha });
+  }
+
   async enviarSemPreencher() {
     await this.botaoEntrar.click();
   }

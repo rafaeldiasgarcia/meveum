@@ -4,7 +4,7 @@
 
 Esta pasta concentra a estrategia e a implementacao das automacoes do Meveum.
 O foco atual e cobrir integracoes de backend e frontend com boa manutencao,
-sem iniciar jornadas E2E completas por enquanto.
+incluindo jornadas E2E completas quando elas agregarem sinal real.
 
 ## Direcao geral
 
@@ -12,7 +12,8 @@ sem iniciar jornadas E2E completas por enquanto.
 - Preferir teste unitario quando ele cobrir o comportamento com clareza.
 - Criar automacao de integracao quando for preciso validar contratos,
   composicao entre camadas ou comportamento observavel no browser.
-- Nao criar E2E agora.
+- Criar E2E apenas para jornadas criticas, sem duplicar combinacoes que ja
+  foram cobertas por uma jornada mais completa.
 - Manter testes pequenos, previsiveis e independentes.
 
 ## Stack esperada
@@ -33,6 +34,7 @@ automations/
   tests/
     frontend/
     api/
+    e2e/
   data/
 ```
 
@@ -69,6 +71,7 @@ automations/
 - `tests/api/` para contratos e fluxos de integracao de backend.
 - `tests/frontend/` para comportamento observavel de telas e componentes
   integrados.
+- `tests/e2e/` para jornadas completas navegador + API + banco.
 - Specs devem conter orquestracao, nao logica de implementacao.
 
 ## Seletores de frontend
@@ -124,6 +127,7 @@ Exemplos:
 - Tags obrigatorias, conforme o escopo:
   - `@api`
   - `@frontend`
+  - `@e2e`
   - `@contrato`
   - `@smoke`
   - `@regressao`
@@ -150,19 +154,99 @@ Exemplos:
 - Quando um teste precisar de conta, ele deve registrar usuario novo, logar e
   entao seguir o fluxo.
 
+## Validacao de banco em E2E
+
+- Fluxos E2E devem conferir persistencia no PostgreSQL quando criarem ou
+  alterarem registros.
+- O acesso ao banco fica isolado em service proprio, nunca em specs.
+- Specs nao montam SQL, nao normalizam dados e nao calculam expectativas.
+- Validacoes de banco devem focar estado de dominio:
+  - usuario e loja criados
+  - token de recuperacao gerado/usado
+  - produto criado, atualizado, indisponibilizado ou removido logicamente
+  - cliente, endereco, pedido e itens persistidos
+  - status de pedido alterado
+  - dados operacionais da loja persistidos
+
 ## Limites atuais
 
-- Nao implementar E2E ainda.
-- Nao automatizar fluxos inteiros de ponta a ponta entre telas e backend.
-- Nao misturar responsabilidades de frontend e backend no mesmo teste se o
-  objetivo puder ser coberto por integracoes menores.
+- Nao criar testes esteticos, de tamanho, cor ou layout fino.
+- Nao mascarar falhas com `test.skip`, `test.fail` ou condicionais de bypass.
+- Nao misturar responsabilidades em E2E quando API/frontend ja cobrirem o
+  comportamento com mais clareza.
+- Nao gerar matriz cartesiana burra: cobrir caminhos por composicao.
 
 ## Roadmap
+
+### E2E atual - 2026-05-14
+
+Objetivo: criar a primeira suite E2E real em `tests/e2e/`, cobrindo jornadas
+criticas de ponta a ponta com persistencia conferida no PostgreSQL.
+
+Mapa inteligente de cenarios:
+
+- Auth/onboarding:
+  - [x] Cadastro via UI cria usuario, loja, sessao e dashboard.
+  - [x] Logout e login reusam a conta criada no mesmo fluxo.
+  - Cobertura combinada: cadastro -> banco -> dashboard -> logout -> login.
+- Recuperacao de senha:
+  - [x] Usuario existente solicita recuperacao via UI.
+  - [x] Token existe no banco e depois fica marcado como usado.
+  - [x] Login com nova senha funciona.
+  - Cobertura combinada: forgot -> banco -> reset -> banco -> login.
+- Cardapio administrativo e publico:
+  - [x] Produto criado no painel persiste no banco.
+  - [x] Produto aparece no cardapio publico da loja.
+  - [x] Toggle de disponibilidade altera `products.available`.
+  - [x] Exclusao remove logicamente via `products.active`.
+  - Cobertura combinada: categoria por preset -> produto UI -> banco ->
+        publico -> toggle -> banco -> exclusao -> banco.
+- Pedido publico pickup:
+  - [x] Cliente adiciona item no cardapio publico.
+  - [x] Checkout retirada cria cliente, pedido e itens.
+  - [x] Pedido aparece no painel administrativo e pode avancar status.
+  - Cobertura combinada: publico pickup -> banco -> painel pedidos ->
+        status -> banco.
+- Pedido publico delivery:
+  - [x] Cliente adiciona item no cardapio publico.
+  - [x] Checkout delivery cria cliente, endereco, pedido, itens e taxa.
+  - [x] Dashboard, clientes e busca refletem o movimento.
+  - Cobertura combinada: publico delivery -> banco -> dashboard ->
+        clientes.
+- Configuracoes:
+  - [x] Dados basicos da loja editados no painel persistem em `stores`.
+  - [x] Pausa manual altera estado operacional.
+  - [x] Horario alterado persiste.
+  - [x] Taxa criada/removida persiste em areas de entrega.
+  - Cobertura combinada: dados -> banco -> status -> banco -> horario ->
+        banco -> taxa -> banco.
+
+Roadmap de execucao:
+
+- [x] Atualizar Playwright para projeto `e2e`.
+- [x] Adicionar dependencia `pg` e service de banco.
+- [x] Criar fixture E2E com DB service e massas prontas.
+- [x] Completar page objects necessarios sem logica nas specs.
+- [x] Implementar specs E2E nos fluxos acima.
+- [x] Rodar E2E isolado.
+- [x] Rodar automacoes completas.
+- [x] Registrar resultado e abrir PR.
+
+Resultado da rodada:
+
+- `npm.cmd test -- --project=e2e`: 6 testes passando.
+- `npm.cmd test`: 71 testes Playwright passando.
+- E2E encontrou e a rodada corrigiu dois bugs de frontend:
+  - toggle de disponibilidade agora usa `PATCH /produtos/{id}/toggle-disponivel`
+    e valida `products.available`;
+  - checkout publico nao desmonta a tela de sucesso ao limpar o carrinho.
 
 ### Revisao atual - 2026-05-14
 
 Use este bloco para retomar a revisao completa das automacoes. O escopo desta
-rodada permite alterar `automations/` e `api/`, mas nao alterar `web/`.
+rodada original permitia alterar `automations/` e `api/`. Rodadas E2E
+posteriores tambem podem alterar `web/` quando for necessario adicionar
+`data-testid` ou corrigir bug real exposto por jornada ponta a ponta.
 
 - [x] Inventariar projetos, fixtures, presets, services, pages e specs.
 - [x] Verificar se todas as specs usam fixtures locais e tags no segundo

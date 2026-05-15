@@ -91,7 +91,10 @@ export function ModalProduto({ produto, onFechar }: Props) {
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center">
       <div className="absolute inset-0 bg-black/50" onClick={onFechar} />
-      <div className="relative bg-white w-full sm:max-w-lg rounded-t-3xl sm:rounded-3xl max-h-[90vh] flex flex-col overflow-hidden">
+      <div
+        className="relative bg-white w-full sm:max-w-lg rounded-t-3xl sm:rounded-3xl max-h-[90vh] flex flex-col overflow-hidden"
+        data-testid="public-product-modal"
+      >
         <div className="w-10 h-1 bg-gray-300 rounded-full mx-auto mt-3" />
 
         <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 mt-1">
@@ -201,6 +204,7 @@ export function ModalProduto({ produto, onFechar }: Props) {
             onClick={handleAdicionar}
             disabled={!podeConcluir}
             className="w-full py-3.5 rounded-2xl bg-orange-500 text-white font-bold text-sm flex items-center justify-between px-4 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-orange-600 transition-colors"
+            data-testid="public-product-add-button"
           >
             <span>Adicionar ao carrinho</span>
             <span>{formatCurrency(totalItem)}</span>

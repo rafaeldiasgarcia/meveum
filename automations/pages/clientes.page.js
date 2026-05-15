@@ -18,7 +18,10 @@ export class ClientesPage {
   }
 
   async buscar(termo) {
-    await this.busca.fill(termo);
+    await Promise.all([
+      this.page.waitForResponse((response) => response.url().includes('/clientes') && response.status() === 200),
+      this.busca.fill(termo),
+    ]);
   }
 
   async validarEstadoVazio() {
@@ -27,6 +30,14 @@ export class ClientesPage {
 
   async abrirPrimeiroCliente() {
     await this.lista.locator('button').first().click();
+  }
+
+  async abrirCliente(clienteId) {
+    await this.page.getByTestId(`cliente-card-${clienteId}`).click();
+  }
+
+  async validarClienteNaLista(clienteId) {
+    await expect(this.page.getByTestId(`cliente-card-${clienteId}`)).toBeVisible();
   }
 
   async validarDetalhe() {

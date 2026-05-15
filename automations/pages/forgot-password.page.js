@@ -25,4 +25,10 @@ export class ForgotPasswordPage {
   async validarTokenExibido() {
     await expect(this.tokenDesenvolvimento).toBeVisible();
   }
+
+  async solicitarERetornarToken(email) {
+    await this.solicitar(email);
+    await this.validarTokenExibido();
+    return this.tokenDesenvolvimento.locator('p').nth(1).innerText();
+  }
 }
