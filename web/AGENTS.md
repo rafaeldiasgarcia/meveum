@@ -22,6 +22,21 @@ A implementacao deve priorizar:
 
 Nao implemente apenas layout estatico. Cada tela deve ter comportamento esperado, estados de loading, erro, vazio e sucesso quando fizer sentido.
 
+## Fluxo de branch, commits e PR
+
+- Trabalhe em branch separada por contexto e nao reutilize PR ja aceita.
+- Separe commits por contexto real: frontend, automacao, backend, docs, CI ou
+  testes.
+- Antes do push final, execute `git fetch origin main` e integre a `main`
+  atualizada na branch de trabalho, resolvendo conflitos antes de subir.
+- Depois de integrar a `main`, rode novamente `npm test`, `npm run build` ou a
+  suite Playwright afetada pela mudanca.
+- Nao commite `.env`, dados locais, logs, relatorios temporarios,
+  `playwright-report/`, `test-results/`, `node_modules/` ou arquivos gerados
+  por execucao local.
+- Se encontrar lacuna fora do escopo, abra issue clara em vez de remover
+  cobertura ou trocar seletor estavel por seletor fragil.
+
 ## Arquitetura geral
 
 O frontend deve seguir uma organizacao modular por dominios, parecida com a divisao do backend.

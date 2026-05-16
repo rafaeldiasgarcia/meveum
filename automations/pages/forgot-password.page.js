@@ -16,10 +16,13 @@ export class ForgotPasswordPage {
 
   async solicitar(email) {
     await this.email.fill(email);
-    await Promise.all([
-      this.page.waitForResponse((response) => response.url().includes('/auth/esqueci-senha') && response.status() === 200),
-      this.botaoEnviar.click(),
-    ]);
+    await this.botaoEnviar.click();
+    await expect(async () => {
+      await expect(this.tokenDesenvolvimento).toBeVisible({ timeout: 1_000 });
+    }).toPass({
+      intervals: [500, 1_000, 2_000],
+      timeout: 30_000,
+    });
   }
 
   async validarTokenExibido() {

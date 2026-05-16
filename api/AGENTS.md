@@ -58,114 +58,19 @@ src/main/java/br/com/meveum/
 Nao crie pastas vazias com `.gitkeep` como promessa de arquitetura. Crie a
 pasta quando houver codigo real para ela.
 
-## Roadmap de implementacao
+## Fluxo de branch, commits e PR
 
-Siga esta ordem preferencial para evoluir o backend. A ordem existe para que
-cada etapa desbloqueie testes manuais e funcionalidades reais do sistema.
-
-## Roadmap da revisao atual
-
-Use este bloco para retomar a revisao backend/contratos iniciada em 2026-05-14.
-O escopo desta rodada permite alterar `api/` e `automations/`, mas nao alterar
-o frontend. Qualquer lacuna de frontend deve virar issue bem descrita.
-
-- [x] Inventariar tabelas, migrations e entidades persistidas.
-- [x] Inventariar todos os controllers/endpoints existentes no backend.
-- [x] Comparar endpoints do backend com chamadas existentes no frontend, sem
-      alterar `web/`.
-- [x] Abrir issues para lacunas de pagina, chamada ou implementacao no front:
-      `#54`, `#55`, `#56`, `#57`, `#58`; detalhes adicionais em `#27`.
-- [x] Revisar autenticacao, ignorando OAuth social por enquanto.
-- [x] Completar cobertura unitaria de `AuthValidator`.
-- [x] Corrigir o primeiro teste do Bruno/Postman e cobrir novas features de
-      autenticacao na collection: pasta Auth validada com Newman.
-- [x] Rodar testes backend e registrar resultado: `./mvnw.cmd test` com 325
-      testes passando.
-- [x] Revisar CI/CD relacionado a backend e automacoes.
-      - `ci.yml`: mantem unitarios/build de API e web.
-      - `automations.yml`: mantem suite completa de Playwright, pois a suite
-        atual roda rapido e cobre contratos de API + frontend integrado.
-
-1. `cardapio/categorias`
-   - Status: concluido.
-   - Manter CRUD, validators, mapper e testes unitarios como referencia para
-     os proximos contextos.
-
-2. `cardapio/produtos`
-   - Status: concluido.
-   - Implementar CRUD de produtos.
-   - Produto deve pertencer a uma loja e, quando informado, a uma categoria da
-     mesma loja.
-   - Cobrir services, validators e mapper com testes unitarios.
-   - Campos esperados inicialmente: nome, descricao, preco, imagem, ordem,
-     ativo e categoria.
-
-3. `cardapio/complementos`
-   - Status: concluido.
-   - Implementar grupos de complemento.
-   - Implementar opcoes de complemento.
-   - Implementar vinculo produto x grupo de complemento.
-   - Validar minimo, maximo, obrigatoriedade e pertencimento a loja.
-
-4. `lojas`
-   - Status: concluido parcialmente.
-   - Implementar consulta e atualizacao dos dados principais da loja.
-   - Implementar pausa manual e status operacional.
-   - Depois evoluir para horarios de funcionamento.
-
-5. `entrega`
-   - Status: concluido.
-   - Implementar areas/regras de entrega da loja.
-   - Validar tipo de area, taxa, pedido minimo e compatibilidade com loja.
-
-6. `pagamentos`
-   - Status: concluido.
-   - Implementar formas de pagamento aceitas pela loja.
-   - Validar tipo de pagamento, ativo/inativo e regras por loja.
-
-7. `crm/clientes`
-   - Status: concluido.
-   - Implementar cadastro e consulta de clientes.
-   - Implementar enderecos de cliente.
-   - Preparar reutilizacao no fluxo de pedido.
-
-8. `pedidos`
-   - Status: concluido.
-   - Implementar criacao de pedido.
-   - Calcular totais a partir de produtos e complementos.
-   - Validar loja aberta, produtos ativos, complementos validos e endereco.
-   - Implementar atualizacao de status.
-
-9. `dashboard`
-   - Status: concluido.
-   - Implementar metricas basicas apos pedidos existirem.
-   - Priorizar faturamento, quantidade de pedidos e produtos mais vendidos.
-
-10. `integracao_whatsapp`
-    - Status: concluido.
-    - Implementar apenas depois que pedidos e status estiverem estaveis.
-    - Preparar envio de notificacoes e mensagens operacionais.
-
-11. `auth`
-    - Status: concluido parcialmente.
-    - Login e cadastro inicial com JWT implementados para usuarios de loja.
-    - Recuperacao e redefinicao de senha implementadas e cobertas em unitario,
-      Postman/Newman e Playwright.
-    - Proteger rotas administrativas e manter endpoints publicos do cardapio
-      liberados para clientes.
-    - Depois evoluir para refresh token e permissoes por perfil.
-
-12. `painel autenticado`
-    - Status: proximo.
-    - Substituir mocks restantes do dashboard, pedidos, clientes,
-      configuracoes e cardapio administrativo por chamadas reais da API.
-    - Garantir envio do JWT nas rotas protegidas e tratamento padronizado de
-      expiracao de sessao.
-    - Manter o frontend consumindo o usuario autenticado e o contexto da loja
-      vindos da sessao, sem textos fixos de demonstracao.
-
-Ao iniciar um item do roadmap, mantenha o padrao de arquitetura deste arquivo e
-crie commits separados por contexto.
+- Trabalhe em branch separada por contexto e nao reutilize PR ja aceita.
+- Separe commits por contexto real: feature, fix, teste, docs, refactor ou CI.
+- Antes do push final, execute `git fetch origin main` e integre a `main`
+  atualizada na branch de trabalho, resolvendo conflitos antes de subir.
+- Depois de integrar a `main`, rode os testes relevantes novamente.
+- Nao commite `.env`, dados locais, logs, `target/`, `node_modules`,
+  relatorios temporarios ou arquivos gerados por execucao local.
+- Ao alterar contrato de API, atualize DTOs, testes unitarios e automacoes
+  afetadas na mesma rodada.
+- Se encontrar lacuna que pertence a outro contexto, abra issue clara em vez de
+  esconder a falha ou alterar teste para passar artificialmente.
 
 ## Controllers
 
