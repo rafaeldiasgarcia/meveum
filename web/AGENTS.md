@@ -298,6 +298,13 @@ Regras obrigatorias:
   restaurar o `data-testid` no frontend, nao alterar o teste para um seletor
   mais fragil
 
+Excecao obrigatoria: nao mantenha `data-testid` em elemento que foi retirado da
+jornada real do usuario. E proibido deixar seletor em placeholder invisivel
+(`aria-hidden`, `sr-only`, `opacity-0`, tamanho de 1px ou equivalente) apenas
+para fazer teste passar. Se a funcionalidade ainda nao esta pronta, remova o
+elemento do contrato ativo, documente a pendencia em issue ou TODO do teste e
+reative o `data-testid` somente quando o elemento voltar visivel e utilizavel.
+
 Alterar `data-testid` sem pedido explicito do responsavel do fluxo e bloqueio
 de PR.
 
