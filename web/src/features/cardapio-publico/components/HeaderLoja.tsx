@@ -8,7 +8,7 @@ type Props = { loja: LojaPublica };
 export function HeaderLoja({ loja }: Props) {
   return (
     <header
-      className="mt-8 mb-2 flex flex-col items-center gap-3 px-4 text-center md:mt-12"
+      className="mb-2 mt-8 flex flex-col items-center gap-3 px-4 text-center md:mt-10"
       data-testid="public-store-header"
     >
       <div className="relative">
@@ -17,7 +17,7 @@ export function HeaderLoja({ loja }: Props) {
           alt={loja.nome}
           width={112}
           height={112}
-          className="h-24 w-24 rounded-full border-4 border-[#FBF7F4] object-cover shadow-xl md:h-28 md:w-28"
+          className="h-24 w-24 rounded-full border-4 border-[#FBF7F4] object-cover shadow-xl md:h-[104px] md:w-[104px]"
         />
         <span
           className={`absolute -bottom-1 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider shadow-sm ${
@@ -32,7 +32,7 @@ export function HeaderLoja({ loja }: Props) {
       </div>
       <div className="mt-1">
         <h1
-          className="text-center text-2xl font-extrabold leading-tight text-[#1C1917] md:text-3xl"
+          className="text-center text-2xl font-extrabold leading-tight text-[#1C1917] md:text-[28px]"
           data-testid="public-store-name"
         >
           {loja.nome}

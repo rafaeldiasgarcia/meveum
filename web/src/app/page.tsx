@@ -177,8 +177,8 @@ function LeadForm() {
 function Hero() {
   return (
     <section className="relative overflow-hidden border-b border-lborder bg-cream">
-      <div className="bg-grain absolute inset-0 opacity-60" />
-      <div className="relative mx-auto grid max-w-6xl items-start gap-10 px-5 pb-16 pt-12 md:grid-cols-12 md:gap-12 md:pb-20 md:pt-16">
+      <div className="bg-grain absolute inset-0 opacity-45" />
+      <div className="relative mx-auto grid max-w-7xl items-start gap-10 px-5 pb-16 pt-12 md:grid-cols-12 md:gap-12 md:pb-20 md:pt-16">
         <div className="md:col-span-7">
           <div className="inline-flex items-center gap-2 rounded-full border border-lborder bg-white px-3 py-1 text-xs font-medium text-lmuted">
             <span className="h-1.5 w-1.5 rounded-full bg-ember" />

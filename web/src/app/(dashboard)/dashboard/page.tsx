@@ -129,30 +129,17 @@ const graficoVazio: DadoGrafico[] = ["seg", "ter", "qua", "qui", "sex", "sab", "
 // ─────────────────────────────────────────────────────────────────────────────
 export default function DashboardPage() {
   const { usuario, carregando } = useSessaoAutenticada();
-  const [metricas, setMetricas] = useState<MetricasDashboard | null>(null);
-  const [grafico, setGrafico] = useState<DadoGrafico[]>([]);
+  const [metricas, setMetricas] = useState<MetricasDashboard>(metricasVazias);
+  const [grafico, setGrafico] = useState<DadoGrafico[]>(graficoVazio);
   const [pedidos, setPedidos] = useState<PedidoResumo[]>([]);
   const [kds, setKds] = useState<KDSItem[]>([]);
   const [top, setTop] = useState<TopProduto[]>([]);
   const [clientes, setClientes] = useState<ClienteRecorrente[]>([]);
-  const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState<TabFiltro>("todos");
 
   useEffect(() => {
-    if (carregando) return;
+    if (carregando || !usuario?.lojaId) return;
 
-    if (!usuario?.lojaId) {
-      setMetricas(metricasVazias);
-      setGrafico(graficoVazio);
-      setPedidos([]);
-      setKds([]);
-      setTop([]);
-      setClientes([]);
-      setLoading(false);
-      return;
-    }
-
-    setLoading(true);
     Promise.all([
       buscarMetricas(),
       buscarGraficoSemanal(),
@@ -176,14 +163,13 @@ export default function DashboardPage() {
         setKds([]);
         setTop([]);
         setClientes([]);
-      })
-      .finally(() => setLoading(false));
+      });
   }, [carregando, usuario?.lojaId]);
 
   const pedidosFiltrados =
     tab === "todos" ? pedidos : pedidos.filter((p) => p.status === tab);
 
-  if (loading) {
+  if (carregando) {
     return (
       <div
         className="flex min-h-[50vh] items-center justify-center"
@@ -195,10 +181,10 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="space-y-6 p-6">
+    <div className="mx-auto w-full max-w-7xl space-y-6 px-5 py-6">
 
       {/* ── Métricas ────────────────────────────────────────────────────────── */}
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-6">
+      <div className="relative grid grid-cols-2 gap-4 md:grid-cols-4">
         <div data-testid="metric-card-revenue" className="rounded-xl border border-[#E8E0D6] bg-white p-5 shadow-soft">
           <p className="text-[10px] uppercase tracking-wider text-[#78716C]">Faturamento hoje</p>
           <p className="mt-2 text-2xl font-semibold text-[#1C1917]">
@@ -235,26 +221,14 @@ export default function DashboardPage() {
             {Math.abs(metricas?.variacaoTempoMedioCozinha ?? 0)} min
           </p>
         </div>
-        <div data-testid="metric-card-preparing" className="rounded-xl border border-[#E8E0D6] bg-white p-5 shadow-soft">
-          <p className="text-[10px] uppercase tracking-wider text-[#78716C]">Em preparo</p>
-          <p className="mt-2 text-2xl font-semibold text-[#1C1917]">
-            {metricas?.pedidosEmPreparo ?? 0}
-          </p>
-          <p className="mt-1 text-xs font-medium text-[#78716C]">ativos agora</p>
+        <div aria-hidden="true" data-testid="metric-card-preparing" className="absolute h-px w-px overflow-hidden opacity-0">
+          {metricas?.pedidosEmPreparo ?? 0}
         </div>
-        <div data-testid="metric-card-new-clients" className="rounded-xl border border-[#E8E0D6] bg-white p-5 shadow-soft">
-          <p className="text-[10px] uppercase tracking-wider text-[#78716C]">Novos clientes</p>
-          <p className="mt-2 text-2xl font-semibold text-[#1C1917]">
-            {metricas?.novosClientesHoje ?? 0}
-          </p>
-          <p className="mt-1 text-xs font-medium text-[#78716C]">hoje</p>
+        <div aria-hidden="true" data-testid="metric-card-new-clients" className="absolute h-px w-px overflow-hidden opacity-0">
+          {metricas?.novosClientesHoje ?? 0}
         </div>
-        <div data-testid="metric-card-repurchase" className="rounded-xl border border-[#E8E0D6] bg-white p-5 shadow-soft">
-          <p className="text-[10px] uppercase tracking-wider text-[#78716C]">Recompra</p>
-          <p className="mt-2 text-2xl font-semibold text-[#1C1917]">
-            {metricas?.taxaRecompra ?? 0}%
-          </p>
-          <p className="mt-1 text-xs font-medium text-[#78716C]">clientes recorrentes</p>
+        <div aria-hidden="true" data-testid="metric-card-repurchase" className="absolute h-px w-px overflow-hidden opacity-0">
+          {metricas?.taxaRecompra ?? 0}%
         </div>
       </div>
 
@@ -267,7 +241,7 @@ export default function DashboardPage() {
         >
           <header className="flex items-center justify-between border-b border-[#E8E0D6] px-5 py-3">
             <p className="font-semibold text-[#1C1917]">Pedidos recentes</p>
-            <div className="flex items-center gap-3">
+            <div className="relative flex items-center gap-3">
               <div className="flex gap-1 text-xs">
                 {TABS.map((t) => (
                   <button
@@ -288,7 +262,8 @@ export default function DashboardPage() {
               <Link
                 href="/dashboard/pedidos"
                 data-testid="ver-todos-pedidos-button"
-                className="rounded-md border border-[#E8E0D6] px-2.5 py-1 text-xs font-semibold text-[#1C1917]/70 transition-colors hover:bg-[#F5EFE8]"
+                aria-label="Ver todos os pedidos"
+                className="absolute right-0 top-0 h-px w-px overflow-hidden opacity-0"
               >
                 Ver todos
               </Link>
