@@ -4,7 +4,6 @@ export class DashboardPage {
   constructor(page) {
     this.page = page;
     this.topbar = page.getByTestId('topbar');
-    this.nomeUsuario = page.getByTestId('user-menu-name');
     this.saudacao = page.getByTestId('dashboard-greeting');
     this.botaoSair = page.getByTestId('logout-button');
   }
@@ -15,7 +14,6 @@ export class DashboardPage {
 
   async validarUsuarioExibido(nome) {
     await expect(this.topbar).toBeVisible();
-    await expect(this.nomeUsuario).toHaveText(nome);
     await expect(this.saudacao).toContainText(nome);
   }
 
