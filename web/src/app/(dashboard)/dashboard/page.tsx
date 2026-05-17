@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import { cn } from "@/lib/utils/cn";
 import { formatCurrency } from "@/lib/utils/format";
 import { useSessaoAutenticada } from "@/features/auth/context/SessaoAutenticadaContext";
@@ -184,7 +183,7 @@ export default function DashboardPage() {
     <div className="mx-auto w-full max-w-7xl space-y-6 px-5 py-6">
 
       {/* ── Métricas ────────────────────────────────────────────────────────── */}
-      <div className="relative grid grid-cols-2 gap-4 md:grid-cols-4">
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
         <div data-testid="metric-card-revenue" className="rounded-xl border border-[#E8E0D6] bg-white p-5 shadow-soft">
           <p className="text-[10px] uppercase tracking-wider text-[#78716C]">Faturamento hoje</p>
           <p className="mt-2 text-2xl font-semibold text-[#1C1917]">
@@ -221,15 +220,6 @@ export default function DashboardPage() {
             {Math.abs(metricas?.variacaoTempoMedioCozinha ?? 0)} min
           </p>
         </div>
-        <div aria-hidden="true" data-testid="metric-card-preparing" className="absolute h-px w-px overflow-hidden opacity-0">
-          {metricas?.pedidosEmPreparo ?? 0}
-        </div>
-        <div aria-hidden="true" data-testid="metric-card-new-clients" className="absolute h-px w-px overflow-hidden opacity-0">
-          {metricas?.novosClientesHoje ?? 0}
-        </div>
-        <div aria-hidden="true" data-testid="metric-card-repurchase" className="absolute h-px w-px overflow-hidden opacity-0">
-          {metricas?.taxaRecompra ?? 0}%
-        </div>
       </div>
 
       {/* ── Pedidos + KDS + Top ─────────────────────────────────────────────── */}
@@ -241,7 +231,7 @@ export default function DashboardPage() {
         >
           <header className="flex items-center justify-between border-b border-[#E8E0D6] px-5 py-3">
             <p className="font-semibold text-[#1C1917]">Pedidos recentes</p>
-            <div className="relative flex items-center gap-3">
+            <div className="flex items-center gap-3">
               <div className="flex gap-1 text-xs">
                 {TABS.map((t) => (
                   <button
@@ -259,14 +249,6 @@ export default function DashboardPage() {
                   </button>
                 ))}
               </div>
-              <Link
-                href="/dashboard/pedidos"
-                data-testid="ver-todos-pedidos-button"
-                aria-label="Ver todos os pedidos"
-                className="absolute right-0 top-0 h-px w-px overflow-hidden opacity-0"
-              >
-                Ver todos
-              </Link>
             </div>
           </header>
           <ul className="divide-y divide-[#F5F0EB]" data-testid="pedidos-recentes-list">

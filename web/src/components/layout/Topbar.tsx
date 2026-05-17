@@ -41,8 +41,6 @@ export function Topbar() {
         >
           + Novo pedido
         </button>
-
-        <span className="sr-only" data-testid="user-menu-name">{nome}</span>
       </div>
     </header>
   );
