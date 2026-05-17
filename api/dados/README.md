@@ -1,12 +1,27 @@
 # Dados de desenvolvimento
 
-Esta pasta guarda arquivos auxiliares para desenvolvimento local. Nao confundir
-com `data/`, que e o volume local do PostgreSQL.
+Esta pasta guarda arquivos auxiliares para desenvolvimento local, como
+collections Postman. Nao confundir com `api/data/postgres`, que e o volume local
+do PostgreSQL criado pelo Docker Compose.
 
-## Dados de teste
+## Dados criados pelo Flyway
 
-O Flyway cria/atualiza os dados de teste pelas migrations `V2`, `V3`, `V4`,
-`V5`, `V6`, `V7` e `V8`.
+As migrations de seed (`V2` a `V10`) criam uma massa fixa para desenvolvimento,
+testes manuais e Postman.
+
+| Versao | Conteudo |
+|---|---|
+| `V2` | Loja base e usuario Bruno |
+| `V3` | Categoria e produto base |
+| `V4` | Grupo e opcao de complemento |
+| `V5` | Area de entrega |
+| `V6` | Forma de pagamento |
+| `V7` | Cliente e endereco |
+| `V8` | Pedido, item e complemento de pedido |
+| `V9` | Usuario autenticavel para automacoes |
+| `V10` | Vinculo entre produto e grupo de complemento |
+
+## IDs fixos
 
 ```txt
 lojaId: 11111111-1111-1111-1111-111111111111
@@ -25,13 +40,24 @@ complementoItemPedidoId: dddddddd-dddd-dddd-dddd-dddddddddddd
 
 ## Collection Postman
 
-Para importar no Postman, use o arquivo:
+Arquivo:
 
 ```txt
 dados/postman/meveum-api.postman_collection.json
 ```
 
-Fluxo sugerido com os dados de teste:
+Fluxo sugerido:
 
-1. Rode listar, detalhar, atualizar e excluir usando os IDs fixos de teste.
-2. Para criacao, use os requests com nomes `Nova` para evitar duplicidade.
+1. Suba o banco com `docker compose up -d`.
+2. Suba a API com `./mvnw spring-boot:run` ou `.\mvnw.cmd spring-boot:run`.
+3. Use os requests de login/cadastro para obter JWT.
+4. Use os IDs fixos para listar, detalhar, atualizar e excluir.
+5. Para criacao, prefira nomes novos para evitar duplicidade.
+
+## Observacoes
+
+- A massa fixa e util para testes manuais.
+- Automacoes novas devem preferir dados dinamicos via services/presets quando
+  precisarem ser independentes.
+- Se uma migration de seed mudar algum ID fixo, atualize este README e a
+  collection Postman na mesma PR.
