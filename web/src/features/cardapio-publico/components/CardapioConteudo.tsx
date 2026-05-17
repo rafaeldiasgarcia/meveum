@@ -29,7 +29,7 @@ export function CardapioConteudo({ lojaId, loja, categorias, produtos }: Props) 
 
   return (
     <>
-      <div className="relative mx-auto w-full max-w-2xl px-4 md:px-10 lg:px-14">
+      <div className="relative mx-auto w-full max-w-2xl px-4 md:px-8">
         <div className="relative">
           <Search className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[#78716C]" />
           <input
@@ -45,9 +45,9 @@ export function CardapioConteudo({ lojaId, loja, categorias, produtos }: Props) 
 
       {!produtosFiltrados && <NavCategorias categorias={categorias} />}
 
-      <main className="flex-1 space-y-10 px-4 pb-32 md:px-10 lg:px-14">
+      <main className="flex-1 space-y-9 px-4 pb-32 md:px-8">
         {produtosFiltrados ? (
-          <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-3" data-testid="public-search-results">
+          <section className="grid gap-4 md:grid-cols-2" data-testid="public-search-results">
             {produtosFiltrados.length === 0 ? (
               <p className="col-span-full py-12 text-center text-sm text-[#78716C]" data-testid="public-search-empty">
                 Nenhum produto encontrado para &quot;{busca}&quot;
@@ -79,7 +79,7 @@ export function CardapioConteudo({ lojaId, loja, categorias, produtos }: Props) 
                   <span className="h-6 w-1.5 rounded-full bg-[#EA580C]" />
                   {categoria.nome}
                 </h2>
-                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                <div className="grid gap-4 md:grid-cols-2">
                   {itensDaCategoria.map((produto) => (
                     <CardProduto
                       key={produto.id}

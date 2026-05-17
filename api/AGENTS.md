@@ -21,6 +21,12 @@ Se uma mudanca exigir novo seletor, adicione um novo `data-testid` mantendo o
 antigo. Se uma automacao falhar porque um seletor foi removido, a correcao deve
 restaurar o `data-testid` no frontend, nao trocar o teste para seletor fragil.
 
+Nao preserve seletor em elemento que deixou de fazer parte da jornada real. Se
+uma funcionalidade ainda nao esta pronta, e proibido manter `data-testid` em
+placeholder invisivel (`aria-hidden`, `sr-only`, `opacity-0`, tamanho de 1px ou
+equivalente) apenas para satisfazer testes. Documente a pendencia e reative o
+contrato quando o elemento voltar visivel e utilizavel.
+
 Estrutura base:
 
 ```text

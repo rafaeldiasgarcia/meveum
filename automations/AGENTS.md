@@ -108,6 +108,18 @@ Regras obrigatorias:
 - mudanca de `data-testid` so pode acontecer com pedido explicito e migracao
   coordenada dos testes afetados.
 
+Contrato de visibilidade:
+
+- automacoes nao devem validar elementos escondidos apenas para preservar
+  compatibilidade artificial;
+- se o elemento nao esta visivel ou utilizavel pelo usuario, ele nao faz parte
+  do contrato ativo daquela jornada;
+- nao aceite `data-testid` em placeholders com `aria-hidden`, `sr-only`,
+  `opacity-0`, tamanho de 1px ou padrao equivalente;
+- quando uma funcionalidade ficar pendente, registre TODO ou issue apontando o
+  contrato futuro e remova a assercao ativa ate o elemento voltar de forma
+  visivel e testavel.
+
 Prioridade obrigatoria de seletores:
 
 1. `data-testid`

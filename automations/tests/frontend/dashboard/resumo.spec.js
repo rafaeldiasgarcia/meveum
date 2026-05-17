@@ -12,9 +12,9 @@ test.describe('dashboard autenticado', () => {
     await dashboardResumoPage.validarPedidosRecentes();
   });
 
-  test('navega para a tela de pedidos pelo atalho do resumo', { tag: ['@frontend', '@regressao', '@contrato'] }, async ({
-    dashboardResumoPage,
-  }) => {
-    await dashboardResumoPage.navegarParaPedidos();
-  });
+  // TODO(#57): reativar cobertura para metric-card-preparing,
+  // metric-card-new-clients, metric-card-repurchase e
+  // ver-todos-pedidos-button quando esses elementos voltarem como parte
+  // visivel e utilizavel do dashboard. Eles nao devem existir escondidos
+  // apenas para satisfazer a automacao.
 });

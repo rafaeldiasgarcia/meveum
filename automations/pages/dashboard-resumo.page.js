@@ -7,13 +7,10 @@ export class DashboardResumoPage {
       page.getByTestId('metric-card-orders-today'),
       page.getByTestId('metric-card-revenue'),
       page.getByTestId('metric-card-ticket'),
-      page.getByTestId('metric-card-preparing'),
-      page.getByTestId('metric-card-new-clients'),
-      page.getByTestId('metric-card-repurchase'),
+      page.getByTestId('metric-card-kitchen-time'),
     ];
     this.grafico = page.getByTestId('grafico-vendas');
     this.pedidosRecentes = page.getByTestId('pedidos-recentes-list');
-    this.botaoVerTodos = page.getByTestId('ver-todos-pedidos-button');
   }
 
   async abrir() {
@@ -29,10 +26,5 @@ export class DashboardResumoPage {
 
   async validarPedidosRecentes() {
     await expect(this.pedidosRecentes).toBeVisible();
-  }
-
-  async navegarParaPedidos() {
-    await this.botaoVerTodos.click();
-    await this.page.waitForURL('**/dashboard/pedidos');
   }
 }

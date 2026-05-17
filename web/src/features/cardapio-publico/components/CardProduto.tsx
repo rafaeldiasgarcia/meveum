@@ -36,7 +36,7 @@ export function CardProduto({ produto, lojaAberta, onSelecionar }: Props) {
       <div className="flex min-w-0 flex-1 flex-col justify-between py-1">
         <div>
           <h3
-            className="text-base font-bold leading-tight text-[#1C1917] md:text-lg"
+            className="text-base font-bold leading-tight text-[#1C1917]"
             data-testid={`public-product-name-${produto.id}`}
           >
             {produto.nome}
@@ -47,12 +47,12 @@ export function CardProduto({ produto, lojaAberta, onSelecionar }: Props) {
             </p>
           )}
         </div>
-        <span className="mt-3 text-lg font-extrabold text-[#EA580C]">
+        <span className="mt-3 text-base font-extrabold text-[#EA580C] md:text-lg">
           {formatCurrency(produto.preco)}
         </span>
       </div>
 
-      <div className="group relative h-28 w-28 shrink-0 rounded-2xl bg-[#F0E8DA] md:h-32 md:w-32">
+      <div className="group relative h-28 w-28 shrink-0 rounded-2xl bg-[#F0E8DA] md:h-[120px] md:w-[120px]">
         <div className="h-full w-full overflow-hidden rounded-2xl">
           <Image
             src={imagem}

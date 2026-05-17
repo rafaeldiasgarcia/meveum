@@ -10,7 +10,7 @@ function saudacao(nome: string) {
 }
 
 export function Topbar() {
-  const { usuario, sair } = useSessaoAutenticada();
+  const { usuario } = useSessaoAutenticada();
   const nome = usuario?.nome ?? "Marina";
 
   return (
@@ -41,22 +41,6 @@ export function Topbar() {
         >
           + Novo pedido
         </button>
-
-        <div className="hidden min-w-0 items-center gap-3 rounded-xl border border-[#E8E0D6] bg-white px-4 py-2 text-sm shadow-sm sm:flex">
-          <span
-            className="max-w-40 truncate font-semibold text-[#1C1917]"
-            data-testid="user-menu-name"
-          >
-            {nome}
-          </span>
-          <button
-            type="button"
-            onClick={sair}
-            className="font-medium text-[#78716C] transition-colors hover:text-[#EA580C]"
-          >
-            Sair
-          </button>
-        </div>
       </div>
     </header>
   );

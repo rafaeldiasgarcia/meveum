@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ArrowRight, Eye, EyeOff, ShieldCheck, Sparkles, Utensils } from "lucide-react";
+import { ArrowRight, Eye, EyeOff, ShieldCheck } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { AuthCarousel } from "@/features/auth/components/AuthCarousel";
@@ -43,17 +43,19 @@ function AppleIcon() {
 
 function AuthBrand() {
   return (
-    <Link href="/" className="flex items-center gap-3" aria-label="MeVêUm">
-      <span className="grid h-[46px] w-[46px] place-items-center rounded-[18px] bg-[#FF5C0A] text-white shadow-[0_22px_55px_rgba(234,88,12,0.28)]">
-        <Utensils className="h-5 w-5" aria-hidden />
+    <Link href="/" className="flex items-center gap-2.5" aria-label="MeVêUm">
+      <span className="grid h-9 w-9 place-items-center rounded-xl bg-[#17100C] text-base font-semibold text-white shadow-sm">
+        M
       </span>
-      <span className="text-2xl font-bold tracking-normal text-black">MeVêUm</span>
+      <span className="text-xl font-semibold tracking-normal text-[#17100C]">
+        MeVê<span className="text-[#FF5C0A]">Um</span>
+      </span>
     </Link>
   );
 }
 
 const inputClass =
-  "input-base h-[54px] rounded-lg border-[#E8E0D6] bg-[#FBF7F4] px-4 text-base text-[#1C1917] placeholder:text-[#8D8780] focus:border-[#FF5C0A] focus:ring-2 focus:ring-[#FF5C0A]/15";
+  "input-base h-12 rounded-lg border-[#E8E0D6] bg-[#FBF7F4] px-4 text-sm text-[#1C1917] placeholder:text-[#8D8780] focus:border-[#FF5C0A] focus:ring-2 focus:ring-[#FF5C0A]/15";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -91,31 +93,32 @@ export default function RegisterPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#FBF7F4]">
-      <div className="mx-auto grid min-h-screen w-full max-w-[1400px] grid-cols-1 lg:grid-cols-2">
-        <section className="flex min-h-screen flex-col px-6 py-8 sm:px-10 lg:px-16 lg:py-12">
+    <main className="relative min-h-screen overflow-x-hidden bg-[#FBF7F4] lg:h-screen lg:overflow-hidden">
+      <div className="bg-grain absolute inset-0 opacity-35" />
+      <div className="relative mx-auto grid min-h-screen w-full max-w-7xl grid-cols-1 gap-8 px-5 py-4 lg:h-screen lg:min-h-0 lg:grid-cols-[minmax(0,0.95fr)_minmax(420px,0.85fr)]">
+        <section className="flex min-h-screen flex-col lg:min-h-0">
           <header className="flex items-center justify-between gap-4">
             <AuthBrand />
-            <Link href="/" className="text-lg font-medium text-[#6F6861] transition-colors hover:text-[#1C1917]">
-              ← Voltar ao site
+            <Link href="/" className="text-sm font-medium text-[#6F6861] transition-colors hover:text-[#1C1917]">
+              &larr; Voltar ao site
             </Link>
           </header>
 
-          <div className="flex flex-1 items-center py-10">
-            <div className="mx-auto w-full max-w-[560px]">
-              <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#E8E0D6] bg-[#FBF7F4] px-4 py-1.5 shadow-[0_1px_2px_rgba(28,25,23,0.04)]">
-                <Sparkles className="h-4 w-4 text-[#FF5C0A]" aria-hidden />
-                <span className="text-base font-medium text-[#3B342E]">Criar conta grátis</span>
+          <div className="flex flex-1 items-center py-5 lg:py-1">
+            <div className="mx-auto w-full max-w-[470px]">
+              <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-lborder bg-white px-3 py-1 text-xs font-medium text-lmuted">
+                <span className="h-1.5 w-1.5 rounded-full bg-ember" />
+                Criar conta grátis
               </div>
 
-              <h1 className="max-w-[540px] text-[40px] font-bold leading-[1.12] tracking-normal text-black sm:text-[44px]">
+              <h1 className="max-w-[500px] text-[28px] font-semibold leading-[1.08] tracking-normal text-black sm:text-[32px]">
                 Comece a vender mais <span className="text-[#FF5C0A]">hoje mesmo.</span>
               </h1>
-              <p className="mt-5 text-lg leading-relaxed text-[#625A53]">
+              <p className="mt-2.5 text-sm leading-relaxed text-[#625A53]">
                 Crie sua conta MeVêUm em menos de 1 minuto. Sem cartão de crédito.
               </p>
 
-              <div className="mt-7 grid grid-cols-1 gap-3 sm:grid-cols-3">
+              <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
                 {[
                   { label: "Google", provedor: "google" as const, icon: <GoogleIcon /> },
                   { label: "Microsoft", provedor: "microsoft" as const, icon: <MicrosoftIcon /> },
@@ -126,7 +129,7 @@ export default function RegisterPage() {
                     type="button"
                     onClick={() => iniciarOAuth(provedor)}
                     data-testid={`social-register-${provedor}`}
-                    className="flex h-[54px] items-center justify-center gap-3 rounded-lg border border-[#E8E0D6] bg-[#FBF7F4] text-lg font-medium text-[#2C2722] shadow-[0_2px_8px_rgba(28,25,23,0.08)] transition hover:bg-white"
+                    className="flex h-12 items-center justify-center gap-2.5 rounded-lg border border-[#E8E0D6] bg-[#FBF7F4] text-sm font-medium text-[#2C2722] shadow-[0_2px_8px_rgba(28,25,23,0.08)] transition hover:bg-white"
                   >
                     {icon}
                     <span>{label}</span>
@@ -134,37 +137,37 @@ export default function RegisterPage() {
                 ))}
               </div>
 
-              <div className="relative my-7">
+              <div className="relative my-4">
                 <div className="absolute inset-0 flex items-center">
                   <div className="w-full border-t border-[#E2D9CF]" />
                 </div>
                 <div className="relative flex justify-center">
-                  <span className="bg-[#FBF7F4] px-4 text-sm font-bold tracking-[0.32em] text-[#AAA29A]">
+                  <span className="bg-[#FBF7F4] px-4 text-xs font-bold tracking-[0.28em] text-[#AAA29A]">
                     OU COM E-MAIL
                   </span>
                 </div>
               </div>
 
-              <form onSubmit={handleSubmit(onSubmit)} noValidate data-testid="register-form" className="space-y-4">
-                <div>
-                  <label htmlFor="nomeLoja" className="mb-2 block text-sm font-bold text-[#1C1917]">
-                    Nome do restaurante
-                  </label>
-                  <input
-                    id="nomeLoja"
-                    placeholder="Burger do Zé"
-                    data-testid="nome-loja-input"
-                    className={`${inputClass}${errors.nomeLoja ? " border-red-400 focus:border-red-400" : ""}`}
-                    {...register("nomeLoja")}
-                  />
-                  {errors.nomeLoja && (
-                    <p className="mt-1.5 text-sm text-red-500" data-testid="nome-loja-error">
-                      {errors.nomeLoja.message}
-                    </p>
-                  )}
-                </div>
+              <form onSubmit={handleSubmit(onSubmit)} noValidate data-testid="register-form" className="space-y-2.5">
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <div>
+                    <label htmlFor="nomeLoja" className="mb-2 block text-sm font-bold text-[#1C1917]">
+                      Nome do restaurante
+                    </label>
+                    <input
+                      id="nomeLoja"
+                      placeholder="Burger do Zé"
+                      data-testid="nome-loja-input"
+                      className={`${inputClass}${errors.nomeLoja ? " border-red-400 focus:border-red-400" : ""}`}
+                      {...register("nomeLoja")}
+                    />
+                    {errors.nomeLoja && (
+                      <p className="mt-1.5 text-sm text-red-500" data-testid="nome-loja-error">
+                        {errors.nomeLoja.message}
+                      </p>
+                    )}
+                  </div>
 
-                <div className="grid gap-4 sm:grid-cols-2">
                   <div>
                     <label htmlFor="nome" className="mb-2 block text-sm font-bold text-[#1C1917]">
                       Seu nome
@@ -182,7 +185,9 @@ export default function RegisterPage() {
                       </p>
                     )}
                   </div>
+                </div>
 
+                <div className="grid gap-3 sm:grid-cols-2">
                   <div>
                     <label htmlFor="telefone" className="mb-2 block text-sm font-bold text-[#1C1917]">
                       WhatsApp
@@ -201,29 +206,29 @@ export default function RegisterPage() {
                       </p>
                     )}
                   </div>
+
+                  <div>
+                    <label htmlFor="email" className="mb-2 block text-sm font-bold text-[#1C1917]">
+                      E-mail
+                    </label>
+                    <input
+                      id="email"
+                      type="email"
+                      placeholder="voce@restaurante.com"
+                      autoComplete="email"
+                      data-testid="register-email-input"
+                      className={`${inputClass}${errors.email ? " border-red-400 focus:border-red-400" : ""}`}
+                      {...register("email")}
+                    />
+                    {errors.email && (
+                      <p className="mt-1.5 text-sm text-red-500" data-testid="register-email-error">
+                        {errors.email.message}
+                      </p>
+                    )}
+                  </div>
                 </div>
 
-                <div>
-                  <label htmlFor="email" className="mb-2 block text-sm font-bold text-[#1C1917]">
-                    E-mail
-                  </label>
-                  <input
-                    id="email"
-                    type="email"
-                    placeholder="voce@restaurante.com"
-                    autoComplete="email"
-                    data-testid="register-email-input"
-                    className={`${inputClass}${errors.email ? " border-red-400 focus:border-red-400" : ""}`}
-                    {...register("email")}
-                  />
-                  {errors.email && (
-                    <p className="mt-1.5 text-sm text-red-500" data-testid="register-email-error">
-                      {errors.email.message}
-                    </p>
-                  )}
-                </div>
-
-                <div className="grid gap-4 sm:grid-cols-2">
+                <div className="grid gap-3 sm:grid-cols-2">
                   <div>
                     <label htmlFor="senha" className="mb-2 block text-sm font-bold text-[#1C1917]">
                       Senha
@@ -282,7 +287,7 @@ export default function RegisterPage() {
                     data-testid="terms-checkbox"
                     className="mt-1 h-4 w-4 flex-shrink-0 cursor-pointer accent-[#FF5C0A]"
                   />
-                  <span className="text-sm leading-relaxed text-[#625A53]">
+                  <span className="text-xs leading-relaxed text-[#625A53]">
                     Aceito os{" "}
                     <Link href="/termos-de-uso" className="font-bold text-[#FF5C0A] hover:underline">
                       Termos de Uso
@@ -299,28 +304,28 @@ export default function RegisterPage() {
                   type="submit"
                   disabled={isSubmitting}
                   data-testid="submit-register-button"
-                  className="mt-5 flex h-[56px] w-full items-center justify-center gap-3 rounded-lg bg-[#FF5C0A] text-lg font-bold tracking-[0.04em] text-white shadow-[0_22px_40px_rgba(234,88,12,0.22)] transition hover:bg-[#EA580C] disabled:cursor-not-allowed disabled:opacity-50"
+                  className="mt-3 flex h-12 w-full items-center justify-center gap-3 rounded-lg bg-[#FF5C0A] text-sm font-bold tracking-[0.04em] text-white shadow-[0_18px_34px_rgba(234,88,12,0.18)] transition hover:bg-[#EA580C] disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   {isSubmitting ? "Criando conta..." : "CRIAR CONTA GRÁTIS"}
                   {!isSubmitting && <ArrowRight className="h-5 w-5" aria-hidden />}
                 </button>
               </form>
 
-              <p className="mt-7 text-center text-lg text-[#625A53]">
+              <p className="mt-4 text-center text-sm text-[#625A53]">
                 Já tem uma conta?{" "}
                 <Link href="/login" className="font-bold text-[#FF5C0A] hover:underline">
                   Entrar
                 </Link>
               </p>
 
-              <div className="mt-8 flex items-center justify-center gap-2 text-sm text-[#8D8780]">
+              <div className="mt-3 flex items-center justify-center gap-2 text-xs text-[#8D8780] lg:hidden">
                 <ShieldCheck className="h-4 w-4 text-[#FF5C0A]" aria-hidden />
                 <span>Conexão segura · seus dados são criptografados</span>
               </div>
             </div>
           </div>
 
-          <footer className="pt-6 text-base text-[#8D8780]">
+          <footer className="hidden pb-1 text-xs text-[#8D8780] lg:block">
             © 2026 MeVêUm · Sistema para restaurantes brasileiros
           </footer>
         </section>

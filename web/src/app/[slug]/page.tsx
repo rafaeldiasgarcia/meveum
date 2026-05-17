@@ -24,8 +24,8 @@ export default async function CardapioPublicoPage({ params }: Props) {
   const produtosAtivos = produtosLoja.filter((p) => p.ativo);
 
   return (
-    <div className="flex min-h-screen w-full justify-center bg-[#FDF6F0] py-0 font-sans text-[#1C1917] md:px-6 md:py-10">
-      <div className="relative flex min-h-screen w-full max-w-md flex-col gap-6 bg-[#FBF7F4] pb-24 md:min-h-[calc(100vh-5rem)] md:max-w-4xl md:overflow-hidden md:rounded-[2.5rem] md:ring-1 md:ring-[#E8E0D6]/70 lg:max-w-5xl">
+    <div className="flex min-h-screen w-full justify-center bg-[#FDF6F0] py-0 font-sans text-[#1C1917] md:px-5 md:py-8">
+      <div className="relative flex min-h-screen w-full max-w-[430px] flex-col gap-6 bg-[#FBF7F4] pb-24 md:min-h-[calc(100vh-4rem)] md:max-w-4xl md:overflow-hidden md:rounded-[2.5rem] md:ring-1 md:ring-[#E8E0D6]/70">
         <CarrinhoProvider>
           <HeaderLoja loja={loja} />
           <CardapioConteudo
