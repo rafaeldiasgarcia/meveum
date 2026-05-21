@@ -146,7 +146,17 @@ describe("dashboard.api", () => {
   });
 
   it("deve retornar 7 pontos no gráfico semanal", async () => {
-    vi.stubGlobal("fetch", mockFetch({ "/pedidos": [] }));
+    vi.stubGlobal("fetch", mockFetch({
+      "/dashboard/grafico-semanal": [
+        { label: "seg", valor: 10 },
+        { label: "ter", valor: 20 },
+        { label: "qua", valor: 30 },
+        { label: "qui", valor: 40 },
+        { label: "sex", valor: 50 },
+        { label: "sab", valor: 60 },
+        { label: "dom", valor: 70 },
+      ],
+    }));
 
     const { buscarGraficoSemanal } = await import("@/lib/api/dashboard.api");
     const grafico = await buscarGraficoSemanal();
