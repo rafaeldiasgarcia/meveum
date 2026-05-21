@@ -129,8 +129,8 @@ export class E2EFluxosService {
     await this.configuracoesPage.atualizarHorario(configuracao);
     await this.dbService.validarHorario(usuarioLogado.lojaId, configuracao);
 
-    await this.configuracoesPage.adicionarTaxa();
-    const taxa = await this.dbService.validarTaxaCriada(usuarioLogado.lojaId);
+    const taxaCriada = await this.configuracoesPage.adicionarTaxa();
+    const taxa = await this.dbService.validarTaxaCriada(usuarioLogado.lojaId, taxaCriada.nome, 7.5);
     await this.configuracoesPage.removerTaxa(taxa.id);
     await this.dbService.validarTaxaRemovida(taxa.id);
   }

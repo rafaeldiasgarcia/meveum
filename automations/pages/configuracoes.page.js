@@ -62,17 +62,28 @@ export class ConfiguracoesPage {
   }
 
   async adicionarTaxa() {
+    const nome = `Area E2E ${Date.now()}`;
+    await this.page.goto('/dashboard/configuracoes/entrega');
+    await this.page.getByTestId('entrega-adicionar-taxa-button').click();
+    await this.page.getByTestId('entrega-area-nome-input').fill(nome);
+    await this.page.getByTestId('entrega-nova-bairro-input').fill(nome);
+    await this.page.getByTestId('entrega-nova-taxa-input').fill('7.5');
+    await this.page.getByTestId('entrega-pedido-minimo-input').fill('20');
+    await this.page.getByTestId('entrega-nova-tempo-input').fill('35');
+
     const resposta = await Promise.all([
       this.page.waitForResponse((response) => response.url().includes('/entrega/areas') && response.request().method() === 'POST' && response.status() === 201),
-      this.botaoAdicionarTaxa.click(),
+      this.page.getByTestId('entrega-area-salvar-button').click(),
     ]);
     return resposta[0].json();
   }
 
   async removerTaxa(taxaId) {
+    await this.page.goto('/dashboard/configuracoes/entrega');
+    await this.page.getByTestId(`entrega-taxa-remover-${taxaId}`).click();
     await Promise.all([
       this.page.waitForResponse((response) => response.url().includes(`/entrega/areas/${taxaId}`) && response.request().method() === 'DELETE'),
-      this.page.getByTestId(`taxa-remover-${taxaId}`).click(),
+      this.page.getByTestId('entrega-excluir-confirmar-button').click(),
     ]);
   }
 
