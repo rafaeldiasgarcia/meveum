@@ -1,4 +1,4 @@
-import type { Loja, HorarioFuncionamento, TaxaEntrega, DiaSemana } from "@/types";
+import type { Loja, HorarioFuncionamento, TaxaEntrega, DiaSemana, AparenciaLoja, AtualizarAparenciaRequest, ConfigEntregaRetirada } from "@/types";
 import { obterLojaId, requestAutenticada } from "@/lib/api/client";
 
 type LojaApi = {
@@ -154,6 +154,76 @@ export async function criarTaxaEntrega(): Promise<Loja> {
 
 export async function removerTaxaEntrega(id: string): Promise<Loja> {
   await requestAutenticada(`/entrega/areas/${id}`, { method: "DELETE" });
+  return buscarLoja();
+}
+
+export async function buscarAparencia(): Promise<AparenciaLoja> {
+  try {
+    const lojaId = obterLojaId();
+    const loja = await requestAutenticada<LojaApi>(`/lojas/${lojaId}`, { method: "GET" });
+    return { nome: loja.nome, slug: loja.slug, logoUrl: loja.logoUrl };
+  } catch {
+    return { nome: "", slug: "", logoUrl: undefined, descricao: undefined, capaBannerUrl: undefined, corPrimaria: "#EA580C" };
+  }
+}
+
+export async function atualizarAparencia(data: AtualizarAparenciaRequest): Promise<AparenciaLoja> {
+  const lojaId = obterLojaId();
+  await requestAutenticada(`/lojas/${lojaId}`, {
+    method: "PUT",
+    body: JSON.stringify({ nome: data.nome, slug: data.slug, logoUrl: data.logoUrl }),
+  });
+  return buscarAparencia();
+}
+
+export async function verificarSlugDisponivel(slug: string): Promise<boolean> {
+  try {
+    await requestAutenticada(`/lojas/slug/${slug}`, { method: "GET" });
+    return false;
+  } catch {
+    return true;
+  }
+}
+
+export async function buscarConfigEntrega(): Promise<ConfigEntregaRetirada> {
+  try {
+    const lojaId = obterLojaId();
+    const taxas = await requestAutenticada<TaxaApi[]>(`/entrega/areas?lojaId=${lojaId}`, { method: "GET" });
+    return {
+      deliveryAtivo: true,
+      retiradaAtivo: true,
+      pedidoMinimo: 0,
+      tempoMedioEntregaMin: 45,
+      tempoMedioRetiradaMin: 20,
+      taxasEntrega: taxas.filter((t) => t.ativo).map(toTaxa),
+    };
+  } catch {
+    return { deliveryAtivo: true, retiradaAtivo: true, pedidoMinimo: 0, tempoMedioEntregaMin: 45, tempoMedioRetiradaMin: 20, taxasEntrega: [] };
+  }
+}
+
+export async function salvarConfigEntrega(data: Omit<ConfigEntregaRetirada, "taxasEntrega">): Promise<void> {
+  const lojaId = obterLojaId();
+  await requestAutenticada(`/lojas/${lojaId}/config-entrega`, {
+    method: "PUT",
+    body: JSON.stringify(data),
+  });
+}
+
+export async function criarTaxaEntregaDetalhada(taxa: Omit<TaxaEntrega, "id">): Promise<Loja> {
+  const lojaId = obterLojaId();
+  await requestAutenticada("/entrega/areas", {
+    method: "POST",
+    body: JSON.stringify({
+      lojaId,
+      nome: taxa.bairro,
+      tipo: "NEIGHBORHOOD",
+      bairro: taxa.bairro,
+      taxa: taxa.taxa,
+      pedidoMinimo: 0,
+      tempoEstimadoMinutos: taxa.tempoMin,
+    }),
+  });
   return buscarLoja();
 }
 
