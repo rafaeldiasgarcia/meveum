@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { toast } from "sonner";
-import { Store, Clock, MapPin, MessageCircle, CreditCard, Plus, Trash2 } from "lucide-react";
+import { Store, Clock, MapPin, MessageCircle, CreditCard } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,8 +15,6 @@ import {
   atualizarLoja,
   toggleAberta,
   atualizarHorarios,
-  criarTaxaEntrega,
-  removerTaxaEntrega,
 } from "@/lib/api/configuracoes.api";
 import type { Loja, HorarioFuncionamento } from "@/types";
 
@@ -62,26 +61,6 @@ export default function ConfiguracoesPage() {
     const atualizada = await toggleAberta();
     setLoja(atualizada);
     toast.success(atualizada.aberta ? "Loja aberta!" : "Loja fechada.");
-  }
-
-  async function adicionarTaxa() {
-    setSalvando(true);
-    try {
-      const atualizada = await criarTaxaEntrega();
-      setLoja(atualizada);
-      toast.success("Taxa de entrega adicionada.");
-    } catch { toast.error("Erro ao adicionar taxa."); }
-    finally { setSalvando(false); }
-  }
-
-  async function removerTaxa(id: string) {
-    setSalvando(true);
-    try {
-      const atualizada = await removerTaxaEntrega(id);
-      setLoja(atualizada);
-      toast.success("Taxa de entrega removida.");
-    } catch { toast.error("Erro ao remover taxa."); }
-    finally { setSalvando(false); }
   }
 
   if (loading) {
@@ -259,8 +238,8 @@ export default function ConfiguracoesPage() {
               <MapPin className="h-4 w-4 text-[var(--color-muted)]" />
               Taxas de entrega
             </CardTitle>
-            <Button variant="ghost" size="sm" onClick={adicionarTaxa} loading={salvando} data-testid="adicionar-taxa-button">
-              <Plus className="h-3.5 w-3.5" /> Adicionar
+            <Button asChild variant="ghost" size="sm" data-testid="adicionar-taxa-button">
+              <Link href="/dashboard/configuracoes/entrega">Gerenciar</Link>
             </Button>
           </div>
         </CardHeader>
@@ -276,9 +255,6 @@ export default function ConfiguracoesPage() {
                   <span className="text-sm font-semibold text-[var(--color-foreground)]">
                     {taxa.taxa === 0 ? "Grátis" : `R$ ${taxa.taxa.toFixed(2)}`}
                   </span>
-                  <Button variant="ghost" size="icon" onClick={() => removerTaxa(taxa.id)} data-testid={`taxa-remover-${taxa.id}`}>
-                    <Trash2 className="h-3.5 w-3.5 text-red-400" />
-                  </Button>
                 </div>
               </div>
             ))}

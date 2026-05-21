@@ -45,11 +45,21 @@ export type HorarioFuncionamento = {
 
 export type DiaSemana = "seg" | "ter" | "qua" | "qui" | "sex" | "sab" | "dom";
 
+export type TipoAreaEntrega = "NEIGHBORHOOD" | "ZIP_RANGE" | "RADIUS";
+
 export type TaxaEntrega = {
   id: string;
+  nome: string;
+  tipo: TipoAreaEntrega;
   bairro: string;
+  cepInicial?: string;
+  cepFinal?: string;
+  raioKm?: number;
   taxa: number;
+  pedidoMinimo: number;
+  tempoEstimadoMinutos: number;
   tempoMin: number;
+  ativo: boolean;
 };
 
 // ─── Cardápio ─────────────────────────────────────────────────────────────────
@@ -138,6 +148,32 @@ export type Cliente = {
   criadoEm: string;
 };
 
+export type CriarClienteRequest = {
+  nome: string;
+  telefone: string;
+};
+
+export type AtualizarClienteRequest = CriarClienteRequest;
+
+export type EnderecoCliente = {
+  id: string;
+  clienteId: string;
+  rotulo?: string;
+  rua: string;
+  numero: string;
+  complemento?: string;
+  bairro: string;
+  cidade: string;
+  estado: string;
+  cep?: string;
+  referencia?: string;
+  latitude?: number;
+  longitude?: number;
+};
+
+export type CriarEnderecoClienteRequest = Omit<EnderecoCliente, "id" | "clienteId">;
+export type AtualizarEnderecoClienteRequest = CriarEnderecoClienteRequest;
+
 // ─── Categorias (admin) ───────────────────────────────────────────────────────
 export type CriarCategoriaRequest = {
   nome: string;
@@ -150,11 +186,16 @@ export type AtualizarCategoriaRequest = Partial<CriarCategoriaRequest>;
 // ─── Complementos (admin) ─────────────────────────────────────────────────────
 export type GrupoComplementoAdmin = {
   id: string;
+  lojaId?: string;
+  produtoId?: string;
+  vinculoId?: string;
   grupoComplementoId: string;
   nomeGrupoComplemento: string;
+  descricao?: string;
   quantidadeMinima: number;
   quantidadeMaxima: number;
   ordem: number;
+  ativo?: boolean;
   opcoes: OpcaoComplementoAdmin[];
 };
 
@@ -167,17 +208,21 @@ export type OpcaoComplementoAdmin = {
 };
 
 export type CriarGrupoComplementoRequest = {
-  produtoId: string;
-  lojaId: string;
+  produtoId?: string;
   nome: string;
+  descricao?: string;
   quantidadeMinima: number;
   quantidadeMaxima: number;
+  ordem?: number;
 };
 
 export type AtualizarGrupoComplementoRequest = {
   nome?: string;
+  descricao?: string;
   quantidadeMinima?: number;
   quantidadeMaxima?: number;
+  ordem?: number;
+  ativo?: boolean;
 };
 
 export type CriarOpcaoComplementoRequest = {
@@ -191,6 +236,11 @@ export type AtualizarOpcaoComplementoRequest = {
   nome?: string;
   descricao?: string;
   precoAdicional?: number;
+};
+
+export type VincularGrupoComplementoProdutoRequest = {
+  grupoComplementoId: string;
+  ordem?: number;
 };
 
 // ─── Formas de pagamento (admin) ──────────────────────────────────────────────
@@ -329,6 +379,19 @@ export type ConfigEntregaRetirada = {
   tempoMedioEntregaMin: number;
   tempoMedioRetiradaMin: number;
   taxasEntrega: TaxaEntrega[];
+};
+
+export type AreaEntregaRequest = {
+  nome: string;
+  tipo: TipoAreaEntrega;
+  bairro?: string;
+  cepInicial?: string;
+  cepFinal?: string;
+  raioKm?: number;
+  taxa: number;
+  pedidoMinimo?: number;
+  tempoEstimadoMinutos?: number;
+  ativo?: boolean;
 };
 
 // ─── Status Público do Pedido ─────────────────────────────────────────────────

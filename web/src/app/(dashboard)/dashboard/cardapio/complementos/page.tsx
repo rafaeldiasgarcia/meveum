@@ -22,6 +22,7 @@ import {
 } from "@/lib/validations/complementos.schema";
 import { listarProdutos } from "@/lib/api/cardapio.api";
 import {
+  listarGruposComplemento,
   listarGruposDoProduto,
   criarGrupoComplemento,
   atualizarGrupoComplemento,
@@ -29,6 +30,8 @@ import {
   criarOpcaoComplemento,
   atualizarOpcaoComplemento,
   excluirOpcaoComplemento,
+  vincularGrupoAoProduto,
+  desvincularGrupoDoProduto,
 } from "@/lib/api/complementos.api";
 import { formatCurrency } from "@/lib/utils/format";
 import type { Produto, GrupoComplementoAdmin, OpcaoComplementoAdmin } from "@/types";
@@ -56,7 +59,12 @@ function GrupoForm({
       if (grupo) {
         await atualizarGrupoComplemento(grupo.grupoComplementoId, { nome: data.nome, quantidadeMinima: data.quantidadeMinima, quantidadeMaxima: data.quantidadeMaxima });
       } else {
-        await criarGrupoComplemento({ produtoId, lojaId: "", nome: data.nome, quantidadeMinima: data.quantidadeMinima, quantidadeMaxima: data.quantidadeMaxima });
+        await criarGrupoComplemento({
+          produtoId,
+          nome: data.nome,
+          quantidadeMinima: data.quantidadeMinima,
+          quantidadeMaxima: data.quantidadeMaxima,
+        });
       }
       toast.success(grupo ? "Grupo atualizado!" : "Grupo criado!");
       onSave();
@@ -169,6 +177,7 @@ type ModalState =
 export default function ComplementosPage() {
   const [produtos, setProdutos] = useState<Produto[]>([]);
   const [produtoSelecionadoId, setProdutoSelecionadoId] = useState<string>("");
+  const [todosGrupos, setTodosGrupos] = useState<GrupoComplementoAdmin[]>([]);
   const [grupos, setGrupos] = useState<GrupoComplementoAdmin[]>([]);
   const [loadingProdutos, setLoadingProdutos] = useState(true);
   const [loadingGrupos, setLoadingGrupos] = useState(false);
@@ -176,12 +185,24 @@ export default function ComplementosPage() {
   const [modal, setModal] = useState<ModalState>(null);
 
   useEffect(() => {
-    setLoadingProdutos(true);
-    listarProdutos()
-      .then(setProdutos)
-      .catch(() => toast.error("Erro ao carregar produtos."))
-      .finally(() => setLoadingProdutos(false));
+    const timer = window.setTimeout(() => {
+      setLoadingProdutos(true);
+      Promise.all([listarProdutos(), listarGruposComplemento()])
+        .then(([listaProdutos, listaGrupos]) => {
+          setProdutos(listaProdutos);
+          setTodosGrupos(listaGrupos);
+        })
+        .catch(() => toast.error("Erro ao carregar produtos."))
+        .finally(() => setLoadingProdutos(false));
+    }, 0);
+
+    return () => window.clearTimeout(timer);
   }, []);
+
+  async function carregarTodosGrupos() {
+    const lista = await listarGruposComplemento();
+    setTodosGrupos(lista);
+  }
 
   async function carregarGrupos(produtoId: string) {
     if (!produtoId) return;
@@ -195,6 +216,11 @@ export default function ComplementosPage() {
     } finally {
       setLoadingGrupos(false);
     }
+  }
+
+  async function recarregarComplementos(produtoId = produtoSelecionadoId) {
+    await carregarTodosGrupos();
+    if (produtoId) await carregarGrupos(produtoId);
   }
 
   function handleSelecionarProduto(id: string) {
@@ -214,7 +240,7 @@ export default function ComplementosPage() {
   async function handleExcluirGrupo(grupo: GrupoComplementoAdmin) {
     try {
       await excluirGrupoComplemento(grupo.grupoComplementoId);
-      await carregarGrupos(produtoSelecionadoId);
+      await recarregarComplementos();
       setModal(null);
       toast.success("Grupo removido.");
     } catch {
@@ -225,11 +251,36 @@ export default function ComplementosPage() {
   async function handleExcluirOpcao(opcao: OpcaoComplementoAdmin) {
     try {
       await excluirOpcaoComplemento(opcao.id);
-      await carregarGrupos(produtoSelecionadoId);
+      await recarregarComplementos();
       setModal(null);
       toast.success("Opção removida.");
     } catch {
       toast.error("Erro ao remover opção.");
+    }
+  }
+
+  async function handleVincularGrupo(grupo: GrupoComplementoAdmin) {
+    if (!produtoSelecionadoId) return;
+    try {
+      await vincularGrupoAoProduto(produtoSelecionadoId, {
+        grupoComplementoId: grupo.grupoComplementoId,
+        ordem: grupos.length,
+      });
+      await carregarGrupos(produtoSelecionadoId);
+      toast.success("Grupo vinculado ao produto.");
+    } catch {
+      toast.error("Erro ao vincular grupo.");
+    }
+  }
+
+  async function handleDesvincularGrupo(grupo: GrupoComplementoAdmin) {
+    if (!produtoSelecionadoId) return;
+    try {
+      await desvincularGrupoDoProduto(produtoSelecionadoId, grupo.grupoComplementoId);
+      await carregarGrupos(produtoSelecionadoId);
+      toast.success("Grupo desvinculado do produto.");
+    } catch {
+      toast.error("Erro ao desvincular grupo.");
     }
   }
 
@@ -266,6 +317,45 @@ export default function ComplementosPage() {
           </div>
         </CardContent>
       </Card>
+
+      {produtoSelecionadoId && (
+        <Card data-testid="grupos-biblioteca">
+          <CardHeader className="p-4 pb-2">
+            <CardTitle className="text-sm">Biblioteca de grupos</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-2 p-4 pt-0">
+            {todosGrupos.length === 0 ? (
+              <p className="text-sm text-[#78716C]">Nenhum grupo criado ainda.</p>
+            ) : (
+              todosGrupos.map((grupo) => {
+                const vinculado = grupos.some((item) => item.grupoComplementoId === grupo.grupoComplementoId);
+                return (
+                  <div
+                    key={grupo.grupoComplementoId}
+                    className="flex items-center justify-between rounded-lg border border-[#E8E0D6] bg-[#F8F6F3] px-3 py-2"
+                    data-testid={`grupo-biblioteca-${grupo.grupoComplementoId}`}
+                  >
+                    <div>
+                      <p className="text-sm font-medium text-[#1C1917]">{grupo.nomeGrupoComplemento}</p>
+                      <p className="text-xs text-[#78716C]">
+                        mín {grupo.quantidadeMinima} / máx {grupo.quantidadeMaxima}
+                      </p>
+                    </div>
+                    <Button
+                      variant={vinculado ? "destructive" : "secondary"}
+                      size="sm"
+                      onClick={() => vinculado ? handleDesvincularGrupo(grupo) : handleVincularGrupo(grupo)}
+                      data-testid={`${vinculado ? "grupo-desvincular" : "grupo-vincular"}-${grupo.grupoComplementoId}`}
+                    >
+                      {vinculado ? "Desvincular" : "Vincular"}
+                    </Button>
+                  </div>
+                );
+              })
+            )}
+          </CardContent>
+        </Card>
+      )}
 
       {/* Grupos de complementos */}
       {produtoSelecionadoId && (
@@ -419,7 +509,7 @@ export default function ComplementosPage() {
           <GrupoForm
             grupo={modal?.tipo === "grupo-editar" ? modal.grupo : null}
             produtoId={produtoSelecionadoId}
-            onSave={async () => { await carregarGrupos(produtoSelecionadoId); setModal(null); }}
+            onSave={async () => { await recarregarComplementos(); setModal(null); }}
             onClose={() => setModal(null)}
           />
         </DialogContent>

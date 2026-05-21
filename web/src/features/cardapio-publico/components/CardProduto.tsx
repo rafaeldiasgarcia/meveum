@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useState } from "react";
 import { Plus } from "lucide-react";
 import { formatCurrency } from "@/lib/utils/format";
 import type { ProdutoPublico } from "@/types/cardapio-publico";
@@ -11,8 +12,8 @@ type Props = {
   onSelecionar: (produto: ProdutoPublico) => void;
 };
 
-function imagemDoProduto(produto: ProdutoPublico): string {
-  if (produto.imagemUrl) return produto.imagemUrl;
+export function imagemDoProduto(produto: ProdutoPublico): string {
+  if (produto.imagemUrl && isImagemValida(produto.imagemUrl)) return produto.imagemUrl;
 
   const nome = produto.nome.toLowerCase();
   if (nome.includes("batata")) return "/cardapio-publico/batata-suprema.jpg";
@@ -23,7 +24,8 @@ function imagemDoProduto(produto: ProdutoPublico): string {
 }
 
 export function CardProduto({ produto, lojaAberta, onSelecionar }: Props) {
-  const imagem = imagemDoProduto(produto);
+  const [imagem, setImagem] = useState(() => imagemDoProduto(produto));
+  const fallback = imagemFallback(produto);
 
   return (
     <button
@@ -59,6 +61,7 @@ export function CardProduto({ produto, lojaAberta, onSelecionar }: Props) {
             alt={produto.nome}
             width={128}
             height={128}
+            onError={() => setImagem(fallback)}
             className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
           />
         </div>
@@ -70,4 +73,20 @@ export function CardProduto({ produto, lojaAberta, onSelecionar }: Props) {
       </div>
     </button>
   );
+}
+
+function isImagemValida(src: string): boolean {
+  if (src.startsWith("/")) return true;
+
+  try {
+    const url = new URL(src);
+    return url.protocol === "http:" || url.protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
+function imagemFallback(produto: ProdutoPublico): string {
+  const semImagem = { ...produto, imagemUrl: null };
+  return imagemDoProduto(semImagem);
 }
