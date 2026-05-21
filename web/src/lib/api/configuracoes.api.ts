@@ -1,4 +1,14 @@
-import type { Loja, HorarioFuncionamento, TaxaEntrega, DiaSemana } from "@/types";
+import type {
+  AparenciaLoja,
+  AreaEntregaRequest,
+  AtualizarAparenciaRequest,
+  ConfigEntregaRetirada,
+  DiaSemana,
+  HorarioFuncionamento,
+  Loja,
+  TaxaEntrega,
+  TipoAreaEntrega,
+} from "@/types";
 import { obterLojaId, requestAutenticada } from "@/lib/api/client";
 
 type LojaApi = {
@@ -23,8 +33,13 @@ type HorarioApi = {
 type TaxaApi = {
   id: string;
   nome: string;
+  tipo: TipoAreaEntrega;
   bairro?: string;
+  cepInicial?: string;
+  cepFinal?: string;
+  raioKm?: number;
   taxa: number;
+  pedidoMinimo?: number;
   tempoEstimadoMinutos?: number;
   ativo: boolean;
 };
@@ -61,11 +76,20 @@ function toHorarioApi(horario: HorarioFuncionamento) {
 }
 
 function toTaxa(taxa: TaxaApi): TaxaEntrega {
+  const tempoEstimadoMinutos = taxa.tempoEstimadoMinutos ?? 45;
   return {
     id: taxa.id,
+    nome: taxa.nome,
+    tipo: taxa.tipo,
     bairro: taxa.bairro ?? taxa.nome,
+    cepInicial: taxa.cepInicial,
+    cepFinal: taxa.cepFinal,
+    raioKm: taxa.raioKm == null ? undefined : Number(taxa.raioKm),
     taxa: Number(taxa.taxa),
-    tempoMin: taxa.tempoEstimadoMinutos ?? 45,
+    pedidoMinimo: Number(taxa.pedidoMinimo ?? 0),
+    tempoEstimadoMinutos,
+    tempoMin: tempoEstimadoMinutos,
+    ativo: taxa.ativo,
   };
 }
 
@@ -134,27 +158,103 @@ export async function atualizarHorarios(horarios: HorarioFuncionamento[]): Promi
   return buscarLoja();
 }
 
-export async function criarTaxaEntrega(): Promise<Loja> {
+export async function criarTaxaEntrega(data: AreaEntregaRequest): Promise<Loja> {
   const lojaId = obterLojaId();
   await requestAutenticada("/entrega/areas", {
     method: "POST",
-    body: JSON.stringify({
-      lojaId,
-      nome: "Nova taxa de entrega",
-      tipo: "NEIGHBORHOOD",
-      bairro: "Novo bairro",
-      taxa: 0,
-      pedidoMinimo: 0,
-      tempoEstimadoMinutos: 45,
-    }),
+    body: JSON.stringify(toAreaEntregaBody(lojaId, data)),
   });
 
+  return buscarLoja();
+}
+
+export async function atualizarTaxaEntrega(id: string, data: AreaEntregaRequest): Promise<Loja> {
+  const lojaId = obterLojaId();
+  await requestAutenticada(`/entrega/areas/${id}`, {
+    method: "PUT",
+    body: JSON.stringify({ ...toAreaEntregaBody(lojaId, data), ativo: data.ativo ?? true }),
+  });
   return buscarLoja();
 }
 
 export async function removerTaxaEntrega(id: string): Promise<Loja> {
   await requestAutenticada(`/entrega/areas/${id}`, { method: "DELETE" });
   return buscarLoja();
+}
+
+export async function buscarAparencia(): Promise<AparenciaLoja> {
+  try {
+    const lojaId = obterLojaId();
+    const loja = await requestAutenticada<LojaApi>(`/lojas/${lojaId}`, { method: "GET" });
+    return { nome: loja.nome, slug: loja.slug, logoUrl: loja.logoUrl };
+  } catch {
+    return { nome: "", slug: "", logoUrl: undefined, descricao: undefined, capaBannerUrl: undefined, corPrimaria: "#EA580C" };
+  }
+}
+
+export async function atualizarAparencia(data: AtualizarAparenciaRequest): Promise<AparenciaLoja> {
+  const lojaId = obterLojaId();
+  await requestAutenticada(`/lojas/${lojaId}`, {
+    method: "PUT",
+    body: JSON.stringify({ nome: data.nome, slug: data.slug, logoUrl: data.logoUrl }),
+  });
+  return buscarAparencia();
+}
+
+export async function verificarSlugDisponivel(slug: string): Promise<boolean> {
+  try {
+    await requestAutenticada(`/lojas/slug/${slug}`, { method: "GET" });
+    return false;
+  } catch {
+    return true;
+  }
+}
+
+export async function buscarConfigEntrega(): Promise<ConfigEntregaRetirada> {
+  const taxasEntrega = await listarTaxasEntrega();
+  return {
+    deliveryAtivo: true,
+    retiradaAtivo: true,
+    pedidoMinimo: 0,
+    tempoMedioEntregaMin: 45,
+    tempoMedioRetiradaMin: 20,
+    taxasEntrega,
+  };
+}
+
+export async function listarTaxasEntrega(): Promise<TaxaEntrega[]> {
+  const lojaId = obterLojaId();
+  const taxas = await requestAutenticada<TaxaApi[]>(`/entrega/areas?lojaId=${lojaId}`, { method: "GET" });
+  return taxas.map(toTaxa);
+}
+
+export async function criarTaxaEntregaDetalhada(taxa: Omit<TaxaEntrega, "id">): Promise<Loja> {
+  return criarTaxaEntrega({
+    nome: taxa.nome ?? taxa.bairro,
+    tipo: taxa.tipo ?? "NEIGHBORHOOD",
+    bairro: taxa.bairro,
+    cepInicial: taxa.cepInicial,
+    cepFinal: taxa.cepFinal,
+    raioKm: taxa.raioKm,
+    taxa: taxa.taxa,
+    pedidoMinimo: taxa.pedidoMinimo,
+    tempoEstimadoMinutos: taxa.tempoEstimadoMinutos ?? taxa.tempoMin,
+  });
+}
+
+function toAreaEntregaBody(lojaId: string, data: AreaEntregaRequest) {
+  return {
+    lojaId,
+    nome: data.nome,
+    tipo: data.tipo,
+    bairro: data.tipo === "NEIGHBORHOOD" ? data.bairro : undefined,
+    cepInicial: data.tipo === "ZIP_RANGE" ? data.cepInicial : undefined,
+    cepFinal: data.tipo === "ZIP_RANGE" ? data.cepFinal : undefined,
+    raioKm: data.tipo === "RADIUS" ? data.raioKm : undefined,
+    taxa: data.taxa,
+    pedidoMinimo: data.pedidoMinimo ?? 0,
+    tempoEstimadoMinutos: data.tempoEstimadoMinutos ?? 45,
+  };
 }
 
 function slugify(valor: string): string {

@@ -233,21 +233,21 @@ export class DatabaseService {
     });
   }
 
-  async validarTaxaCriada(lojaId) {
+  async validarTaxaCriada(lojaId, nome, taxaEsperada = 7.5) {
     return this.validarComRetry(async () => {
       const taxa = await this.buscarUm(
         `
           select *
           from store_delivery_zones
-          where store_id = $1 and name = 'Nova taxa de entrega' and active = true
+          where store_id = $1 and name = $2 and active = true
           order by id desc
           limit 1
         `,
-        [lojaId]
+        [lojaId, nome]
       );
 
       expect(taxa).not.toBeNull();
-      expect(toDinheiro(taxa.fee)).toBe(0);
+      expect(toDinheiro(taxa.fee)).toBe(taxaEsperada);
       return taxa;
     });
   }

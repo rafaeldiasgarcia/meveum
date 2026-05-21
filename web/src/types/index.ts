@@ -45,11 +45,21 @@ export type HorarioFuncionamento = {
 
 export type DiaSemana = "seg" | "ter" | "qua" | "qui" | "sex" | "sab" | "dom";
 
+export type TipoAreaEntrega = "NEIGHBORHOOD" | "ZIP_RANGE" | "RADIUS";
+
 export type TaxaEntrega = {
   id: string;
+  nome: string;
+  tipo: TipoAreaEntrega;
   bairro: string;
+  cepInicial?: string;
+  cepFinal?: string;
+  raioKm?: number;
   taxa: number;
+  pedidoMinimo: number;
+  tempoEstimadoMinutos: number;
   tempoMin: number;
+  ativo: boolean;
 };
 
 // ─── Cardápio ─────────────────────────────────────────────────────────────────
@@ -138,6 +148,32 @@ export type Cliente = {
   criadoEm: string;
 };
 
+export type CriarClienteRequest = {
+  nome: string;
+  telefone: string;
+};
+
+export type AtualizarClienteRequest = CriarClienteRequest;
+
+export type EnderecoCliente = {
+  id: string;
+  clienteId: string;
+  rotulo?: string;
+  rua: string;
+  numero: string;
+  complemento?: string;
+  bairro: string;
+  cidade: string;
+  estado: string;
+  cep?: string;
+  referencia?: string;
+  latitude?: number;
+  longitude?: number;
+};
+
+export type CriarEnderecoClienteRequest = Omit<EnderecoCliente, "id" | "clienteId">;
+export type AtualizarEnderecoClienteRequest = CriarEnderecoClienteRequest;
+
 // ─── Categorias (admin) ───────────────────────────────────────────────────────
 export type CriarCategoriaRequest = {
   nome: string;
@@ -150,11 +186,16 @@ export type AtualizarCategoriaRequest = Partial<CriarCategoriaRequest>;
 // ─── Complementos (admin) ─────────────────────────────────────────────────────
 export type GrupoComplementoAdmin = {
   id: string;
+  lojaId?: string;
+  produtoId?: string;
+  vinculoId?: string;
   grupoComplementoId: string;
   nomeGrupoComplemento: string;
+  descricao?: string;
   quantidadeMinima: number;
   quantidadeMaxima: number;
   ordem: number;
+  ativo?: boolean;
   opcoes: OpcaoComplementoAdmin[];
 };
 
@@ -167,17 +208,21 @@ export type OpcaoComplementoAdmin = {
 };
 
 export type CriarGrupoComplementoRequest = {
-  produtoId: string;
-  lojaId: string;
+  produtoId?: string;
   nome: string;
+  descricao?: string;
   quantidadeMinima: number;
   quantidadeMaxima: number;
+  ordem?: number;
 };
 
 export type AtualizarGrupoComplementoRequest = {
   nome?: string;
+  descricao?: string;
   quantidadeMinima?: number;
   quantidadeMaxima?: number;
+  ordem?: number;
+  ativo?: boolean;
 };
 
 export type CriarOpcaoComplementoRequest = {
@@ -193,6 +238,11 @@ export type AtualizarOpcaoComplementoRequest = {
   precoAdicional?: number;
 };
 
+export type VincularGrupoComplementoProdutoRequest = {
+  grupoComplementoId: string;
+  ordem?: number;
+};
+
 // ─── Formas de pagamento (admin) ──────────────────────────────────────────────
 export type TipoFormaPagamento = "PIX" | "CREDIT_CARD_DELIVERY" | "DEBIT_CARD_DELIVERY" | "CASH";
 
@@ -200,6 +250,166 @@ export type FormaPagamento = {
   id: string;
   tipo: TipoFormaPagamento;
   ativo: boolean;
+};
+
+// ─── Cupons ───────────────────────────────────────────────────────────────────
+export type TipoCupon = "percentual" | "fixo";
+
+export type Cupon = {
+  id: string;
+  codigo: string;
+  tipo: TipoCupon;
+  valor: number;
+  valorMinimoPedido?: number;
+  limiteUsos?: number;
+  usosAtuais: number;
+  expiracaoEm?: string;
+  ativo: boolean;
+  criadoEm: string;
+};
+
+export type CriarCuponRequest = {
+  codigo: string;
+  tipo: TipoCupon;
+  valor: number;
+  valorMinimoPedido?: number;
+  limiteUsos?: number;
+  expiracaoEm?: string;
+};
+
+export type AtualizarCuponRequest = Partial<CriarCuponRequest>;
+
+// ─── WhatsApp ─────────────────────────────────────────────────────────────────
+export type MensagensWhatsApp = {
+  recebido: string;
+  em_preparo: string;
+  saiu_entrega: string;
+  finalizado: string;
+};
+
+export type ConfigWhatsApp = {
+  numero: string;
+  mensagens: MensagensWhatsApp;
+};
+
+// ─── Financeiro ───────────────────────────────────────────────────────────────
+export type PeriodoFinanceiro = "hoje" | "7dias" | "30dias" | "mes";
+
+export type ItemFormaPagamentoFinanceiro = {
+  forma: string;
+  label: string;
+  total: number;
+  percentual: number;
+};
+
+export type RelatorioFinanceiro = {
+  faturamentoTotal: number;
+  pedidosPagos: number;
+  pedidosCancelados: number;
+  ticketMedio: number;
+  porFormaPagamento: ItemFormaPagamentoFinanceiro[];
+  grafico: DadoGrafico[];
+};
+
+// ─── Relatórios ───────────────────────────────────────────────────────────────
+export type PeriodoRelatorio = "7dias" | "30dias" | "90dias";
+
+export type HorarioPico = {
+  hora: string;
+  pedidos: number;
+};
+
+export type RelatorioOperacional = {
+  topProdutos: TopProduto[];
+  horariosPico: HorarioPico[];
+  clientesNovos: number;
+  clientesRecorrentes: number;
+  totalClientes: number;
+  vendasPorDia: DadoGrafico[];
+};
+
+// ─── Equipe ───────────────────────────────────────────────────────────────────
+export type CargoEquipe = "OWNER" | "MANAGER" | "STAFF";
+
+export type MembroEquipe = {
+  id: string;
+  nome: string;
+  email: string;
+  telefone?: string;
+  cargo: CargoEquipe;
+  ativo: boolean;
+  criadoEm: string;
+};
+
+export type ConvidarMembroRequest = {
+  email: string;
+  nome: string;
+  cargo: CargoEquipe;
+};
+
+// ─── Onboarding ───────────────────────────────────────────────────────────────
+export type EtapaOnboarding =
+  | "dados_loja"
+  | "horarios"
+  | "entrega_retirada"
+  | "pagamentos";
+
+export type OnboardingStatus = {
+  etapasCompletas: EtapaOnboarding[];
+  concluido: boolean;
+};
+
+// ─── Aparência da Loja ────────────────────────────────────────────────────────
+export type AparenciaLoja = {
+  nome: string;
+  descricao?: string;
+  slug: string;
+  logoUrl?: string;
+  capaBannerUrl?: string;
+  corPrimaria?: string;
+};
+
+export type AtualizarAparenciaRequest = Partial<AparenciaLoja>;
+
+// ─── Entrega e Retirada ───────────────────────────────────────────────────────
+export type ConfigEntregaRetirada = {
+  deliveryAtivo: boolean;
+  retiradaAtivo: boolean;
+  pedidoMinimo: number;
+  tempoMedioEntregaMin: number;
+  tempoMedioRetiradaMin: number;
+  taxasEntrega: TaxaEntrega[];
+};
+
+export type AreaEntregaRequest = {
+  nome: string;
+  tipo: TipoAreaEntrega;
+  bairro?: string;
+  cepInicial?: string;
+  cepFinal?: string;
+  raioKm?: number;
+  taxa: number;
+  pedidoMinimo?: number;
+  tempoEstimadoMinutos?: number;
+  ativo?: boolean;
+};
+
+// ─── Status Público do Pedido ─────────────────────────────────────────────────
+export type HistoricoStatusPedido = {
+  status: StatusPedido;
+  ocorridoEm: string;
+};
+
+export type PedidoPublico = {
+  token: string;
+  numero: number;
+  nomeCliente: string;
+  status: StatusPedido;
+  tipo: "delivery" | "retirada" | "mesa";
+  itens: { nomeProduto: string; quantidade: number; subtotal: number }[];
+  total: number;
+  historico: HistoricoStatusPedido[];
+  criadoEm: string;
 };
 
 // ─── Dashboard ────────────────────────────────────────────────────────────────

@@ -23,6 +23,9 @@ const NAV_ITEMS: NavItem[] = [
   { href: "/dashboard/whatsapp", label: "WhatsApp" },
   { href: "/dashboard/financeiro", label: "Financeiro" },
   { href: "/dashboard/relatorios", label: "Relatórios" },
+  { href: "/dashboard/equipe", label: "Equipe" },
+  { href: "/dashboard/configuracoes", label: "Configurações" },
+  { href: "/dashboard/ajuda", label: "Ajuda" },
 ];
 
 function slugTestId(label: string) {

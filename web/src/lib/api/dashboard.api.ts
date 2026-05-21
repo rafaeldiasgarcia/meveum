@@ -5,17 +5,60 @@ import type {
   MetricasDashboard,
   Pedido,
   PedidoResumo,
+  StatusPedido,
   TopProduto,
 } from "@/types";
 import { obterLojaId, requestAutenticada } from "@/lib/api/client";
-import { listarPedidos } from "@/lib/api/pedidos.api";
 
 type ResumoDashboardApi = {
   faturamentoTotal: number;
   quantidadePedidos: number;
   ticketMedio: number;
-  pedidosNovos: number;
-  pedidosEmPreparo: number;
+  tempoMedioCozinhaMin?: number;
+  variacaoPedidos?: number;
+  variacaoFaturamento?: number;
+  variacaoTicket?: number;
+  variacaoTempoCozinha?: number;
+  pedidosEmPreparo?: number;
+};
+
+type DadoGraficoApi = {
+  label: string;
+  valor: number;
+};
+
+type PedidoResumoApi = {
+  id: string;
+  numero: number;
+  descricao: string;
+  nomeCliente: string;
+  local: string;
+  status: string;
+  tempoStr: string;
+  total: number;
+  formaPagamento?: string;
+};
+
+type KdsItemApi = {
+  id: string;
+  numero: number;
+  nomeProduto: string;
+  minutosEmPreparo: number;
+};
+
+type ProdutoMaisVendidoApi = {
+  nomeProduto: string;
+  quantidadeVendida: number;
+  faturamento: number;
+};
+
+type ClienteRecorrenteApi = {
+  id: string;
+  nome: string;
+  iniciais: string;
+  totalPedidos: number;
+  totalGasto: number;
+  badge: "VIP" | "RECORRENTE";
 };
 
 function periodoHoje() {
@@ -35,226 +78,148 @@ function periodoUltimosDias(dias: number) {
   return { inicio: inicio.toISOString(), fim: fim.toISOString() };
 }
 
+function queryPeriodo(periodo: { inicio: string; fim: string }) {
+  const lojaId = obterLojaId();
+  return `lojaId=${lojaId}&inicio=${encodeURIComponent(periodo.inicio)}&fim=${encodeURIComponent(periodo.fim)}`;
+}
+
 export async function buscarMetricas(): Promise<MetricasDashboard> {
   const [resumoHoje, resumo7Dias] = await Promise.all([
-    buscarResumoHoje(),
-    buscarResumoUltimosDias(),
+    buscarResumo(periodoHoje()),
+    buscarResumo(periodoUltimosDias(7)),
   ]);
 
   return {
-    pedidosHoje: Number(resumoHoje.quantidadePedidos),
-    faturamentoHoje: Number(resumoHoje.faturamentoTotal),
-    ticketMedio: Number(resumoHoje.ticketMedio),
-    tempoMedioCozinhaMin: 0,
-    pedidosEmPreparo: Number(resumoHoje.pedidosEmPreparo),
+    pedidosHoje: Number(resumoHoje.quantidadePedidos ?? 0),
+    faturamentoHoje: Number(resumoHoje.faturamentoTotal ?? 0),
+    ticketMedio: Number(resumoHoje.ticketMedio ?? 0),
+    tempoMedioCozinhaMin: Number(resumoHoje.tempoMedioCozinhaMin ?? 0),
+    pedidosEmPreparo: Number(resumoHoje.pedidosEmPreparo ?? 0),
     novosClientesHoje: 0,
     taxaRecompra: 0,
-    variacaoPedidosPercent: 0,
-    variacaoFaturamentoPercent: 0,
-    variacaoTicketMedio: 0,
-    variacaoTempoMedioCozinha: 0,
-    faturamento7Dias: Number(resumo7Dias.faturamentoTotal),
-    variacaoFaturamento7Dias: 0,
+    variacaoPedidosPercent: Number(resumoHoje.variacaoPedidos ?? 0),
+    variacaoFaturamentoPercent: Number(resumoHoje.variacaoFaturamento ?? 0),
+    variacaoTicketMedio: Number(resumoHoje.variacaoTicket ?? 0),
+    variacaoTempoMedioCozinha: Number(resumoHoje.variacaoTempoCozinha ?? 0),
+    faturamento7Dias: Number(resumo7Dias.faturamentoTotal ?? 0),
+    variacaoFaturamento7Dias: Number(resumo7Dias.variacaoFaturamento ?? 0),
   };
 }
 
 export async function buscarGraficoSemanal(): Promise<DadoGrafico[]> {
-  const pedidos = await listarPedidos();
-  const dias = Array.from({ length: 7 }, (_, index) => {
-    const data = new Date();
-    data.setDate(data.getDate() - (6 - index));
-    data.setHours(0, 0, 0, 0);
-    return data;
-  });
-
-  return dias.map((dia) => {
-    const total = pedidos
-      .filter((pedido) => mesmoDia(new Date(pedido.criadoEm), dia))
-      .reduce((acc, pedido) => acc + pedido.total, 0);
-
-    return {
-      label: dia.toLocaleDateString("pt-BR", { weekday: "short" }).replace(".", ""),
-      valor: total,
-    };
-  });
+  const dados = await requestAutenticada<DadoGraficoApi[]>(
+    `/dashboard/grafico-semanal?${queryPeriodo(periodoUltimosDias(7))}`,
+    { method: "GET" }
+  );
+  return dados.map((item) => ({ label: item.label, valor: Number(item.valor) }));
 }
 
 export async function buscarPedidosRecentes(): Promise<Pedido[]> {
-  return (await listarPedidos()).slice(0, 5);
+  const pedidos = await buscarPedidosResumo();
+  return pedidos.map((pedido) => ({
+    id: pedido.id,
+    numero: pedido.numero,
+    clienteId: "",
+    nomeCliente: pedido.nomeCliente,
+    telefoneCliente: "",
+    status: pedido.status,
+    tipo: pedido.local.toLowerCase().includes("retirada") ? "retirada" : "delivery",
+    itens: [],
+    total: pedido.total,
+    formaPagamento: pedido.formaPagamento ?? "pix",
+    criadoEm: new Date().toISOString(),
+    atualizadoEm: new Date().toISOString(),
+  }));
 }
 
 export async function buscarPedidosResumo(): Promise<PedidoResumo[]> {
-  const pedidos = await listarPedidos();
+  const lojaId = obterLojaId();
+  const pedidos = await requestAutenticada<PedidoResumoApi[]>(
+    `/dashboard/pedidos-resumo?lojaId=${lojaId}&limite=8`,
+    { method: "GET" }
+  );
 
-  return pedidos.slice(0, 8).map((pedido) => ({
+  return pedidos.map((pedido) => ({
     id: pedido.id,
     numero: pedido.numero,
-    descricao: descreverPedido(pedido),
+    descricao: pedido.descricao,
     nomeCliente: pedido.nomeCliente,
-    local: descreverLocalPedido(pedido),
-    status: pedido.status,
-    tempoStr: calcularTempoDecorrido(pedido.criadoEm),
-    total: pedido.total,
-    formaPagamento: pedido.formaPagamento,
+    local: pedido.local,
+    status: toStatusPedido(pedido.status),
+    tempoStr: pedido.tempoStr,
+    total: Number(pedido.total),
+    formaPagamento: toFormaPagamento(pedido.formaPagamento),
   }));
 }
 
 export async function buscarKDSItems(): Promise<KDSItem[]> {
-  const pedidos = await listarPedidos();
-
-  return pedidos
-    .filter((pedido) => pedido.status === "em_preparo")
-    .slice(0, 5)
-    .map((pedido) => ({
-      id: pedido.id,
-      numero: pedido.numero,
-      nomeProduto: pedido.itens[0]?.nomeProduto ?? "Pedido em preparo",
-      minutosEmPreparo: calcularMinutosDesde(pedido.atualizadoEm),
-    }));
+  const lojaId = obterLojaId();
+  const itens = await requestAutenticada<KdsItemApi[]>(`/dashboard/kds?lojaId=${lojaId}`, { method: "GET" });
+  return itens.map((item) => ({
+    id: item.id,
+    numero: item.numero,
+    nomeProduto: item.nomeProduto,
+    minutosEmPreparo: Number(item.minutosEmPreparo),
+  }));
 }
 
 export async function buscarTopProdutos(): Promise<TopProduto[]> {
-  const pedidos = await listarPedidos();
-  const produtos = new Map<string, { nome: string; unidades: number; faturamento: number }>();
+  const produtos = await requestAutenticada<ProdutoMaisVendidoApi[]>(
+    `/dashboard/produtos-mais-vendidos?${queryPeriodo(periodoHoje())}&limite=5`,
+    { method: "GET" }
+  );
 
-  pedidos.forEach((pedido) => {
-    pedido.itens.forEach((item) => {
-      const atual = produtos.get(item.produtoId) ?? {
-        nome: item.nomeProduto,
-        unidades: 0,
-        faturamento: 0,
-      };
-
-      produtos.set(item.produtoId, {
-        nome: atual.nome,
-        unidades: atual.unidades + item.quantidade,
-        faturamento: atual.faturamento + item.subtotal,
-      });
-    });
-  });
-
-  return [...produtos.values()]
-    .sort((a, b) => b.faturamento - a.faturamento)
-    .slice(0, 5)
-    .map((produto, index) => ({
-      posicao: index + 1,
-      ...produto,
-    }));
+  return produtos.map((produto, index) => ({
+    posicao: index + 1,
+    nome: produto.nomeProduto,
+    unidades: Number(produto.quantidadeVendida),
+    faturamento: Number(produto.faturamento),
+  }));
 }
 
 export async function buscarClientesRecorrentes(): Promise<ClienteRecorrente[]> {
-  const pedidos = await listarPedidos();
-  const clientes = new Map<string, { nome: string; totalPedidos: number; totalGasto: number }>();
-
-  pedidos.forEach((pedido) => {
-    const atual = clientes.get(pedido.clienteId) ?? {
-      nome: pedido.nomeCliente,
-      totalPedidos: 0,
-      totalGasto: 0,
-    };
-
-    clientes.set(pedido.clienteId, {
-      nome: atual.nome,
-      totalPedidos: atual.totalPedidos + 1,
-      totalGasto: atual.totalGasto + pedido.total,
-    });
-  });
-
-  return [...clientes.entries()]
-    .filter(([, cliente]) => cliente.totalPedidos > 1)
-    .sort(([, a], [, b]) => b.totalGasto - a.totalGasto)
-    .slice(0, 5)
-    .map(([id, cliente]) => ({
-      id,
-      nome: cliente.nome,
-      iniciais: obterIniciais(cliente.nome),
-      totalPedidos: cliente.totalPedidos,
-      totalGasto: cliente.totalGasto,
-      badge: cliente.totalGasto >= 500 ? "VIP" : "RECORRENTE",
-    }));
-}
-
-function mesmoDia(data: Date, referencia: Date) {
-  return data.getFullYear() === referencia.getFullYear()
-    && data.getMonth() === referencia.getMonth()
-    && data.getDate() === referencia.getDate();
-}
-
-async function buscarResumoHoje(): Promise<ResumoDashboardApi> {
   const lojaId = obterLojaId();
-  const { inicio, fim } = periodoHoje();
-  return requestAutenticada<ResumoDashboardApi>(
-    `/dashboard/resumo?lojaId=${lojaId}&inicio=${encodeURIComponent(inicio)}&fim=${encodeURIComponent(fim)}`,
-    { method: "GET" },
+  const clientes = await requestAutenticada<ClienteRecorrenteApi[]>(
+    `/dashboard/clientes-recorrentes?lojaId=${lojaId}&limite=5`,
+    { method: "GET" }
   );
+
+  return clientes.map((cliente) => ({
+    id: cliente.id,
+    nome: cliente.nome,
+    iniciais: cliente.iniciais,
+    totalPedidos: Number(cliente.totalPedidos),
+    totalGasto: Number(cliente.totalGasto),
+    badge: cliente.badge,
+  }));
 }
 
-export async function buscarResumoUltimosDias(): Promise<ResumoDashboardApi> {
-  const lojaId = obterLojaId();
-  const { inicio, fim } = periodoUltimosDias(7);
-  return requestAutenticada<ResumoDashboardApi>(
-    `/dashboard/resumo?lojaId=${lojaId}&inicio=${encodeURIComponent(inicio)}&fim=${encodeURIComponent(fim)}`,
-    { method: "GET" },
-  );
+async function buscarResumo(periodo: { inicio: string; fim: string }): Promise<ResumoDashboardApi> {
+  return requestAutenticada<ResumoDashboardApi>(`/dashboard/resumo?${queryPeriodo(periodo)}`, { method: "GET" });
 }
 
-function descreverPedido(pedido: Pedido) {
-  const [primeiroItem, ...outrosItens] = pedido.itens;
-  if (!primeiroItem) return "Pedido sem itens";
-  if (outrosItens.length === 0) return primeiroItem.nomeProduto;
-  return `${primeiroItem.nomeProduto} + ${outrosItens.length} item(ns)`;
+function toStatusPedido(status: string): StatusPedido {
+  const normalizado = status.toLowerCase();
+  if (normalizado === "new") return "recebido";
+  if (normalizado === "preparing") return "em_preparo";
+  if (normalizado === "out_for_delivery") return "saiu_entrega";
+  if (normalizado === "done") return "finalizado";
+  if (normalizado === "canceled") return "cancelado";
+  if (normalizado === "pronto") return "pronto";
+  if (normalizado === "recebido" || normalizado === "em_preparo" || normalizado === "saiu_entrega" || normalizado === "finalizado" || normalizado === "cancelado") {
+    return normalizado;
+  }
+  return "recebido";
 }
 
-function descreverLocalPedido(pedido: Pedido) {
-  if (pedido.tipo === "mesa" && pedido.mesa) return `Mesa ${pedido.mesa}`;
-  if (pedido.tipo === "retirada") return "Retirada";
-  return pedido.bairroEntrega ?? "Delivery";
-}
-
-function calcularTempoDecorrido(dataIso: string) {
-  const minutos = calcularMinutosDesde(dataIso);
-  if (minutos < 60) return `${minutos}min`;
-  const horas = Math.floor(minutos / 60);
-  const restoMinutos = minutos % 60;
-  return restoMinutos > 0 ? `${horas}h ${restoMinutos}min` : `${horas}h`;
-}
-
-function calcularMinutosDesde(dataIso: string) {
-  const inicio = new Date(dataIso).getTime();
-  if (Number.isNaN(inicio)) return 0;
-  return Math.max(0, Math.round((Date.now() - inicio) / 60000));
-}
-
-function calcularTempoMedioCozinha(pedidos: Pedido[]) {
-  if (pedidos.length === 0) return 0;
-
-  const totalMinutos = pedidos.reduce((acc, pedido) => {
-    const criadoEm = new Date(pedido.criadoEm).getTime();
-    const atualizadoEm = new Date(pedido.atualizadoEm).getTime();
-    if (Number.isNaN(criadoEm) || Number.isNaN(atualizadoEm)) return acc;
-    return acc + Math.max(0, Math.round((atualizadoEm - criadoEm) / 60000));
-  }, 0);
-
-  return Math.round(totalMinutos / pedidos.length);
-}
-
-function calcularTaxaRecompra(pedidos: Pedido[]) {
-  if (pedidos.length === 0) return 0;
-
-  const pedidosPorCliente = pedidos.reduce((acc, pedido) => {
-    acc.set(pedido.clienteId, (acc.get(pedido.clienteId) ?? 0) + 1);
-    return acc;
-  }, new Map<string, number>());
-
-  const clientesRecorrentes = [...pedidosPorCliente.values()].filter((total) => total > 1).length;
-  return Math.round((clientesRecorrentes / pedidosPorCliente.size) * 100);
-}
-
-function obterIniciais(nome: string) {
-  return nome
-    .split(" ")
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((parte) => parte[0]?.toUpperCase())
-    .join("");
+function toFormaPagamento(forma?: string): PedidoResumo["formaPagamento"] {
+  const normalizado = forma?.toLowerCase();
+  if (normalizado === "pix") return "pix";
+  if (normalizado === "cash") return "dinheiro";
+  if (normalizado === "credit_card_delivery") return "cartao_credito";
+  if (normalizado === "debit_card_delivery") return "cartao_debito";
+  if (normalizado === "cartao_credito" || normalizado === "cartao_debito" || normalizado === "dinheiro") {
+    return normalizado;
+  }
+  return undefined;
 }
